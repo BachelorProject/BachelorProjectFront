@@ -8,6 +8,9 @@ node_js:
 addons:
   chrome: stable
 
+notifications:
+  slack: olympoworkspace:T5nXKCY75r2oTMgwT96NfpoQ
+
 cache:
   directories:
     - ./node_modules
