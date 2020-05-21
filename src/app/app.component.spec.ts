@@ -1,9 +1,7 @@
 import { TestBed, async } from '@angular/core/testing';
 import { AppComponent } from './app.component';
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {MatToolbar} from '@angular/material/toolbar';
-import {RouterOutlet} from '@angular/router';
 import {MenuComponent} from './components/menu/menu.component';
 
 describe('AppComponent', () => {
@@ -13,6 +11,11 @@ describe('AppComponent', () => {
         AppComponent,
         MenuComponent
       ],
+      imports: [
+      ],
+      providers: [
+        FormBuilder,
+        ReactiveFormsModule],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
   }));
