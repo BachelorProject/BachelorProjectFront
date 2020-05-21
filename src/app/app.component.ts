@@ -7,6 +7,7 @@ import {MatDrawer} from '@angular/material/sidenav';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+  title = 'Olympo';
   isScreenSmall = false;
 
   @ViewChild('drawer') public drawer: MatDrawer;
