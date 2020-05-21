@@ -1,0 +1,69 @@
+.container{
+  height: 100%;
+  width: 100%;
+  margin:0;
+  padding:0;
+  position: relative;
+}
+
+.drawer-container{
+  height: calc(100% - 47px);
+  width: fit-content;
+  margin: 0;
+  position: absolute;
+  left: 0;
+  top: 47px;
+  z-index: 99;
+}
+
+#logo{
+  height: 100%;
+}
+
+.logo-container{
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 5%;
+  cursor: pointer;
+  font-size: 22px;
+}
+
+:host{
+  font-family: 'Josefin Sans', sans-serif;
+}
+
+.menu-icon{
+  margin-right: 3%;
+  color: black;
+  cursor: pointer;
+  height: 70%;
+}
+
+.header{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /*border-bottom: solid #aaa 1px;*/
+  background-color: #fff;
+  box-shadow: #ccc 0 1px 8px;
+  height: 50px;
+  overflow: visible;
+  position: fixed;
+  top:0;
+  left: 0;
+  z-index: 99;
+}
+
+.page-content{
+  background-color: rgba(0,0,0,0);
+}
+
+.page-container{
+  transform: translateY(50px);
+  height: calc(100% - 50px);
+  width: 100%;
+}
+
