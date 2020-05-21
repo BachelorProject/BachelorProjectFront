@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { WelcomeComponent } from './welcome.component';
+import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
+import {NO_ERRORS_SCHEMA} from '@angular/core';
 
 describe('WelcomeComponent', () => {
   let component: WelcomeComponent;
@@ -8,7 +10,11 @@ describe('WelcomeComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ WelcomeComponent ]
+      declarations: [ WelcomeComponent ],
+      providers: [
+        FormBuilder,
+        ReactiveFormsModule],
+      schemas: [NO_ERRORS_SCHEMA]
     })
     .compileComponents();
   }));
