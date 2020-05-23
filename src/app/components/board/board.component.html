@@ -1,0 +1,48 @@
+<div class="container">
+  <div class="content" #content>
+    <form #filter id="filter" [formGroup]="filterForm" (ngSubmit)="filterWithParams(filterForm.value)">
+
+      <mat-form-field>
+        <input matInput placeholder="საძიებო სიტყვა" formControlName="searchString">
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>კატეგორია</mat-label>
+        <mat-select formControlName="categories" multiple>
+          <mat-option *ngFor="let category of categoryList" [value]="category">{{category}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>დან</mat-label>
+        <input matInput [matDatepicker]="pickerFrom" formControlName="fromDate">
+        <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+        <mat-datepicker #pickerFrom></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>მდე</mat-label>
+        <input matInput [matDatepicker]="pickerTo" formControlName="toDate">
+        <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+        <mat-datepicker #pickerTo></mat-datepicker>
+      </mat-form-field>
+
+      <button mat-mini-fab color="primary" type="submit">
+        <img src="../../../assets/images/search.svg">
+      </button>
+    </form>
+    <app-board-item [data]="tournament" *ngFor="let tournament of tournaments" ></app-board-item>
+    <mat-spinner style="margin:50px;"></mat-spinner>
+  </div>
+  <div class="right-panel">
+    <div class="calendar-container">
+      <mat-calendar></mat-calendar>
+    </div>
+    <div id="scroll-up" (click)="scrollToTop()">
+      <img src="../../../assets/images/scroll-up.svg">
+    </div>
+  </div>
+</div>
+
+
+

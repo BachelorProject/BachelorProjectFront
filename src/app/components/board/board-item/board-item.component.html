@@ -1,0 +1,25 @@
+<div class="container" [routerLink]="'/contest/' + data.id">
+  <div class="left-panel">
+    <img [src]="data.imageUrl" class="contest-image">
+    <div class="info-container">
+      <h2 class="united-grid">რეგისტრაცია</h2>
+      <img src="../../../../assets/images/calendar-register-start.svg" matTooltip="რეგისტრაციის დასაწყისი"/>
+      <p matTooltip="რეგისტრაციის დასაწყისი">{{getFormatted(data.registrationStart)}}</p>
+      <img src="../../../../assets/images/calendar-register-end.svg" matTooltip="რეგისტრაციის დასასრული"/>
+      <p matTooltip="რეგისტრაციის დასასრული">{{getFormatted(data.registrationEnd)}}</p>
+      <h2 class="united-grid">შემდეგი ტური</h2>
+      <img src="../../../../assets/images/calendar-first-event.svg" matTooltip="ჩატარების თარიღი"/>
+      <p matTooltip="ჩატარების თარიღი">{{getFormatted(data.nextContestStart)}}</p>
+      <img src="../../../../assets/images/timer-time.svg" matTooltip="ჩატარების ხანგრძლივობა"/>
+      <p matTooltip="ჩატარების ხანგრძლივობა">{{data.nextContestDuration}} წთ.</p>
+      <p class="united-grid category">{{data.category}}</p>
+    </div>
+  </div>
+  <div class="right-panel" [title]="data.title" >
+    <h1> {{data.title}}</h1>
+
+    <div #contest [innerHTML]="data.body">
+    </div>
+    <div #fade id="fade-gradient">read more...</div>
+  </div>
+</div>

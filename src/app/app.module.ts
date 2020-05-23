@@ -11,23 +11,36 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MatFormFieldModule} from '@angular/material/form-field';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
+import {MatSelectModule} from '@angular/material/select';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 
 import { MenuComponent } from './components/menu/menu.component';
 import {AppComponent} from './app.component';
 import {ConfigService} from '../config/config.service';
 import { WelcomeComponent } from './components/welcome/welcome.component';
+import { BoardComponent } from './components/board/board.component';
+import { BoardItemComponent } from './components/board/board-item/board-item.component';
+import {APIInterceptor} from '../config/APIInterceptor';
+
 const appRoutes: Routes = [
-  {path: '', component: WelcomeComponent}
+  {path: '', component: WelcomeComponent},
+  {path: 'board', component: BoardComponent}
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
     WelcomeComponent,
-    MenuComponent
+    MenuComponent,
+    BoardComponent,
+    BoardItemComponent
   ],
   imports: [
     BrowserModule,
@@ -35,6 +48,7 @@ const appRoutes: Routes = [
       appRoutes,
       {enableTracing: true} // <-- debugging purposes only
     ),
+    HttpClientModule,
     MatToolbarModule,
     MatIconModule,
     MatSidenavModule,
@@ -46,9 +60,20 @@ const appRoutes: Routes = [
     FormsModule,
     MatCheckboxModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    MatTooltipModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatSelectModule,
+    MatProgressSpinnerModule,
+    MatSnackBarModule
   ],
-  providers: [ConfigService],
+  providers: [ConfigService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: APIInterceptor,
+      multi: true,
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule {
