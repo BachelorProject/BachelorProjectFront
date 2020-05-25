@@ -50,9 +50,11 @@
   margin: 10px 10px 0;
   background-color: #fff;
   box-shadow: #999 3px 3px 6px;
-  display: flex;
+  display: grid;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
+  grid-template-columns: 18% 18% 18% 18% 8%; /* TODO: if small 2 rows*/
+  grid-column-gap: 3%;
   flex-direction: row;
 }
 

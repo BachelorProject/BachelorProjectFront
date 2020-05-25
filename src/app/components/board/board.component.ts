@@ -31,13 +31,13 @@ export class BoardComponent implements OnInit {
     this.configService.getTournamentList(from, to, this.searchString, this.categories, this.fromDate, this.toDate).subscribe(
       value => {
         // @ts-ignore
-        for ( const elem of value){// we know that value should be a list so we ignore error.
+        for (const elem of value){ // we know that value should be a list so we ignore error.
           this.tournaments.push(elem);
         }
         this.isFetching = false;
       }
       , error => {
-        this.snackBar.open('Something went wrong', 'Dismiss', {duration: 5000});
+        this.snackBar.open('დაფიქსირდა ხარვეზი, სცადეთ მოგვიანებით.', 'კარგი', {duration: 5000});
         this.isFetching = false;
       }
     );
@@ -78,7 +78,7 @@ export class BoardComponent implements OnInit {
   @HostListener('window:scroll', ['$event']) // for window scroll events
   onScroll(event) {
     const scrollPos = this.getScrollPosition();
-    if (scrollPos > 88.0) {
+    if (scrollPos > 88.0 + 12.0 * (1 - 50 / (this.tournaments.length + 50))) {
 
       if (!this.isFetching) {
         this.isFetching = true;
@@ -100,6 +100,9 @@ export class BoardComponent implements OnInit {
   }
 
   filterWithParams(params) {
+    if (! this.filterForm.valid){
+      return;
+    }
     this.categories = params.categories != null ? params.categories : this.categoryList;
     this.searchString = params.searchString != null ? params.searchString : '';
     this.fromDate = params.fromDate != null ? new Date(params.fromDate).getTime() : new Date().getTime();
