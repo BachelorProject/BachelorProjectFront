@@ -20,6 +20,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {CKEditorModule} from '@ckeditor/ckeditor5-angular';
 
 import { MenuComponent } from './components/menu/menu.component';
 import {AppComponent} from './app.component';
@@ -28,6 +29,7 @@ import { WelcomeComponent } from './components/welcome/welcome.component';
 import { BoardComponent } from './components/board/board.component';
 import { BoardItemComponent } from './components/board/board-item/board-item.component';
 import {APIInterceptor} from '../config/APIInterceptor';
+import { EditorComponent } from './components/editor/editor.component';
 
 const appRoutes: Routes = [
   {path: '', component: WelcomeComponent},
@@ -38,6 +40,8 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     WelcomeComponent,
+    MenuComponent,
+    EditorComponent
     MenuComponent,
     BoardComponent,
     BoardItemComponent
@@ -67,6 +71,8 @@ const appRoutes: Routes = [
     MatSelectModule,
     MatProgressSpinnerModule,
     MatSnackBarModule
+    MatButtonModule,
+    CKEditorModule
   ],
   providers: [ConfigService,
     {
