@@ -14,20 +14,23 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {CKEditorModule} from '@ckeditor/ckeditor5-angular';
 
 import { MenuComponent } from './components/menu/menu.component';
 import {AppComponent} from './app.component';
 import {ConfigService} from '../config/config.service';
 import { WelcomeComponent } from './components/welcome/welcome.component';
+import { EditorComponent } from './components/editor/editor.component';
 const appRoutes: Routes = [
-  {path: '', component: WelcomeComponent}
+  {path: '', component: EditorComponent}
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
     WelcomeComponent,
-    MenuComponent
+    MenuComponent,
+    EditorComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +49,8 @@ const appRoutes: Routes = [
     FormsModule,
     MatCheckboxModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    CKEditorModule
   ],
   providers: [ConfigService],
   bootstrap: [AppComponent]
