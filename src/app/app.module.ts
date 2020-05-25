@@ -22,7 +22,7 @@ import {ConfigService} from '../config/config.service';
 import { WelcomeComponent } from './components/welcome/welcome.component';
 import { EditorComponent } from './components/editor/editor.component';
 const appRoutes: Routes = [
-  {path: '', component: EditorComponent}
+  {path: '', component: WelcomeComponent}
 ];
 
 @NgModule({
