@@ -119,6 +119,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "BachelorProjectFront"
+    }
+  },
+  "defaultProject": "BachelorProjectFront",
+  "cli": {
+    "analytics": "2f5ca4d8-5ccc-4481-b5ca-f09ca43f486b"
+  }
 }

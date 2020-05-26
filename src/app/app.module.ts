@@ -41,7 +41,7 @@ const appRoutes: Routes = [
     AppComponent,
     WelcomeComponent,
     MenuComponent,
-    EditorComponent
+    EditorComponent,
     MenuComponent,
     BoardComponent,
     BoardItemComponent
@@ -70,7 +70,7 @@ const appRoutes: Routes = [
     MatNativeDateModule,
     MatSelectModule,
     MatProgressSpinnerModule,
-    MatSnackBarModule
+    MatSnackBarModule,
     MatButtonModule,
     CKEditorModule
   ],
