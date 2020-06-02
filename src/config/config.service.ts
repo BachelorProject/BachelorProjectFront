@@ -1,6 +1,6 @@
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Tournament} from './config.service.model';
+import {AuthResponse, Tournament} from './config.service.model';
 
 @Injectable()
 export class ConfigService {
@@ -23,4 +23,27 @@ export class ConfigService {
     return this.http.get<Tournament>('tournament/list', {params});
   }
 
+  signUp(email, password){
+    const res =  this.http.post<AuthResponse>('signup', {email, password});
+    console.log(res);
+    return res;
+  }
+
+  signIn(email, password){
+    const res =  this.http.post<AuthResponse>('signin', {email, password});
+    console.log(res);
+    return res;
+  }
+
+  signInFacebook(userInfo) {
+    console.log('HERE signInFacebook  ');
+    const res = this.http.post<AuthResponse>('signin/facebook', userInfo);
+    return res;
+  }
+
+  signInGoogle(userInfo: { google_email: string; google_id: string; last_name: string; photo_url: string; first_name: string }) {
+    const res = this.http.post<AuthResponse>('signin/google', userInfo);
+    console.log(res);
+    return res;
+  }
 }

@@ -1,5 +1,7 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {ConfigService} from '../../../config/config.service';
+import {AuthServiceLocal} from '../../auth.service';
 
 @Component({
   selector: 'app-welcome',
@@ -11,14 +13,20 @@ export class WelcomeComponent implements OnInit {
   registerFormGroup: FormGroup;
   passwordsMatch = true;
   post: any = '';
+
   @ViewChild('passInput') passElem: ElementRef;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, private configService: ConfigService, private authService: AuthServiceLocal) {
   }
 
   ngOnInit() {
     this.createForm();
+    // this.authService.authState.subscribe((user) => {
+    //   this.user = user;
+    //   this.loggedIn = (user != null);
+    // });
   }
+
 
   createForm() {
     const emailRegex: RegExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -79,7 +87,36 @@ export class WelcomeComponent implements OnInit {
     return this.loginFromGroup.get('password').hasError('required') ? 'Field is required' : '';
   }
 
+  signUp(){
+    const email = this.registerFormGroup.get('email');
+    const password  = this.registerFormGroup.get('password');
+    this.authService.signUp(email, password);
+  }
+
+  signIn(){
+    const email = this.loginFromGroup.get('email');
+    const password  = this.loginFromGroup.get('password');
+    this.authService.signIn(email, password);
+  }
+
+  signInWithGoogle() {
+    this.authService.signInWithGoogle();
+  }
+
+  signInWithFB() {
+    this.authService.signInWithFB();
+  }
+
+
+  // signOut(){
+  //   this.authService.signOut();
+  // }
+
+
   onSubmit(post) {
+    console.log('onSubmit');
     this.post = post;
   }
+
+
 }

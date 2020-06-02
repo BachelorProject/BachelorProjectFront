@@ -1,4 +1,6 @@
 <div class="welcome-container">
+  <div id="fb-root"></div>
+  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v7.0&appId=282612922769382&autoLogAppEvents=1"></script>
 
   <div class="quote-container">
     „I know that I know nothig” <div>Socrates</div>
@@ -26,7 +28,7 @@
             </mat-error>
           </mat-form-field>
 
-          <button class="submit-button" type="submit" mat-raised-button
+          <button class="submit-button" (click)="signIn()"type="submit" mat-raised-button
                   [disabled]="!loginFromGroup.valid && loginFromGroup.touched">Sign in
           </button>
 
@@ -36,7 +38,15 @@
           <p>or</p>
           <div></div>
         </div>
-        <p>facebook and google buttons here</p>
+<!--        <div class="fb-login-button" style="height: 50px" data-size="large" data-button-type="continue_with" data-layout="default" data-auto-logout-link="false" data-use-continue-as="false" data-width=""></div>-->
+        <button class="submit-button" (click)="signInWithFB()"type="submit" mat-raised-button>
+          Facebook Sign in
+        </button>
+
+        <button class="submit-button" (click)="signInWithGoogle()"type="submit" mat-raised-button>
+          Google Sign in
+        </button>
+
       </mat-tab>
       <mat-tab label="Sign Up">
 
@@ -69,13 +79,11 @@
           </mat-form-field>
 
 
-          <button class="submit-button" type="submit" mat-raised-button
+          <button class="submit-button"  (click)="signUp()" type="submit" mat-raised-button
                   [disabled]="!registerFormGroup.valid && registerFormGroup.touched">Sign up
           </button>
 
         </form>
-
-
 
       </mat-tab>
     </mat-tab-group>

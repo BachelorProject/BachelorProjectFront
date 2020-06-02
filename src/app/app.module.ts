@@ -31,11 +31,28 @@ import { BoardItemComponent } from './components/board/board-item/board-item.com
 import {APIInterceptor} from '../config/APIInterceptor';
 import { EditorComponent } from './components/editor/editor.component';
 
+import { SocialLoginModule, AuthServiceConfig } from 'angularx-social-login';
+import { GoogleLoginProvider, FacebookLoginProvider } from 'angularx-social-login';
+
 const appRoutes: Routes = [
   {path: '', component: WelcomeComponent},
   {path: 'board', component: BoardComponent}
 ];
 
+const config = new AuthServiceConfig([
+  {
+    id: FacebookLoginProvider.PROVIDER_ID,
+    provider: new FacebookLoginProvider('282612922769382')
+  },
+  {
+    id: GoogleLoginProvider.PROVIDER_ID,
+    provider: new GoogleLoginProvider('616971751002-usm5cqoimng46fake1g3qbslu3cgfcd1.apps.googleusercontent.com')
+  }
+]);
+
+export function provideConfig() {
+  return config;
+}
 @NgModule({
   declarations: [
     AppComponent,
@@ -72,13 +89,18 @@ const appRoutes: Routes = [
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatButtonModule,
-    CKEditorModule
+    CKEditorModule,
+    SocialLoginModule
   ],
   providers: [ConfigService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: APIInterceptor,
       multi: true,
+    },
+    {
+      provide: AuthServiceConfig,
+      useFactory: provideConfig
     }],
   bootstrap: [AppComponent]
 })
