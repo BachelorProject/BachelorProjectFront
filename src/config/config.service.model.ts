@@ -17,3 +17,9 @@ export interface AuthResponse {
   token: string;
   newUser: string;
 }
+
+export interface Subject {
+  id: number;
+  name: string;
+  color_id: number;
+}
