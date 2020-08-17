@@ -29,4 +29,33 @@ export class Utils {
     }
   }
 
+  public static subjectColor(color: number) {
+    switch (color) {
+      case 0:
+        return '#96C8ED';
+      case 1:
+        return '#F6A2D2';
+      case 2:
+        return '#FAFF5C';
+      case 3:
+        return '#FF9999';
+      case 4:
+        return '#79D184';
+      case 5:
+        return '#FFBF70';
+      case 6:
+        return '#B5E477';
+      case 7:
+        return '#B492DD';
+      case 8:
+        return '#9DFBFB';
+      case 9:
+        return '#ebebeb';
+      case 10:
+        return '#f3da82';
+      default:
+        return '#fa837a';
+    }
+  }
+
 }

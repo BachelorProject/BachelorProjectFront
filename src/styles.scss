@@ -56,7 +56,8 @@ $app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
   --color-accent: #{mat-color($app-accent)};
   --color-warn: #{mat-color($app-warn)};
 
-  --color-header-soft: #{#6A6A6A}
+  --color-header-soft: #{#6A6A6A};
+  --color-text-casual: #{#67879E};
 }
 
 html, body{
