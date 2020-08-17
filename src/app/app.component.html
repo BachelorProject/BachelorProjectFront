@@ -1,19 +1,19 @@
 <div class="container">
-  <mat-toolbar class="header">
-    <div class="logo-container">
-      <img id="logo" src="../assets/images/logo.svg">
-      <p>OLYMPO</p>
-    </div>
-    <app-menu *ngIf="!isScreenSmall" [direction]="'row'"></app-menu>
-    <img *ngIf="isScreenSmall" src="../assets/images/menu-icon-material.svg" (click)="drawer.toggle()" class="menu-icon">
-  </mat-toolbar>
+<!--  <mat-toolbar class="header">-->
+<!--    <div class="logo-container">-->
+<!--      <img id="logo" src="../assets/images/logo.svg">-->
+<!--      <p>OLYMPO</p>-->
+<!--    </div>-->
+<!--    <app-menu *ngIf="!isScreenSmall" [direction]="'row'"></app-menu>-->
+<!--    <img *ngIf="isScreenSmall" src="../assets/images/menu-icon-material.svg" (click)="drawer.toggle()" class="menu-icon">-->
+<!--  </mat-toolbar>-->
 
-  <mat-drawer-container *ngIf="isScreenSmall" class="drawer-container" [hasBackdrop]="true">
-    <mat-drawer #drawer [mode]="'side'">
-      <app-menu [direction]="'column'"></app-menu>
-    </mat-drawer>
-    <mat-drawer-container></mat-drawer-container>
-  </mat-drawer-container>
+<!--  <mat-drawer-container *ngIf="isScreenSmall" class="drawer-container" [hasBackdrop]="true">-->
+<!--    <mat-drawer #drawer [mode]="'side'">-->
+<!--      <app-menu [direction]="'column'"></app-menu>-->
+<!--    </mat-drawer>-->
+<!--    <mat-drawer-container></mat-drawer-container>-->
+<!--  </mat-drawer-container>-->
   <div class="page-container">
     <router-outlet></router-outlet>
   </div>

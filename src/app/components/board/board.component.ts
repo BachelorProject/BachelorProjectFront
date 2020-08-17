@@ -30,8 +30,7 @@ export class BoardComponent implements OnInit {
 
     this.configService.getTournamentList(from, to, this.searchString, this.categories, this.fromDate, this.toDate).subscribe(
       value => {
-        // @ts-ignore
-        for (const elem of value){ // we know that value should be a list so we ignore error.
+        for (const elem of value){
           this.tournaments.push(elem);
         }
         this.isFetching = false;

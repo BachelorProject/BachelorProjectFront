@@ -20,7 +20,7 @@ export class ConfigService {
         toDate: toDate.toString()
       }
     });
-    return this.http.get<Tournament>('tournament/list', {params});
+    return this.http.get<Tournament[]>('tournament/list', {params});
   }
 
 }

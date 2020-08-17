@@ -2,29 +2,29 @@ export class Utils {
 
   public static numberToMonth(mon: number) {
     switch (mon) {
-      case 1:
+      case 0:
         return 'იანვარი';
-      case 2:
+      case 1:
         return 'თებერვალი';
-      case 3:
+      case 2:
         return 'მარტი';
-      case 4:
+      case 3:
         return 'აპრილი';
-      case 5:
+      case 4:
         return 'მაისი';
-      case 6:
+      case 5:
         return 'ივნისი';
-      case 7:
+      case 6:
         return 'ივლისი';
-      case 8:
+      case 7:
         return 'აგვისტო';
-      case 9:
+      case 8:
         return 'სექტემბერი';
-      case 10:
+      case 9:
         return 'ოქტომბერი';
-      case 11:
+      case 10:
         return 'ნოემბერი';
-      case 12:
+      case 11:
         return 'დეკემბერი';
     }
   }

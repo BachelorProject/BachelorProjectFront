@@ -1,84 +1,90 @@
 <div class="welcome-container">
 
-  <div class="quote-container">
-    „I know that I know nothig” <div>Socrates</div>
+  <div class="form-panel">
+
+  </div>
+  <div class="animation-panel">
+    <img id="animation-bg" src="../../../assets/images/animation-landing/bg-animation-landing.svg">
+    <img id="animation-left" src="../../../assets/images/animation-landing/animation-landing-ltr.svg">
+    <img id="animation-bottom" src="../../../assets/images/animation-landing/animation-landing-btt.svg">
+    <img id="animation-top" src="../../../assets/images/animation-landing/animation-landing-ttb.svg">
+    <img id="animation-right" src="../../../assets/images/animation-landing/animation-landing-rtl.svg">
   </div>
 
-  <div class="login-register-container">
-    <mat-tab-group>
-      <mat-tab label="Sign In">
+  <!--  <div class="login-register-container">-->
+  <!--    <mat-tab-group>-->
+  <!--      <mat-tab label="Sign In">-->
 
-        <form [formGroup]="loginFromGroup" (ngSubmit)="onSubmit(loginFromGroup.value)" class="form">
+  <!--        <form [formGroup]="loginFromGroup" (ngSubmit)="onSubmit(loginFromGroup.value)" class="form">-->
 
-          <mat-form-field>
-            <mat-label>Email</mat-label>
-            <input matInput formControlName="email">
-            <mat-error>
-              {{ getErrorEmailLogin() }}
-            </mat-error>
-          </mat-form-field>
+  <!--          <mat-form-field>-->
+  <!--            <mat-label>Email</mat-label>-->
+  <!--            <input matInput formControlName="email">-->
+  <!--            <mat-error>-->
+  <!--              {{ getErrorEmailLogin() }}-->
+  <!--            </mat-error>-->
+  <!--          </mat-form-field>-->
 
-          <mat-form-field>
-            <mat-label>Password</mat-label>
-            <input matInput formControlName="password" type="password">
-            <mat-error>
-              {{ getErrorPasswordLogin() }}
-            </mat-error>
-          </mat-form-field>
+  <!--          <mat-form-field>-->
+  <!--            <mat-label>Password</mat-label>-->
+  <!--            <input matInput formControlName="password" type="password">-->
+  <!--            <mat-error>-->
+  <!--              {{ getErrorPasswordLogin() }}-->
+  <!--            </mat-error>-->
+  <!--          </mat-form-field>-->
 
-          <button class="submit-button" type="submit" mat-raised-button
-                  [disabled]="!loginFromGroup.valid && loginFromGroup.touched">Sign in
-          </button>
+  <!--          <button class="submit-button" type="submit" mat-raised-button-->
+  <!--                  [disabled]="!loginFromGroup.valid && loginFromGroup.touched">Sign in-->
+  <!--          </button>-->
 
-        </form>
+  <!--        </form>-->
 
-        <div class="divider-holder">
-          <p>or</p>
-          <div></div>
-        </div>
-        <p>facebook and google buttons here</p>
-      </mat-tab>
-      <mat-tab label="Sign Up">
-
-
-        <form [formGroup]="registerFormGroup" (ngSubmit)="onSubmit(registerFormGroup.value)" class="form">
-
-          <mat-form-field>
-            <mat-label>Email</mat-label>
-            <input matInput formControlName="email">
-            <mat-error>
-              {{ getErrorEmailRegister() }}
-            </mat-error>
-          </mat-form-field>
-
-          <mat-form-field style="margin-bottom: 13px">
-            <mat-label>Password</mat-label>
-            <input matInput formControlName="password" type="password" #passInput>
-            <mat-hint>Choose a password of at least eight characters, one uppercase letter and one number</mat-hint>
-            <mat-error>
-              {{ getErrorPasswordRegister() }}
-            </mat-error>
-          </mat-form-field>
-
-          <mat-form-field>
-            <mat-label>Re-enter Password</mat-label>
-            <input matInput formControlName="repassword" type="password">
-            <mat-error>
-              {{ getErrorRePasswordRegister() }}
-            </mat-error>
-          </mat-form-field>
+  <!--        <div class="divider-holder">-->
+  <!--          <p>or</p>-->
+  <!--          <div></div>-->
+  <!--        </div>-->
+  <!--        <p>facebook and google buttons here</p>-->
+  <!--      </mat-tab>-->
+  <!--      <mat-tab label="Sign Up">-->
 
 
-          <button class="submit-button" type="submit" mat-raised-button
-                  [disabled]="!registerFormGroup.valid && registerFormGroup.touched">Sign up
-          </button>
+  <!--        <form [formGroup]="registerFormGroup" (ngSubmit)="onSubmit(registerFormGroup.value)" class="form">-->
 
-        </form>
+  <!--          <mat-form-field>-->
+  <!--            <mat-label>Email</mat-label>-->
+  <!--            <input matInput formControlName="email">-->
+  <!--            <mat-error>-->
+  <!--              {{ getErrorEmailRegister() }}-->
+  <!--            </mat-error>-->
+  <!--          </mat-form-field>-->
+
+  <!--          <mat-form-field style="margin-bottom: 13px">-->
+  <!--            <mat-label>Password</mat-label>-->
+  <!--            <input matInput formControlName="password" type="password" #passInput>-->
+  <!--            <mat-hint>Choose a password of at least eight characters, one uppercase letter and one number</mat-hint>-->
+  <!--            <mat-error>-->
+  <!--              {{ getErrorPasswordRegister() }}-->
+  <!--            </mat-error>-->
+  <!--          </mat-form-field>-->
+
+  <!--          <mat-form-field>-->
+  <!--            <mat-label>Re-enter Password</mat-label>-->
+  <!--            <input matInput formControlName="repassword" type="password">-->
+  <!--            <mat-error>-->
+  <!--              {{ getErrorRePasswordRegister() }}-->
+  <!--            </mat-error>-->
+  <!--          </mat-form-field>-->
 
 
+  <!--          <button class="submit-button" type="submit" mat-raised-button-->
+  <!--                  [disabled]="!registerFormGroup.valid && registerFormGroup.touched">Sign up-->
+  <!--          </button>-->
 
-      </mat-tab>
-    </mat-tab-group>
-  </div>
+  <!--        </form>-->
+
+
+  <!--      </mat-tab>-->
+  <!--    </mat-tab-group>-->
+  <!--  </div>-->
 
 </div>
