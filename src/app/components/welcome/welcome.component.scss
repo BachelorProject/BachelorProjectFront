@@ -1,3 +1,6 @@
+*{
+  font-family: 'Baloo Tamma 2', cursive;
+}
 
 .welcome-container {
   width: 100%;
@@ -18,17 +21,27 @@
   flex-direction: column;
 }
 
-.animation-panel{
+.animation-panel {
   align-items: start;
   position: relative;
 }
 
-#animation-bg{
+#animation-bg {
   width: 80%;
   position: absolute;
+  animation: appear-animation 800ms ease-out;
 }
 
-#animation-left{
+@keyframes appear-animation {
+  0% {
+    opacity: .5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+#animation-left {
   width: 19%;
   position: absolute;
   margin-left: 3%;
@@ -45,12 +58,12 @@
   }
 }
 
-#animation-bottom{
+#animation-bottom {
   width: 20%;
   position: absolute;
   margin-left: 22%;
   margin-top: 10%;
-  animation: anim-btt 800ms ease-out, anim-float-bottom 5000ms ease-in-out infinite;
+  animation: anim-btt 800ms ease-out, anim-float-bottom 5000ms ease-in-out infinite 800ms;
 }
 
 @keyframes anim-btt {
@@ -74,12 +87,12 @@
   }
 }
 
-#animation-top{
+#animation-top {
   width: 23%;
   position: absolute;
   margin-left: 46%;
   margin-top: -5%;
-  animation: anim-ttb 800ms ease-out, anim-float-top 5000ms ease-in-out infinite;
+  animation: anim-ttb 800ms ease-out, anim-float-top 5000ms ease-in-out infinite 800ms;
 }
 
 @keyframes anim-ttb {
@@ -90,8 +103,6 @@
     transform: translateY(0);
   }
 }
-
-
 
 @keyframes anim-float-top {
   0% {
@@ -105,7 +116,7 @@
   }
 }
 
-#animation-right{
+#animation-right {
   width: 34%;
   position: absolute;
   margin-left: 49%;
@@ -122,86 +133,89 @@
   }
 }
 
-//
-//.login-register-container {
-//  padding: 10px;
-//  width: 300px;
-//  height: 300px;
-//  background-color: #fff;
-//  box-shadow: #ccc 2px 2px 10px;
-//  //height: 400px;
-//}
-//
-//::ng-deep.mat-tab-label, ::ng-deep.mat-tab-label-active{
-//  min-width: 50%!important;
-//  padding: 0!important;
-//  margin: 0!important;
-//}
-//
-//
-//@media (max-width: 1000px){
-//  .welcome-container{
-//    height: fit-content;
-//    overflow-y: scroll;
-//    justify-content: center;
-//    min-height: 100%;
-//    -ms-overflow-style: none;  /* Internet Explorer 10+ */
-//    scrollbar-width: none;  /* Firefox */
-//  }
-//  .welcome-container::-webkit-scrollbar {
-//    width: 0;  /* Remove scrollbar space */
-//    background: transparent;  /* Optional: just make scrollbar invisible */
-//  }
-//  /* Optional: show position indicator in red */
-//  .welcome-container::-webkit-scrollbar-thumb {
-//    background: #FF0000;
-//  }
-//}
-//
-//form{
-//  padding: 5px;
-//  display: flex;
-//  justify-content: center;
-//  flex-direction: column;
-//  align-items: center;
-//}
-//
-//mat-form-field{
-//  min-width: calc(100% - 10px);
-//}
-//
-//.submit-button{
-//  width: 70%;
-//}
-//
-//
-//.divider-holder{
-//  position: relative;
-//  width: 90%;
-//  margin:auto;
-//  height:45px;
-//}
-//.divider-holder div{
-//  width: 100%;
-//  height: 1px;
-//  background-color: #ddd;
-//  position: absolute;
-//  left:0;
-//  top:50%;
-//}
-//
-//.divider-holder p{
-//  background-color: #fff;
-//  width: fit-content;
-//  position: absolute;
-//  left:50%;
-//  top: 50%;
-//  transform: translateX(-50%) translateY(-50%);
-//  margin:0;
-//  padding: 0 5px;
-//  color: #aaa;
-//  text-transform: uppercase;
-//  font-size: 14px;
-//  z-index: 99;
-//}
-//
+h1 {
+  font-size: 40px;
+  font-weight: bold;
+  margin: 0;
+  line-height: 40px;
+  letter-spacing: 3.36px;
+  color: var(--color-header-soft);
+}
+
+form {
+  padding: 5px;
+  display: flex;
+  width: 35%;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+button {
+  margin: 10px;
+}
+
+.mat-form-field {
+  width: 100%;
+  font-weight: 500;
+  color: #3D3D3D80;
+}
+
+.mat-error {
+  color: #EF6351;
+}
+
+.mat-input-prefix{
+  width: 16px;
+  margin-left: 5px;
+  margin-right: 5px;
+  transform: translateY(2px);
+}
+
+@media (max-width: 960px) {
+  .welcome-container {
+    height: fit-content;
+    overflow-y: scroll;
+    justify-content: center;
+    min-height: 100%;
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    scrollbar-width: none; /* Firefox */
+  }
+  .welcome-container::-webkit-scrollbar {
+    width: 0; /* Remove scrollbar space */
+    background: transparent; /* Optional: just make scrollbar invisible */
+  }
+  .animation-panel {
+    display: none;
+  }
+  .form-panel {
+    width: 100%;
+  }
+}
+
+@media (max-width: 540px) {
+  form {
+    width: 60%;
+  }
+}
+
+.submit-button {
+  width: 80%;
+  border: solid 0;
+  padding: 5px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  font-size: 16px;
+  color: #FCFCFC;
+  border-radius: 40px;
+  background-color: #1B73F0;
+}
+
+#forgot-pass{
+  font-weight: 600;
+  font-size: 26px/36px;
+  letter-spacing: 0;
+  color: #3D3D3D80;
+  opacity: 1;
+  text-decoration: none;
+}
