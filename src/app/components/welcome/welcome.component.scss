@@ -20,7 +20,6 @@
   justify-content: center;
   flex-direction: column;
 }
-
 .animation-panel {
   align-items: start;
   position: relative;
@@ -34,7 +33,7 @@
 
 @keyframes appear-animation {
   0% {
-    opacity: .5;
+    opacity: .0;
   }
   100% {
     opacity: 1;
@@ -172,7 +171,7 @@ button {
   transform: translateY(2px);
 }
 
-@media (max-width: 960px) {
+@media (max-width: 1140px) {
   .welcome-container {
     height: fit-content;
     overflow-y: scroll;
@@ -195,7 +194,7 @@ button {
 
 @media (max-width: 540px) {
   form {
-    width: 60%;
+    width: 65%;
   }
 }
 
@@ -211,11 +210,32 @@ button {
   background-color: #1B73F0;
 }
 
-#forgot-pass{
+.link-text{
   font-weight: 600;
   font-size: 26px/36px;
   letter-spacing: 0;
   color: #3D3D3D80;
-  opacity: 1;
   text-decoration: none;
+  text-align: center;
+}
+
+.link-text a{
+  white-space: nowrap;
+  color: #001A49;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+p {
+  margin: 5px 0;
+}
+
+#social-container{
+
+}
+
+.social{
+  width: 30px;
+  cursor: pointer;
+  margin: 5px 10px 10px;
 }

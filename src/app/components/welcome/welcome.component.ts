@@ -9,8 +9,10 @@ import {AuthServiceLocal} from '../../auth.service';
   styleUrls: ['./welcome.component.scss']
 })
 export class WelcomeComponent implements OnInit {
+  state = 'login';
   loginFromGroup: FormGroup;
   registerFormGroup: FormGroup;
+  recoverFromGroup: FormGroup;
   passwordsMatch = true;
   post: any = '';
 
@@ -41,6 +43,9 @@ export class WelcomeComponent implements OnInit {
         [Validators.required, this.checkRePasswordRegister.bind(this)]
       )]]
     });
+    this.recoverFromGroup = this.formBuilder.group({
+      email: [null, [Validators.required, Validators.pattern(emailRegex)]]
+    });
   }
 
   checkPasswordRegister(control) {
@@ -69,6 +74,11 @@ export class WelcomeComponent implements OnInit {
         this.registerFormGroup.get('email').hasError('alreadyInUse') ? 'This email is already in use' : '';
   }
 
+  getErrorEmailRecover() {
+    return this.recoverFromGroup.get('email').hasError('required') ? 'Field is required' :
+      this.recoverFromGroup.get('email').hasError('pattern') ? 'Not a valid email' : '';
+  }
+
   getErrorPasswordRegister() {
     return this.registerFormGroup.get('password').hasError('required') ? 'Field is required (At least 8 characters, one uppercase letter and one number)' :
       this.registerFormGroup.get('password').hasError('requirements') ? 'Password requirements are not met. (At least eight characters, one uppercase letter and one number.)' : '';
@@ -87,18 +97,6 @@ export class WelcomeComponent implements OnInit {
     return this.loginFromGroup.get('password').hasError('required') ? 'Field is required' : '';
   }
 
-  signUp(){
-    const email = this.registerFormGroup.get('email');
-    const password  = this.registerFormGroup.get('password');
-    this.authService.signUp(email, password);
-  }
-
-  signIn(){
-    const email = this.loginFromGroup.get('email');
-    const password  = this.loginFromGroup.get('password');
-    this.authService.signIn(email, password);
-  }
-
   signInWithGoogle() {
     this.authService.signInWithGoogle();
   }
@@ -107,16 +105,27 @@ export class WelcomeComponent implements OnInit {
     this.authService.signInWithFB();
   }
 
-
-  // signOut(){
-  //   this.authService.signOut();
-  // }
-
-
-  onSubmit(post) {
-    console.log('onSubmit');
-    this.post = post;
+  onSubmitLogin(post) {
+    if (post.email !== null && post.password !== null) {
+      this.authService.signIn(post.email, post.password);
+    }
   }
 
+  onSubmitRegister(post) {
+    if (post.email !== null && post.password !== null) {
+      this.authService.signUp(post.email, post.password);
+    }
+  }
+
+  onSubmitRecover(post) {
+    if (post.email !== null) {
+      // Todo: mariam daamate es servisi.
+      // this.authService.recoverPassword(post.email);
+    }
+  }
+
+  changeState(state) {
+    this.state = state;
+  }
 
 }

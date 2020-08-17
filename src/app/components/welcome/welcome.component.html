@@ -2,7 +2,9 @@
   <div class="form-panel">
     <h1>OLYMPO</h1>
 
-    <form [formGroup]="loginFromGroup" (ngSubmit)="onSubmit(loginFromGroup.value)" class="form">
+    <!--    STATE LOGIN-->
+    <form *ngIf="state=='login'" [formGroup]="loginFromGroup" (ngSubmit)="onSubmitLogin(loginFromGroup.value)"
+          class="form">
 
       <mat-form-field>
         <mat-label>Email</mat-label>
@@ -22,13 +24,83 @@
         </mat-error>
       </mat-form-field>
 
-      <a id="forgot-pass" href="#">Forgot password?</a>
+      <a class="link-text" style="cursor: pointer" (click)="changeState('forgot password')">Forgot password?</a>
 
       <button class="submit-button" type="submit" mat-raised-button
-              [disabled]="!loginFromGroup.valid && loginFromGroup.touched">Login
+              [disabled]="!loginFromGroup.valid && loginFromGroup.touched">Sign in
       </button>
 
+      <p class="link-text">Don't have an account? <a (click)="changeState('register')">Sign up</a>
+      </p>
+
     </form>
+
+    <!--    STATE REGISTER-->
+    <form *ngIf="state=='register'" [formGroup]="registerFormGroup"
+          (ngSubmit)="onSubmitRegister(registerFormGroup.value)" class="form">
+
+      <mat-form-field>
+        <mat-label>Email</mat-label>
+        <img class="mat-input-prefix" src="../../../assets/images/ic-material-person-outline.svg" matPrefix>
+        <input matInput formControlName="email" autocomplete="off">
+        <mat-error>
+          {{ getErrorEmailRegister() }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field style="margin-bottom: 13px">
+        <mat-label>Password</mat-label>
+        <img class="mat-input-prefix" src="../../../assets/images/ic-feather-lock.svg" matPrefix>
+        <input matInput formControlName="password" type="password" #passInput>
+        <mat-hint>Choose a password of at least eight characters, one uppercase letter and one number</mat-hint>
+        <mat-error>
+          {{ getErrorPasswordRegister() }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Re-enter Password</mat-label>
+        <img class="mat-input-prefix" src="../../../assets/images/ic-feather-lock.svg" matPrefix>
+        <input matInput formControlName="repassword" type="password">
+        <mat-error>
+          {{ getErrorRePasswordRegister() }}
+        </mat-error>
+      </mat-form-field>
+
+      <button class="submit-button" type="submit" mat-raised-button
+              [disabled]="!loginFromGroup.valid && loginFromGroup.touched">Sign up
+      </button>
+
+      <p class="link-text">Already a member? <a (click)="changeState('login')">Sign in</a></p>
+    </form>
+
+    <!--    STATE FORGOT PASSWORD-->
+    <form *ngIf="state=='forgot password'" [formGroup]="recoverFromGroup"
+          (ngSubmit)="onSubmitRecover(recoverFromGroup.value)" class="form">
+
+      <mat-form-field>
+        <mat-label>Email</mat-label>
+        <img class="mat-input-prefix" src="../../../assets/images/ic-material-person-outline.svg" matPrefix>
+        <input matInput formControlName="email" autocomplete="off">
+        <mat-hint>Enter your account's email</mat-hint>
+        <mat-error>
+          {{ getErrorEmailRecover() }}
+        </mat-error>
+      </mat-form-field>
+
+      <button class="submit-button" type="submit" mat-raised-button
+              [disabled]="!loginFromGroup.valid && loginFromGroup.touched">Send an email
+      </button>
+
+      <p class="link-text">Already a member? <a (click)="changeState('login')">Sign in</a></p>
+
+    </form>
+
+    <p class="link-text">or Connect with:</p>
+    <div id="social-container">
+      <img class="social" src="../../../assets/images/ic-google.svg" (click)="signInWithGoogle()">
+      <img class="social" src="../../../assets/images/ic-facebook.svg" (click)="signInWithFB()">
+    </div>
   </div>
   <div class="animation-panel">
     <img id="animation-bg" src="../../../assets/images/animation-landing/bg-animation-landing.svg">

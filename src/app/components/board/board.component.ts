@@ -2,7 +2,6 @@ import {Component, HostListener, OnInit} from '@angular/core';
 import {Tournament} from '../../../config/config.service.model';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {ConfigService} from '../../../config/config.service';
-import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-board',
@@ -23,20 +22,19 @@ export class BoardComponent implements OnInit {
   toDate = 19999999999999;
   filterForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private configService: ConfigService, private snackBar: MatSnackBar) {
+  constructor(private formBuilder: FormBuilder, private configService: ConfigService) {
   }
 
   fetchTournaments(from: number, to: number) {
 
     this.configService.getTournamentList(from, to, this.searchString, this.categories, this.fromDate, this.toDate).subscribe(
       value => {
-        for (const elem of value){
+        for (const elem of value) {
           this.tournaments.push(elem);
         }
         this.isFetching = false;
       }
       , error => {
-        this.snackBar.open('დაფიქსირდა ხარვეზი, სცადეთ მოგვიანებით.', 'კარგი', {duration: 5000});
         this.isFetching = false;
       }
     );
@@ -99,7 +97,7 @@ export class BoardComponent implements OnInit {
   }
 
   filterWithParams(params) {
-    if (! this.filterForm.valid){
+    if (!this.filterForm.valid) {
       return;
     }
     this.categories = params.categories != null ? params.categories : this.categoryList;
