@@ -11,3 +11,9 @@ export interface Tournament {
   nextContestDuration: number;
   category: string;
 }
+
+export interface AuthResponse {
+  success: string;
+  token: string;
+  newUser: string;
+}

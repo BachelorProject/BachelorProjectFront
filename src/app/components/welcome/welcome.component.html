@@ -1,4 +1,6 @@
 <div class="welcome-container">
+  <div id="fb-root"></div>
+  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v7.0&appId=282612922769382&autoLogAppEvents=1"></script>
 
   <div class="form-panel">
 
@@ -33,58 +35,87 @@
   <!--            </mat-error>-->
   <!--          </mat-form-field>-->
 
-  <!--          <button class="submit-button" type="submit" mat-raised-button-->
-  <!--                  [disabled]="!loginFromGroup.valid && loginFromGroup.touched">Sign in-->
-  <!--          </button>-->
+  <div class="login-register-container">
+    <mat-tab-group>
+      <mat-tab label="Sign In">
 
-  <!--        </form>-->
+        <form [formGroup]="loginFromGroup" (ngSubmit)="onSubmit(loginFromGroup.value)" class="form">
 
-  <!--        <div class="divider-holder">-->
-  <!--          <p>or</p>-->
-  <!--          <div></div>-->
-  <!--        </div>-->
-  <!--        <p>facebook and google buttons here</p>-->
-  <!--      </mat-tab>-->
-  <!--      <mat-tab label="Sign Up">-->
+          <mat-form-field>
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email">
+            <mat-error>
+              {{ getErrorEmailLogin() }}
+            </mat-error>
+          </mat-form-field>
 
+          <mat-form-field>
+            <mat-label>Password</mat-label>
+            <input matInput formControlName="password" type="password">
+            <mat-error>
+              {{ getErrorPasswordLogin() }}
+            </mat-error>
+          </mat-form-field>
 
-  <!--        <form [formGroup]="registerFormGroup" (ngSubmit)="onSubmit(registerFormGroup.value)" class="form">-->
+          <button class="submit-button" (click)="signIn()"type="submit" mat-raised-button
+                  [disabled]="!loginFromGroup.valid && loginFromGroup.touched">Sign in
+          </button>
 
-  <!--          <mat-form-field>-->
-  <!--            <mat-label>Email</mat-label>-->
-  <!--            <input matInput formControlName="email">-->
-  <!--            <mat-error>-->
-  <!--              {{ getErrorEmailRegister() }}-->
-  <!--            </mat-error>-->
-  <!--          </mat-form-field>-->
+        </form>
 
-  <!--          <mat-form-field style="margin-bottom: 13px">-->
-  <!--            <mat-label>Password</mat-label>-->
-  <!--            <input matInput formControlName="password" type="password" #passInput>-->
-  <!--            <mat-hint>Choose a password of at least eight characters, one uppercase letter and one number</mat-hint>-->
-  <!--            <mat-error>-->
-  <!--              {{ getErrorPasswordRegister() }}-->
-  <!--            </mat-error>-->
-  <!--          </mat-form-field>-->
+        <div class="divider-holder">
+          <p>or</p>
+          <div></div>
+        </div>
+<!--        <div class="fb-login-button" style="height: 50px" data-size="large" data-button-type="continue_with" data-layout="default" data-auto-logout-link="false" data-use-continue-as="false" data-width=""></div>-->
+        <button class="submit-button" (click)="signInWithFB()"type="submit" mat-raised-button>
+          Facebook Sign in
+        </button>
 
-  <!--          <mat-form-field>-->
-  <!--            <mat-label>Re-enter Password</mat-label>-->
-  <!--            <input matInput formControlName="repassword" type="password">-->
-  <!--            <mat-error>-->
-  <!--              {{ getErrorRePasswordRegister() }}-->
-  <!--            </mat-error>-->
-  <!--          </mat-form-field>-->
+        <button class="submit-button" (click)="signInWithGoogle()"type="submit" mat-raised-button>
+          Google Sign in
+        </button>
 
-
-  <!--          <button class="submit-button" type="submit" mat-raised-button-->
-  <!--                  [disabled]="!registerFormGroup.valid && registerFormGroup.touched">Sign up-->
-  <!--          </button>-->
-
-  <!--        </form>-->
+      </mat-tab>
+      <mat-tab label="Sign Up">
 
 
-  <!--      </mat-tab>-->
-  <!--    </mat-tab-group>-->
-  <!--  </div>-->
+        <form [formGroup]="registerFormGroup" (ngSubmit)="onSubmit(registerFormGroup.value)" class="form">
+
+          <mat-form-field>
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email">
+            <mat-error>
+              {{ getErrorEmailRegister() }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field style="margin-bottom: 13px">
+            <mat-label>Password</mat-label>
+            <input matInput formControlName="password" type="password" #passInput>
+            <mat-hint>Choose a password of at least eight characters, one uppercase letter and one number</mat-hint>
+            <mat-error>
+              {{ getErrorPasswordRegister() }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Re-enter Password</mat-label>
+            <input matInput formControlName="repassword" type="password">
+            <mat-error>
+              {{ getErrorRePasswordRegister() }}
+            </mat-error>
+          </mat-form-field>
+
+
+          <button class="submit-button"  (click)="signUp()" type="submit" mat-raised-button
+                  [disabled]="!registerFormGroup.valid && registerFormGroup.touched">Sign up
+          </button>
+
+        </form>
+
+      </mat-tab>
+    </mat-tab-group>
+  </div>
 
 </div>
