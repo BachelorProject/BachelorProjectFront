@@ -51,10 +51,10 @@
       <mat-form-field style="margin-bottom: 13px">
         <mat-label>Password</mat-label>
         <img class="mat-input-prefix" src="../../../assets/images/ic-feather-lock.svg" matPrefix>
-        <input matInput formControlName="password" type="password" #passInput>
+        <input matInput formControlName="password" type="password">
         <mat-hint>Choose a password of at least eight characters, one uppercase letter and one number</mat-hint>
         <mat-error>
-          {{ getErrorPasswordRegister() }}
+          {{ getErrorPassword() }}
         </mat-error>
       </mat-form-field>
 
@@ -63,12 +63,12 @@
         <img class="mat-input-prefix" src="../../../assets/images/ic-feather-lock.svg" matPrefix>
         <input matInput formControlName="repassword" type="password">
         <mat-error>
-          {{ getErrorRePasswordRegister() }}
+          {{ getErrorRePassword() }}
         </mat-error>
       </mat-form-field>
 
       <button class="submit-button" type="submit" mat-raised-button
-              [disabled]="!loginFromGroup.valid && loginFromGroup.touched">Sign up
+              [disabled]="!registerFormGroup.valid && registerFormGroup.touched">Sign up
       </button>
 
       <p class="link-text">Already a member? <a (click)="changeState('login')">Sign in</a></p>
@@ -89,10 +89,40 @@
       </mat-form-field>
 
       <button class="submit-button" type="submit" mat-raised-button
-              [disabled]="!loginFromGroup.valid && loginFromGroup.touched">Send an email
+              [disabled]="!recoverFromGroup.valid && recoverFromGroup.touched">Send an email
       </button>
 
       <p class="link-text">Already a member? <a (click)="changeState('login')">Sign in</a></p>
+
+    </form>
+
+    <!--    STATE RECOVER PASSWORD-->
+    <form *ngIf="state=='recover password'" [formGroup]="newPassFromGroup"
+          (ngSubmit)="onSubmitRecover(newPassFromGroup.value)" class="form">
+
+      <mat-form-field style="margin-bottom: 13px">
+        <mat-label>New Password</mat-label>
+        <img class="mat-input-prefix" src="../../../assets/images/ic-feather-lock.svg" matPrefix>
+        <input matInput formControlName="password" type="password">
+        <mat-hint>Choose a password of at least eight characters, one uppercase letter and one number</mat-hint>
+        <mat-error>
+          {{ getErrorPassword() }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Re-enter Password</mat-label>
+        <img class="mat-input-prefix" src="../../../assets/images/ic-feather-lock.svg" matPrefix>
+        <input matInput formControlName="repassword" type="password">
+        <mat-error>
+          {{ getErrorRePassword() }}
+        </mat-error>
+      </mat-form-field>
+      <button class="submit-button" type="submit" mat-raised-button
+              [disabled]="!newPassFromGroup.valid && newPassFromGroup.touched">Reset Password
+      </button>
+
+      <p class="link-text">Or you can return back to <a (click)="changeState('login')">Sign in</a></p>
 
     </form>
 

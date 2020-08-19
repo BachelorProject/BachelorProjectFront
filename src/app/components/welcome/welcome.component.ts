@@ -1,7 +1,8 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ConfigService} from '../../../config/config.service';
 import {AuthServiceLocal} from '../../auth.service';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-welcome',
@@ -13,12 +14,19 @@ export class WelcomeComponent implements OnInit {
   loginFromGroup: FormGroup;
   registerFormGroup: FormGroup;
   recoverFromGroup: FormGroup;
+  newPassFromGroup: FormGroup;
   passwordsMatch = true;
   post: any = '';
+  recoverToken = '';
 
-  @ViewChild('passInput') passElem: ElementRef;
-
-  constructor(private formBuilder: FormBuilder, private configService: ConfigService, private authService: AuthServiceLocal) {
+  constructor(private formBuilder: FormBuilder, private configService: ConfigService, private authService: AuthServiceLocal,
+              private activatedRoute: ActivatedRoute) {
+    this.activatedRoute.queryParams.subscribe(params => {
+      this.recoverToken = params.recoverToken;
+      if (this.recoverToken != null) {
+        this.state = 'recover password';
+      }
+    });
   }
 
   ngOnInit() {
@@ -45,6 +53,12 @@ export class WelcomeComponent implements OnInit {
     });
     this.recoverFromGroup = this.formBuilder.group({
       email: [null, [Validators.required, Validators.pattern(emailRegex)]]
+    });
+    this.newPassFromGroup = this.formBuilder.group({
+      password: [null, [Validators.required, this.checkPasswordRegister]],
+      repassword: [null, [Validators.compose(
+        [Validators.required, this.checkRePasswordRegister.bind(this)]
+      )]]
     });
   }
 
@@ -79,12 +93,12 @@ export class WelcomeComponent implements OnInit {
       this.recoverFromGroup.get('email').hasError('pattern') ? 'Not a valid email' : '';
   }
 
-  getErrorPasswordRegister() {
+  getErrorPassword() {
     return this.registerFormGroup.get('password').hasError('required') ? 'Field is required (At least 8 characters, one uppercase letter and one number)' :
       this.registerFormGroup.get('password').hasError('requirements') ? 'Password requirements are not met. (At least eight characters, one uppercase letter and one number.)' : '';
   }
 
-  getErrorRePasswordRegister() {
+  getErrorRePassword() {
     return this.registerFormGroup.get('repassword').hasError('required') ? 'Field is required' : 'Passwords does not match.';
   }
 

@@ -1,5 +1,5 @@
 import {Component, HostListener, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -9,8 +9,14 @@ import {Router} from '@angular/router';
 export class AppComponent implements OnInit {
   title = 'Olympo';
   isScreenSmall = false;
+  showHeader = true;
 
-  constructor(public router: Router) { }
+  constructor(public router: Router, public activatedRoute: ActivatedRoute) {
+    this.activatedRoute.queryParams.subscribe(params => {
+      const urlTree = this.router.parseUrl(this.router.url);
+      this.showHeader = urlTree.root.children.primary != null;
+    });
+  }
 
   ngOnInit(): void {
     this.isScreenSmall = document.body.offsetWidth < 1000;
