@@ -54,7 +54,7 @@
         <input matInput formControlName="password" type="password">
         <mat-hint>Choose a password of at least eight characters, one uppercase letter and one number</mat-hint>
         <mat-error>
-          {{ getErrorPassword() }}
+          {{ getErrorPasswordRegister() }}
         </mat-error>
       </mat-form-field>
 
@@ -63,7 +63,7 @@
         <img class="mat-input-prefix" src="../../../assets/images/ic-feather-lock.svg" matPrefix>
         <input matInput formControlName="repassword" type="password">
         <mat-error>
-          {{ getErrorRePassword() }}
+          {{ getErrorRePasswordRegister() }}
         </mat-error>
       </mat-form-field>
 
@@ -98,7 +98,7 @@
 
     <!--    STATE RECOVER PASSWORD-->
     <form *ngIf="state=='recover password'" [formGroup]="newPassFromGroup"
-          (ngSubmit)="onSubmitRecover(newPassFromGroup.value)" class="form">
+          (ngSubmit)="onSubmitChangePassword(newPassFromGroup.value)" class="form">
 
       <mat-form-field style="margin-bottom: 13px">
         <mat-label>New Password</mat-label>
@@ -106,7 +106,7 @@
         <input matInput formControlName="password" type="password">
         <mat-hint>Choose a password of at least eight characters, one uppercase letter and one number</mat-hint>
         <mat-error>
-          {{ getErrorPassword() }}
+          {{ getErrorPasswordNewPass() }}
         </mat-error>
       </mat-form-field>
 
@@ -115,7 +115,7 @@
         <img class="mat-input-prefix" src="../../../assets/images/ic-feather-lock.svg" matPrefix>
         <input matInput formControlName="repassword" type="password">
         <mat-error>
-          {{ getErrorRePassword() }}
+          {{ getErrorRePasswordNewPass() }}
         </mat-error>
       </mat-form-field>
       <button class="submit-button" type="submit" mat-raised-button

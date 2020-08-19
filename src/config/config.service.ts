@@ -42,4 +42,9 @@ export class ConfigService {
   changePassword(email: any, password: any) {
     return this.http.post<AuthResponse>('change_password', {email, password});
   }
+
+
+  recoverPassword(email: string) {
+    return this.http.post<AuthResponse>('recover_password_by_email', {email});
+  }
 }

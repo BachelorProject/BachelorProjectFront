@@ -154,6 +154,19 @@ export class AuthServiceLocal {
   signOut(){
     this.authService.signOut();
   }
+
+
+  recoverPassword(email: string){
+    this.configService.recoverPassword(email).subscribe(
+      value => {
+        console.log(value);
+      }
+      , error => {
+        // this.snackBar.open('დაფიქსირდა ხარვეზი, სცადეთ მოგვიანებით.', 'კარგი', {duration: 5000});
+        // this.isFetching = false;
+        console.log('error in subscribe');
+      });
+  }
 }
   /// ?????????
 
