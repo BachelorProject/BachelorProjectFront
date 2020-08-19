@@ -89,7 +89,7 @@ export class AuthServiceLocal {
 
 
   signUp(email, password){
-    this.configService.signUp(email.value, password.value).subscribe(
+    this.configService.signUp(email, password).subscribe(
       value => {
         console.log(value);
         localStorage.setItem('access_token', value.token);
@@ -103,7 +103,7 @@ export class AuthServiceLocal {
   }
 
   signIn(email, password){
-    this.configService.signIn(email.value, password.value).subscribe(
+    this.configService.signIn(email, password).subscribe(
       value => {
         console.log(value);
         localStorage.setItem('access_token', value.token);
