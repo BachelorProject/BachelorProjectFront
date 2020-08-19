@@ -9,11 +9,12 @@ import {Utils} from '../../../config/utils';
 export class SubjectTagComponent implements OnInit {
   @Input() subject: Subject;
   color: string;
-  constructor() {}
+
+  constructor() {
+  }
 
 
   ngOnInit(): void {
-    console.log('subject   ' +  this.subject);
     this.color = Utils.subjectColor(this.subject.color_id);
   }
 
