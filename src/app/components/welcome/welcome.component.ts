@@ -131,6 +131,11 @@ export class WelcomeComponent implements OnInit {
     }
   }
 
+  onSubmitChangePassword(post) {
+    if (post.email !== null && post.password !== null) {
+      this.authService.changePassword(post.email, post.password);
+    }
+  }
   onSubmitRecover(post) {
     if (post.email !== null) {
       // Todo: mariam daamate es servisi.

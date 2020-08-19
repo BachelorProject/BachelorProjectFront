@@ -1,17 +1,11 @@
-import {ElementRef, Injectable, ViewChild} from '@angular/core';
-
+import { Injectable} from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-
-import { User } from './user';
-import {AuthService, SocialUser} from 'angularx-social-login';
-
+import {AuthService} from 'angularx-social-login';
 import {FacebookLoginProvider, GoogleLoginProvider} from 'angularx-social-login';
 import {ConfigService} from '../config/config.service';
-import {FormBuilder} from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -20,9 +14,7 @@ import {FormBuilder} from '@angular/forms';
 export class AuthServiceLocal {
   API_URL = 'http://localhost:4000';
   headers = new HttpHeaders().set('Content-Type', 'application/json');
-  currentUser = {};
 
-  // configService , router -?
   constructor(private httpClient: HttpClient, public router: Router,
               private configService: ConfigService, private authService: AuthService){}
 
@@ -116,6 +108,20 @@ export class AuthServiceLocal {
     );
   }
 
+  changePassword(email, password){
+    this.configService.changePassword(email, password).subscribe(
+      value => {
+        console.log(value);
+        localStorage.setItem('access_token', value.token);
+      }
+      , error => {
+        // this.snackBar.open('დაფიქსირდა ხარვეზი, სცადეთ მოგვიანებით.', 'კარგი', {duration: 5000});
+        // this.isFetching = false;
+        console.log('error in subscribe');
+      }
+    );
+  }
+
   getUserProfile(id): Observable<any> {
     return this.httpClient.get(`${this.API_URL}/users/profile/${id}`, { headers: this.headers }).pipe(
       map((res: Response) => {
@@ -126,7 +132,7 @@ export class AuthServiceLocal {
   }
 
   handleError(error: HttpErrorResponse) {
-    let msg = '';
+    let msg;
     if (error.error instanceof ErrorEvent) {
       // client-side error
       msg = error.error.message;
