@@ -140,6 +140,7 @@ export class AuthServiceLocal {
   // todo
   logout() {
     localStorage.removeItem('access_token');
+    window.location.href = '/';
     // if (localStorage.removeItem('access_token') == null) {
     //   this.router.navigate(['users/login']);
     // }

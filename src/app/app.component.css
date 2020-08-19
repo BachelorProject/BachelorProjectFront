@@ -1,19 +1,13 @@
+*{
+  font-family: 'Baloo Tamma 2', cursive;
+}
+
 .container{
   height: 100%;
   width: 100%;
   margin:0;
   padding:0;
   position: relative;
-}
-
-.drawer-container{
-  height: calc(100% - 47px);
-  width: fit-content;
-  margin: 0;
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  z-index: 99;
 }
 
 #logo{
@@ -25,13 +19,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: 5%;
   cursor: pointer;
   font-size: 22px;
 }
 
-:host{
-  font-family: 'Josefin Sans', sans-serif;
+.logo-container p{
+  font-size: 30px;
+  color: #6A6A6A;
+  text-transform: capitalize;
+  letter-spacing: 4px;
+  font-weight: 600;
 }
 
 .menu-icon{
@@ -49,9 +46,11 @@
   /*border-bottom: solid #aaa 1px;*/
   background-color: #fff;
   box-shadow: #ccc 0 1px 8px;
-  height: 50px;
+  height: 65px;
   overflow: visible;
   position: fixed;
+  padding-left: 10%;
+  padding-right: 10%;
   top:0;
   left: 0;
   z-index: 99;
@@ -62,9 +61,9 @@
 }
 
 .page-container{
-  /*transform: translateY(50px);*/
-  /*height: calc(100% - 50px);*/
-  height: 100%;
+  transform: translateY(65px);
+  height: calc(100% - 65px);
+  /*height: 100%;*/
   width: 100%;
 }
 

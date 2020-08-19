@@ -1,5 +1,5 @@
-import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
-import {MatDrawer} from '@angular/material/sidenav';
+import {Component, HostListener, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +10,7 @@ export class AppComponent implements OnInit {
   title = 'Olympo';
   isScreenSmall = false;
 
-  @ViewChild('drawer') public drawer: MatDrawer;
+  constructor(public router: Router) { }
 
   ngOnInit(): void {
     this.isScreenSmall = document.body.offsetWidth < 1000;

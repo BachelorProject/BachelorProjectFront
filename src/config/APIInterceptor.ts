@@ -35,6 +35,9 @@ export class APIInterceptor implements HttpInterceptor {
     return next.handle(this.apiReq).subscribe(
       ignore => { }
       , error => {
+        if (error.status === 401) {
+          this.authService.logout();
+        }
         this.snackBar.open('An error has occurred. Please try again later.', 'Ok', {duration: 5000});
       }
     );

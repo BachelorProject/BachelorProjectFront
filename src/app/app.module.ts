@@ -34,10 +34,12 @@ import { EditorComponent } from './components/editor/editor.component';
 import { SocialLoginModule, AuthServiceConfig } from 'angularx-social-login';
 import { GoogleLoginProvider, FacebookLoginProvider } from 'angularx-social-login';
 import { SubjectTagComponent } from './components/subject-tag/subject-tag.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 
 const appRoutes: Routes = [
   {path: '', component: WelcomeComponent},
-  {path: 'board', component: BoardComponent}
+  {path: 'board', component: BoardComponent},
+  {path: '**', component: PageNotFoundComponent}
 ];
 
 const config = new AuthServiceConfig([
@@ -63,7 +65,8 @@ export function provideConfig() {
     MenuComponent,
     BoardComponent,
     BoardItemComponent,
-    SubjectTagComponent
+    SubjectTagComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,

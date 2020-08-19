@@ -1,6 +1,15 @@
 <div class="container" style="flex-direction:{{direction}}" >
-  <a class="item" [routerLink]="'board'">ტურნირები</a>
-  <div class="item">რეგისტრაცია</div>
-  <div class="item">მთავარი</div>
-  <div class="item">პროფილი</div>
+  <a class="item item-absolute" [routerLink]="'upcoming'"> <!-- TODO: add upcoming -->
+    <img class="icon" src="../../../assets/images/ic-upcoming-contest.svg">
+    <div class="red-notif" > </div>
+  </a>
+  <a class="item" [routerLink]="'board'">
+    <img class="icon" src="../../../assets/images/ic-dashboard.svg">
+  </a>
+  <a class="item" [routerLink]="'profile'">
+    <img class="profile-icon" src="../../../assets/images/profile-example.png">
+  </a>
+  <a class="item" [routerLink]="'logout'">
+    <img class="icon" src="../../../assets/images/ic-logout.svg">
+  </a>
 </div>
