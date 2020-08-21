@@ -25,7 +25,12 @@ describe('BoardItemComponent', () => {
       registrationEnd: 1590160850706,
       nextContestStart: 1590161250706,
       nextContestDuration: 180,
-      category: 'მათემატიკა'
+      subjects: [{
+        color_id: 1,
+        id: 1,
+        name: 'Mathematics'
+      }],
+      registeredCount: 213
     };
     fixture.detectChanges();
   });

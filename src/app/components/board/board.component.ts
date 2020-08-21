@@ -39,23 +39,44 @@ export class BoardComponent implements OnInit {
       }
     );
 
-    // for (let i = from; i < to; i++) {
-    //   this.tournaments.push({
-    //     id: 1,
-    //     title: 'This is a test contest lol',
-    //     body: '<h2>Happy feast of winter veil!</h2><p>&nbsp; &nbsp; we are happy to inform you that fuck you:</p><ol><li>fuck you</li><li>fuck you</li><li>fuck you</li><li>fuck you</li><li>fuck you</li><li>t</li><li>t</li><li>w</li><li>e</li><li>e</li></ol><p>asdasdasdasd</p><p><strong>sadaasd &nbsp;sad asd asd asd asd a.</strong> dasda :</p><ul><li>asdasdasd <strong>asd </strong>asdads</li><li>asdasd asd.</li></ul><blockquote><p>asdasdasd</p></blockquote>',
-    //     imageUrl: 'https://avatar.onlinesoccermanager.nl/03319541v1.png',
-    //     registrationStart: 1590160650706,
-    //     registrationEnd: 1590160850706,
-    //     nextContestStart: 1590161250706,
-    //     nextContestDuration: 180,
-    //     category: 'მათემატიკა'
-    //   });
-    // }
-    // const thisClass = this;
-    // setTimeout(() => {
-    //   thisClass.isFetching = false;
-    // }, 500);
+    for (let i = from; i < to; i++) {
+      this.tournaments.push({
+        id: 1,
+        title: 'This is a test contest lol This is a test contest lol This is a test contest lol This is a test contest lol This is a test contest lol',
+        body: 'we are happy to inform you that this is a test header.we are happy to inform you that this is a test header.we are happy to inform you that this is a test header.we are happy to inform you that this is a test header.we are happy to inform you that this is a test header.we are happy to inform you that this is a test header.we are happy to inform you that this is a test header.we are happy to inform you that this is a test header.we are happy to inform you that this is a test header.we are happy to inform you that this is a test header.we are happy to inform you that this is a test header.we are happy to inform you that this is a test header.we are happy to inform you that this is a test header.we are happy to inform you that this is a test header.we are happy to inform you that this is a test header.we are happy to inform you that this is a test header.we are happy to inform you that this is a test header.we are happy to inform you that this is a test header.we are happy to inform you that this is a test header.',
+        imageUrl: 'https://avatar.onlinesoccermanager.nl/03319541v1.png',
+        registrationStart: 1590160650706,
+        registrationEnd: 1599999504638,
+        nextContestStart: 1590161299909,
+        nextContestDuration: 180,
+        subjects: [{
+          color_id: 1,
+          id: 1,
+          name: 'Mathematics'
+        }, {
+          color_id: 2,
+          id: 2,
+          name: 'Phsyics'
+        }, {
+          color_id: 3,
+          id: 3,
+          name: 'Geography'
+        }, {
+          color_id: 4,
+          id: 4,
+          name: 'Biology'
+        }, {
+          color_id: 5,
+          id: 5,
+          name: 'Chemistry'
+        }],
+        registeredCount: 3423
+      });
+    }
+    const thisClass = this;
+    setTimeout(() => {
+      thisClass.isFetching = false;
+    }, 500);
   }
 
   ngOnInit(): void {

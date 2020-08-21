@@ -1,5 +1,5 @@
 import {Component, HostListener, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -12,9 +12,13 @@ export class AppComponent implements OnInit {
   showHeader = true;
 
   constructor(public router: Router, public activatedRoute: ActivatedRoute) {
-    this.activatedRoute.queryParams.subscribe(params => {
-      const urlTree = this.router.parseUrl(this.router.url);
-      this.showHeader = urlTree.root.children.primary != null;
+    router.events.subscribe(e => {
+      if (e instanceof NavigationEnd) {
+        this.activatedRoute.queryParams.subscribe(params => {
+          const urlTree = this.router.parseUrl(this.router.url);
+          this.showHeader = urlTree.root.children.primary != null;
+        });
+      }
     });
   }
 

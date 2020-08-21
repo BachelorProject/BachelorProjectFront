@@ -3,17 +3,18 @@
 }
 
 .circle {
-  height: 16px;
-  width: 16px;
+  height: 15px;
+  width: 15px;
   background-color: red;
   border-radius: 50%;
   display: inline-block;
   margin: 2px;
 }
+
 .text {
   margin: 2px;
   color : var(--color-text-casual);
-  size : 16px;
+  size : 15px;
   font-weight: 600;
   letter-spacing: 1px;
   transform: translateY(1px);
@@ -28,4 +29,6 @@
   padding-left: 3px;
   padding-right: 3px;
   border-radius: 10px;
+  background-color: #fff;
+  min-width: 28px;
 }

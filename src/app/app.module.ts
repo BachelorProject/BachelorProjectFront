@@ -35,6 +35,7 @@ import { SocialLoginModule, AuthServiceConfig } from 'angularx-social-login';
 import { GoogleLoginProvider, FacebookLoginProvider } from 'angularx-social-login';
 import { SubjectTagComponent } from './components/subject-tag/subject-tag.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import {CountdownModule} from 'ngx-countdown';
 
 const appRoutes: Routes = [
   {path: '', component: WelcomeComponent},
@@ -95,7 +96,8 @@ export function provideConfig() {
     MatSnackBarModule,
     MatButtonModule,
     CKEditorModule,
-    SocialLoginModule
+    SocialLoginModule,
+    CountdownModule
   ],
   providers: [ConfigService,
     {
