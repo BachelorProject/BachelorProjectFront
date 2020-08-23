@@ -1,32 +1,42 @@
-@media (max-width: 1000px) {
+@media (max-width: 1200px) {
 
   .right-panel {
     display: none !important;
   }
 
-  .content {
+  .board-content {
     width: 100% !important;
   }
 
 }
 
-.left-panel{
+.left-panel {
   width: calc(100% - 350px);
 }
 
 .right-panel {
   position: sticky;
-  background-color: red;
-  top: 20px;
-  left: 0;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  max-height: calc(100vh - 115px);
+  top: 50px;
+  margin-bottom: 100px;
+  right: 0;
   width: 250px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
 }
 
-.container {
+.right-panel::-webkit-scrollbar {
+  width: 0; /* Remove scrollbar space */
+  background: transparent; /* Optional: just make scrollbar invisible */
+}
+
+.board-container {
   position: relative;
   width: 100%;
   display: flex;
@@ -36,9 +46,10 @@
   padding-top: 50px;
 }
 
-.content {
+.board-content {
   width: 85%;
   display: flex;
+  position: relative;
   flex-direction: row;
   align-items: flex-start;
   justify-content: space-between;
@@ -64,4 +75,115 @@
 #scroll-up:hover {
   transform: translateY(-3px) translateX(10vw);
   transition: all 500ms ease-in-out;
+}
+
+.create-button {
+  border-radius: 10px;
+  background-color: #3CACFE;
+  color: #fff;
+  box-shadow: #aaa 1px 1px 3px;
+  width: 100%;
+  border: none;
+  text-transform: uppercase;
+  font-size: 18px;
+  letter-spacing: 4px;
+  font-weight: 700;
+  font-family: 'Baloo Tamma 2', cursive;
+  line-height: 20px;
+  outline: none;
+  padding: 10px 8px 8px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.create-button:hover {
+  background-color: #39a9f6;
+  box-shadow: #aaa 1px 1px 4px;
+  transition: all 200ms linear;
+}
+
+.switch-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+
+}
+
+.switch {
+  padding: 0 10px 0 3px;
+}
+
+.switch-container p {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--color-header-soft);
+  transform: translateY(-4px);
+}
+
+mat-label {
+  font-family: 'Baloo Tamma 2', cursive;
+}
+
+mat-form-field {
+
+  width: 100%;
+}
+
+.mat-option-prefix {
+  width: 16px;
+  border-radius: 8px;
+  height: 16px;
+  float: left;
+  transform: translateY(15px);
+  margin-right: 5px;
+}
+
+.mat-input-prefix {
+  width: 16px;
+  margin-left: 5px;
+  margin-right: 5px;
+  transform: translateY(2px);
+}
+
+mwl-calendar-month-view {
+  width: 100%;
+}
+
+h3 {
+  font-size: 18px;
+  margin: 0;
+  text-align: center;
+}
+
+.right-panel-calendar-controller {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40px;
+
+}
+
+.calendar-controller-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 15px;
+  cursor: pointer;
+  width: 15%;
+}
+
+.calendar-controller-arrow p {
+  height: 100%;
+}
+
+.calendar-title {
+  width: 70%;
+}
+
+.cal-cell {
+  font-size: 14px;
 }

@@ -30,12 +30,17 @@ import { BoardComponent } from './components/board/board.component';
 import { BoardItemComponent } from './components/board/board-item/board-item.component';
 import {APIInterceptor} from '../config/APIInterceptor';
 import { EditorComponent } from './components/editor/editor.component';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
 import { SocialLoginModule, AuthServiceConfig } from 'angularx-social-login';
 import { GoogleLoginProvider, FacebookLoginProvider } from 'angularx-social-login';
 import { SubjectTagComponent } from './components/subject-tag/subject-tag.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import {CountdownModule} from 'ngx-countdown';
+import {NgSwitcheryModule} from 'angular-switchery-ios';
+import {NgbModalModule, NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {FlatpickrModule} from 'angularx-flatpickr';
 
 const appRoutes: Routes = [
   {path: '', component: WelcomeComponent},
@@ -97,7 +102,15 @@ export function provideConfig() {
     MatButtonModule,
     CKEditorModule,
     SocialLoginModule,
-    CountdownModule
+    CountdownModule,
+    NgSwitcheryModule,
+    NgbModalModule,
+    FlatpickrModule.forRoot(),
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory,
+    }),
+    NgbModule
   ],
   providers: [ConfigService,
     {
