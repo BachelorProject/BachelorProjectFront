@@ -153,7 +153,7 @@ export class WelcomeComponent implements OnInit {
   onSubmitChangePassword(post) {
     // add token
     if (this.recoverEmail !== null && post.password !== null) {
-      this.authService.changePassword(this.recoverEmail, post.password);
+      this.authService.changePassword(this.recoverEmail, post.password, this.recoverToken);
     }
   }
 

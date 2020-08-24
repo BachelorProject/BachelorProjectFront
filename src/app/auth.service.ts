@@ -108,13 +108,15 @@ export class AuthServiceLocal {
     );
   }
 
-  changePassword(email, password){
+  changePassword(email, password, accessToken){
+    localStorage.setItem('access_token', accessToken);
     this.configService.changePassword(email, password).subscribe(
       value => {
         console.log(value);
         localStorage.setItem('access_token', value.token);
       }
       , error => {
+        console.log(error);
         // this.snackBar.open('დაფიქსირდა ხარვეზი, სცადეთ მოგვიანებით.', 'კარგი', {duration: 5000});
         // this.isFetching = false;
         console.log('error in subscribe');
