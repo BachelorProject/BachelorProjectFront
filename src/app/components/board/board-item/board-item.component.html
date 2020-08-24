@@ -1,25 +1,42 @@
-<div class="container" [routerLink]="'/contest/' + data.id">
-  <div class="left-panel">
-    <img [src]="data.imageUrl" class="contest-image">
-    <div class="info-container">
-      <h2 class="united-grid">რეგისტრაცია</h2>
-      <img src="../../../../assets/images/calendar-register-start.svg" matTooltip="რეგისტრაციის დასაწყისი"/>
-      <p matTooltip="რეგისტრაციის დასაწყისი">{{getFormatted(data.registrationStart)}}</p>
-      <img src="../../../../assets/images/calendar-register-end.svg" matTooltip="რეგისტრაციის დასასრული"/>
-      <p matTooltip="რეგისტრაციის დასასრული">{{getFormatted(data.registrationEnd)}}</p>
-      <h2 class="united-grid">შემდეგი ტური</h2>
-      <img src="../../../../assets/images/calendar-first-event.svg" matTooltip="ჩატარების თარიღი"/>
-      <p matTooltip="ჩატარების თარიღი">{{getFormatted(data.nextContestStart)}}</p>
-      <img src="../../../../assets/images/timer-time.svg" matTooltip="ჩატარების ხანგრძლივობა"/>
-      <p matTooltip="ჩატარების ხანგრძლივობა">{{data.nextContestDuration}} წთ.</p>
-      <p class="united-grid category">{{data.category}}</p>
+<div class="item-container" [routerLink]="'/contest/' + data.id ">
+  <div class="horizontal-flex" [ngClass]="isSmallScreen ? 'sm-header' : '' ">
+    <img id="user-logo" [src]="data.imageUrl"/>
+    <h1 *ngIf="isSmallScreen" class="item-title" [title]="data.title"> {{data.title}}</h1>
+  </div>
+  <div class="text-container">
+    <h1 class="item-title" [title]="data.title"> {{data.title}}</h1>
+    <div id="item-body" [innerHTML]="data.body"></div>
+  </div>
+  <div class="right-panel">
+    <div class="horizontal-flex" style="width: 100%;">
+      <div class="right-item" title="people registered">
+        <img src="../../../assets/images/ic-material-people.svg">
+        <p>{{data.registeredCount.toLocaleString()}}</p>
+      </div>
+      <div class="right-item" title="duration">
+        <img class="timer" src="../../../assets/images/ic-material-timer.svg">
+        <p>{{data.nextContestDuration}} min</p>
+      </div>
+    </div>
+    <div class="right-item" title="contest time">
+      <img src="../../../assets/images/ic-material-today.svg">
+      <p>{{getFormattedDateTime(data.nextContestStart)}}</p>
+    </div>
+    <div class="register-button-container">
+      <button class="unregistered" (click)="register($event)">register</button>
+      <p id="register-countDown">
+        <countdown *ngIf="timeLeft < 86400" [config]="{ leftTime: this.timeLeft, format: 'h:m:s' }"></countdown>
+        <ng-container *ngIf="timeLeft >= 86400" >
+          {{floor(timeLeft/86400)}} day(s)
+        </ng-container>
+        left.
+      </p>
     </div>
   </div>
-  <div class="right-panel" [title]="data.title" >
-    <h1> {{data.title}}</h1>
-
-    <div #contest [innerHTML]="data.body">
-    </div>
-    <div #fade id="fade-gradient">read more...</div>
+  <div class="subject-container">
+    <app-subject-tag *ngFor="let subject of data.subjects.slice(0,2)" [subject]="subject"
+                     class="subject" [mode]="this.isSmallScreen? 'sm' : 'lg'"></app-subject-tag>
+    <app-subject-tag *ngIf="data.subjects.length > 2" [isMoreTag]="true"
+                     [moreSubjects]="data.subjects.slice(2)" [mode]="this.isSmallScreen? 'sm' : 'lg'"></app-subject-tag>
   </div>
 </div>

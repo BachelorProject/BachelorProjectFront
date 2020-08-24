@@ -2,7 +2,7 @@
   font-family: 'Baloo Tamma 2', cursive;
 }
 
-.container{
+.app-container{
   height: 100%;
   width: 100%;
   margin:0;
@@ -25,9 +25,10 @@
 
 .logo-container p{
   font-size: 30px;
-  color: #6A6A6A;
+  color: var(--color-header-soft);
   text-transform: capitalize;
   letter-spacing: 4px;
+  margin:0;
   font-weight: 600;
 }
 
@@ -67,3 +68,13 @@
   width: 100%;
 }
 
+
+.filter-fab {
+  background-color: var(--color-header-h1);
+  top: auto;
+  right: 20px;
+  bottom: 10px;
+  left: auto;
+  position: fixed;
+  outline: none;
+}

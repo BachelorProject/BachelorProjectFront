@@ -1,48 +1,127 @@
-<div class="container">
-  <div class="content" #content>
-    <form #filter id="filter" [formGroup]="filterForm" (ngSubmit)="filterWithParams(filterForm.value)">
-
-      <mat-form-field>
-        <input matInput placeholder="საძიებო სიტყვა" formControlName="searchString">
-      </mat-form-field>
-
-      <mat-form-field>
-        <mat-label>კატეგორია</mat-label>
-        <mat-select formControlName="categories" multiple>
-          <mat-option *ngFor="let category of categoryList" [value]="category">{{category}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <mat-form-field>
-        <mat-label>დან</mat-label>
-        <input matInput [matDatepicker]="pickerFrom" formControlName="fromDate">
-        <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
-        <mat-datepicker #pickerFrom></mat-datepicker>
-      </mat-form-field>
-
-      <mat-form-field>
-        <mat-label>მდე</mat-label>
-        <input matInput [matDatepicker]="pickerTo" formControlName="toDate">
-        <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
-        <mat-datepicker #pickerTo></mat-datepicker>
-      </mat-form-field>
-
-      <button mat-mini-fab color="primary" type="submit">
-        <img src="../../../assets/images/search.svg">
-      </button>
-    </form>
-    <app-board-item [data]="tournament" *ngFor="let tournament of tournaments" ></app-board-item>
-    <mat-spinner style="margin:50px;"></mat-spinner>
-  </div>
-  <div class="right-panel">
-    <div class="calendar-container">
-      <mat-calendar></mat-calendar>
+<div class="board-container">
+  <div class="board-content">
+    <div [hidden]="isSmallScreen && isFilterOpen" class="left-panel">
+      <app-board-item [data]="tournament" *ngFor="let tournament of tournaments"></app-board-item>
+      <div class="skeleton">
+        <div class="horizontal-flex">
+          <div class="skeleton-circle"></div>
+          <div class="skeleton-rect"></div>
+        </div>
+        <div class="skeleton-rect" style="width: 70%;"></div>
+        <div class="skeleton-rect"></div>
+      </div>
     </div>
-    <div id="scroll-up" (click)="scrollToTop()">
-      <img src="../../../assets/images/scroll-up.svg">
+    <div [hidden]="isSmallScreen && !isFilterOpen" class="right-panel">
+      <button class="create-button"> create</button>
+      <form class="filter-form" [formGroup]="filterFormGroup">
+        <div class="switch-container">
+          <ng-switchery (change)="formValueChanged()" class="switch" formControlName="myContests"></ng-switchery>
+          <p>created by me/all</p>
+        </div>
+        <div class="switch-container">
+          <ng-switchery (change)="formValueChanged()" class="switch" formControlName="pastContests"></ng-switchery>
+          <p>past contests</p>
+        </div>
+        <mat-form-field>
+          <mat-label>Search</mat-label>
+          <input class="search-input" matInput formControlName="search" autocomplete="off"
+                 (input)="formValueChanged()">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Category</mat-label>
+          <mat-select formControlName="categories" multiple
+                      (selectionChange)="formValueChanged()">
+            <mat-option *ngFor="let category of categoryService.categories" [value]="category.id">
+              <div class="mat-option-prefix" style="background-color: {{getColor(category.color_id)}}" matPrefix></div>
+              {{category.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </form>
+      <div class="right-panel-calendar-controller">
+        <div
+          class="calendar-controller-arrow"
+          mwlCalendarPreviousView
+          [view]="view"
+          [(viewDate)]="viewDate"
+          (viewDateChange)="closeOpenMonthViewDay()"
+        >
+          <img src="../../../assets/images/ic-material-navigate-before.svg">
+        </div>
+        <div
+          class="calendar-title"
+          mwlCalendarToday
+          [(viewDate)]="viewDate"
+        >
+          <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+        </div>
+        <div
+          class="calendar-controller-arrow"
+          mwlCalendarNextView
+          [view]="view"
+          [(viewDate)]="viewDate"
+          (viewDateChange)="closeOpenMonthViewDay()"
+        >
+          <img src="../../../assets/images/ic-material-navigate-next.svg">
+        </div>
+      </div>
+
+      <mwl-calendar-month-view
+        [viewDate]="viewDate"
+        [events]="events"
+        [refresh]="refresh"
+        [activeDayIsOpen]="activeDayIsOpen"
+        [cellTemplate]="customCellTemplate"
+        [eventTitleTemplate]="eventTemplate"
+        (dayClicked)="dayClicked($event.day)"
+        (eventClicked)="handleEvent('Clicked', $event.event)">
+      </mwl-calendar-month-view>
+
+      <ng-template #customCellTemplate let-day="day" let-locale="locale">
+        <div class="cal-cell-top">
+          <span class="cal-day-number" [ngClass]="day.events.length > 0? 'cal-day-event' : ''">
+            {{ day.date | calendarDate:'monthViewDayNumber':locale }}
+          </span>
+        </div>
+      </ng-template>
+
+      <ng-template
+          #eventTemplate
+          let-locale="locale"
+          let-event="event"
+          let-eventClicked="eventClicked">
+
+        <div class="event-container" (click)="eventClicked.emit({event: event})">
+          <h2>{{event.meta.title}}</h2>
+          <div class="event-data">
+            <img class="user-logo" [src]="event.meta.imageUrl"/>
+
+            <div class="event-items">
+              <div class="event-item" title="contest time">
+                <img src="../../../assets/images/ic-material-today.svg">
+                <p>{{getFormattedDateTime(event.meta.nextContestStart)}}</p>
+              </div>
+              <div class="event-item" title="people registered">
+                <img src="../../../assets/images/ic-material-people.svg">
+                <p>{{event.meta.registeredCount.toLocaleString()}}</p>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="subject-container">
+            <app-subject-tag [mode]="'sm'" *ngFor="let subject of event.meta.subjects.slice(0,1)" [subject]="subject"
+                             class="subject"></app-subject-tag>
+            <app-subject-tag [mode]="'sm'" *ngIf="event.meta.subjects.length > 1" [isMoreTag]="true"
+                             [moreSubjects]="event.meta.subjects.slice(1)"></app-subject-tag>
+          </div>
+        </div>
+      </ng-template>
+
     </div>
+
   </div>
+
 </div>
-
 
 

@@ -1,68 +1,74 @@
-@media (max-width: 1000px) {
+@media (max-width: 1200px) {
 
   .right-panel {
-    display: none !important;
+    position: relative;
+    margin: 0 calc(50% - 125px);
+    max-height: none!important;
   }
 
-  .calendar-container {
-    display: none;
-  }
-
-  .content {
+  .board-content {
     width: 100% !important;
   }
+
+  .left-panel {
+    width: 80% !important;
+    margin-left: 10%;
+    margin-right: 10%;
+  }
+
+}
+
+.left-panel {
+  width: calc(100% - 350px);
 }
 
 .right-panel {
   position: sticky;
-  top: 20px;
-  left: 0;
-  width: 35%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  max-height: calc(100vh - 115px);
+  top: 50px;
+  margin-bottom: 100px;
+  right: 0;
+  width: 250px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  margin-top: 20px;
-  height: 100vh;
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
 }
 
-.container {
+.filter-form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.right-panel::-webkit-scrollbar {
+  width: 0; /* Remove scrollbar space */
+  background: transparent; /* Optional: just make scrollbar invisible */
+}
+
+.board-container {
   position: relative;
   width: 100%;
   display: flex;
   align-items: flex-start;
   justify-content: center;
   flex-direction: row;
+  padding-top: 50px;
 }
 
-.content {
-  width: 75%;
+.board-content {
+  width: 85%;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-#filter {
-  font-family: Roboto;
-  height: 70px;
-  width: calc(100% - 20px);
-  margin: 10px 10px 0;
-  background-color: #fff;
-  box-shadow: #999 3px 3px 6px;
-  display: grid;
-  align-items: center;
-  justify-content: center;
-  grid-template-columns: 18% 18% 18% 18% 8%; /* TODO: if small 2 rows*/
-  grid-column-gap: 3%;
+  position: relative;
   flex-direction: row;
-}
-
-.calendar-container {
-  background-color: #fff;
-  width: 80%;
-  border-radius: 15px;
-  box-shadow: #ddd 0 0 8px;
+  align-items: flex-start;
+  justify-content: space-between;
 }
 
 #scroll-up {
@@ -86,3 +92,263 @@
   transform: translateY(-3px) translateX(10vw);
   transition: all 500ms ease-in-out;
 }
+
+.create-button {
+  border-radius: 10px;
+  background-color: #3CACFE;
+  color: #fff;
+  box-shadow: #aaa 1px 1px 3px;
+  width: 100%;
+  border: none;
+  text-transform: uppercase;
+  font-size: 18px;
+  letter-spacing: 4px;
+  font-weight: 700;
+  font-family: 'Baloo Tamma 2', cursive;
+  line-height: 20px;
+  outline: none;
+  padding: 10px 8px 8px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.create-button:hover {
+  background-color: #39a9f6;
+  box-shadow: #aaa 1px 1px 4px;
+  transition: all 200ms linear;
+}
+
+.switch-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+
+}
+
+.switch {
+  padding: 0 10px 0 3px;
+}
+
+.switch-container p {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--color-header-soft);
+  transform: translateY(-4px);
+}
+
+mat-label {
+  font-family: 'Baloo Tamma 2', cursive;
+}
+
+mat-form-field {
+
+  width: 100%;
+}
+
+.mat-option-prefix {
+  width: 16px;
+  border-radius: 8px;
+  height: 16px;
+  float: left;
+  transform: translateY(15px);
+  margin-right: 5px;
+}
+
+.mat-input-prefix {
+  width: 16px;
+  margin-left: 5px;
+  margin-right: 5px;
+  transform: translateY(2px);
+}
+
+mwl-calendar-month-view {
+  width: 100%;
+}
+
+h3 {
+  font-size: 18px;
+  margin: 0;
+  text-align: center;
+}
+
+.right-panel-calendar-controller {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40px;
+
+}
+
+.calendar-controller-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 15px;
+  cursor: pointer;
+  width: 15%;
+}
+
+.calendar-controller-arrow p {
+  height: 100%;
+}
+
+.calendar-title {
+  width: 70%;
+}
+
+.cal-cell {
+  font-size: 14px;
+}
+
+.event-container {
+  border: solid 1px #b7b7b7;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 20px;
+  padding: 14px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+  position: relative;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.event-container h2 {
+  width: 100%;
+  margin: 0 0 10px;
+  letter-spacing: 1px;
+  color: var(--color-header-h1);
+  font-size: 16px;
+  font-weight: 600;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.subject-container {
+  width: 50px;
+  height: 10px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform: translate3d(-20px, -5px, 0);
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.event-container .subject {
+  margin-left: 10px;
+}
+
+.event-data {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: row;
+  width: 100%;
+}
+
+.user-logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 35px;
+  border: solid #707070 1px;
+  margin-right: 15px;
+}
+
+
+.event-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-grow: 1;
+}
+
+.event-item p {
+  font-size: 12px;
+  color: var(--color-text-casual);
+  font-weight: 500;
+  margin: 4px 0 0;
+}
+
+.event-item img {
+  width: 16px;
+  margin-right: 8px;
+}
+
+.event-items {
+  flex-grow: 1;
+  min-height: 50px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.skeleton {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.skeleton-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: #eee;
+  margin: 10px;
+}
+
+.horizontal-flex {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: row;
+  margin-bottom: 5px;
+  width: 100%;
+}
+
+.skeleton-rect {
+  width: 100%;
+  margin: 10px;
+  height: 40px;
+  background-color: #f6f6f6;
+  position: relative;
+  overflow: hidden;
+}
+
+.horizontal-flex .skeleton-rect {
+  width: calc(100% - 120px);
+}
+
+.skeleton-rect::before {
+  content: '';
+  display: block;
+  position: absolute;
+  left: -450px;
+  top: 0;
+  height: 100%;
+  width: 450px;
+  background: linear-gradient(to right, transparent 0%, #fff 50%, transparent 100%);
+  animation: load 1s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;
+}
+
+@keyframes load {
+  from {
+    left: -150px;
+  }
+  to {
+    left: 100%;
+  }
+}
+

@@ -9,7 +9,8 @@ export interface Tournament {
   registrationEnd: number;
   nextContestStart: number;
   nextContestDuration: number;
-  category: string;
+  subjects: Subject[];
+  registeredCount: number;
 }
 
 export interface AuthResponse {

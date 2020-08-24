@@ -1,83 +1,165 @@
-import {Component, HostListener, OnInit} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit} from '@angular/core';
 import {Tournament} from '../../../config/config.service.model';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {ConfigService} from '../../../config/config.service';
+import {Utils} from '../../../config/utils';
+import {CalendarDateFormatter, CalendarEvent, CalendarView} from 'angular-calendar';
+import {isSameDay, isSameMonth} from 'date-fns';
+import {Subject} from 'rxjs';
+import {CustomDateFormatter} from './custom-date-formatter.provider';
+import * as moment from 'moment';
+import {Router} from '@angular/router';
+import {FabControllerService} from '../../../config/FabControllerService';
+import {CategoryService} from '../../../config/CategoryService';
 
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: CalendarDateFormatter,
+      useClass: CustomDateFormatter,
+    },
+  ],
   styleUrls: ['./board.component.css']
 })
-export class BoardComponent implements OnInit {
+export class BoardComponent implements OnInit, AfterViewInit {
 
-  tournaments: Tournament[] = [];
-  FETCH_SIZE = 10;
-  isFetching = false;
-  categoryList = ['მათემატიკა', 'ფიზიკა', 'ქიმია', 'ბიოლოგია'];
-
-  // filter
-  searchString = '';
-  categories = this.categoryList;
-  fromDate = new Date().getTime();
-  toDate = 19999999999999;
-  filterForm: FormGroup;
-
-  constructor(private formBuilder: FormBuilder, private configService: ConfigService) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private configService: ConfigService,
+    public router: Router,
+    public ref: ChangeDetectorRef,
+    public fab: FabControllerService,
+    public categoryService: CategoryService) {
+    fab.icon = '../../../assets/images/ic-material-filter-list.svg';
+    fab.onClickListener.subscribe(() => {
+      this.switchFilter();
+    });
   }
 
-  fetchTournaments(from: number, to: number) {
+  events: CalendarEvent[] = [];
+  tournaments: Tournament[] = [];
+  filterFormGroup: FormGroup;
 
-    this.configService.getTournamentList(from, to, this.searchString, this.categories, this.fromDate, this.toDate).subscribe(
-      value => {
-        for (const elem of value) {
-          this.tournaments.push(elem);
-        }
-        this.isFetching = false;
-      }
-      , error => {
-        this.isFetching = false;
-      }
-    );
+  FETCH_SIZE = 10;
+  isFetching = false;
+  isSmallScreen = false;
+  isFilterOpen = false;
+  private searchTimeout = undefined;
 
-    // for (let i = from; i < to; i++) {
-    //   this.tournaments.push({
-    //     id: 1,
-    //     title: 'This is a test contest lol',
-    //     body: '<h2>Happy feast of winter veil!</h2><p>&nbsp; &nbsp; we are happy to inform you that fuck you:</p><ol><li>fuck you</li><li>fuck you</li><li>fuck you</li><li>fuck you</li><li>fuck you</li><li>t</li><li>t</li><li>w</li><li>e</li><li>e</li></ol><p>asdasdasdasd</p><p><strong>sadaasd &nbsp;sad asd asd asd asd a.</strong> dasda :</p><ul><li>asdasdasd <strong>asd </strong>asdads</li><li>asdasd asd.</li></ul><blockquote><p>asdasdasd</p></blockquote>',
-    //     imageUrl: 'https://avatar.onlinesoccermanager.nl/03319541v1.png',
-    //     registrationStart: 1590160650706,
-    //     registrationEnd: 1590160850706,
-    //     nextContestStart: 1590161250706,
-    //     nextContestDuration: 180,
-    //     category: 'მათემატიკა'
-    //   });
-    // }
-    // const thisClass = this;
-    // setTimeout(() => {
-    //   thisClass.isFetching = false;
-    // }, 500);
+  view: CalendarView = CalendarView.Month;
+  viewDate: Date = new Date();
+  refresh: Subject<any> = new Subject();
+  activeDayIsOpen = false;
+
+  ngAfterViewInit(): void {
+    this.scrollToTop();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.isSmallScreen = document.body.offsetWidth < 1200;
+    if (!this.isSmallScreen) {
+      this.isFilterOpen = false;
+    }
+    this.fab.isHidden = !this.isSmallScreen;
   }
 
   ngOnInit(): void {
-    this.filterForm = this.formBuilder.group({
-      searchString: [null, []],
+    this.isSmallScreen = document.body.offsetWidth < 1200;
+    this.fab.isHidden = !this.isSmallScreen;
+    this.filterFormGroup = this.formBuilder.group({
+      search: [null, []],
       categories: [null, []],
-      fromDate: [null, []],
-      toDate: [null, []]
+      myContests: [null, []],
+      pastContests: [null, []]
+    });
+
+    this.filterFormGroup.patchValue({
+      search: '',
+      categories: [],
+      myContests: false,
+      pastContests: false
     });
 
     if (!this.isFetching) {
       this.isFetching = true;
       this.fetchTournaments(this.tournaments.length, this.tournaments.length + this.FETCH_SIZE);
     }
+    this.configService.getMyTournamentList()
+      .subscribe(
+        value => {
+          this.events = [];
+          for (const elem of value) {
+            this.events.push({
+              start: new Date(elem.nextContestStart),
+              end: new Date(elem.nextContestStart + elem.nextContestDuration * 60 * 1000),
+              title: elem.title,
+              actions: null,
+              allDay: false,
+              resizable: {
+                beforeStart: false,
+                afterEnd: false,
+              },
+              draggable: false,
+              meta: elem
+            });
+          }
+
+          this.refresh.next();
+        }
+      );
+  }
+
+  formValueChanged() {
+    console.log('called it');
+    if (this.searchTimeout !== undefined) {
+      clearTimeout(this.searchTimeout);
+    }
+    this.searchTimeout = setTimeout(() => {
+      if (!this.isFetching) {
+        this.isFetching = true;
+        this.tournaments = [];
+        this.fetchTournaments(this.tournaments.length, this.tournaments.length + this.FETCH_SIZE);
+      }
+    }, 1000);
+  }
+
+  fetchTournaments(from: number, to: number) {
+
+    this.configService.getTournamentList(
+      from,
+      to,
+      this.filterFormGroup.value.myContests,
+      this.filterFormGroup.value.pastContests,
+      this.filterFormGroup.value.search,
+      this.filterFormGroup.value.categories,
+    ).subscribe(
+      value => {
+        for (const elem of value) {
+          this.tournaments.push(elem);
+        }
+        this.isFetching = false;
+      }
+      , () => {
+        this.isFetching = false;
+      }
+    );
+
+    const thisClass = this;
+    setTimeout(() => {
+      thisClass.isFetching = false;
+    }, 500);
   }
 
   @HostListener('window:scroll', ['$event']) // for window scroll events
-  onScroll(event) {
+  onScroll() {
     const scrollPos = this.getScrollPosition();
     if (scrollPos > 88.0 + 12.0 * (1 - 50 / (this.tournaments.length + 50))) {
 
-      if (!this.isFetching) {
+      if (!this.isFetching && !this.isFilterOpen) {
         this.isFetching = true;
         this.fetchTournaments(this.tournaments.length, this.tournaments.length + this.FETCH_SIZE);
       }
@@ -96,20 +178,37 @@ export class BoardComponent implements OnInit {
     window.scrollTo(0, 0);
   }
 
-  filterWithParams(params) {
-    if (!this.filterForm.valid) {
-      return;
-    }
-    this.categories = params.categories != null ? params.categories : this.categoryList;
-    this.searchString = params.searchString != null ? params.searchString : '';
-    this.fromDate = params.fromDate != null ? new Date(params.fromDate).getTime() : new Date().getTime();
-    this.toDate = params.toDate != null ? new Date(params.toDate).getTime() : 19999999999999;
-    this.tournaments = [];
+  getColor(colorId: number) {
+    return Utils.subjectColor(colorId);
+  }
 
-    if (!this.isFetching) {
-      this.isFetching = true;
-      this.fetchTournaments(this.tournaments.length, this.tournaments.length + this.FETCH_SIZE);
+  dayClicked({date, events}: { date: Date; events: CalendarEvent[] }): void {
+    if (isSameMonth(date, this.viewDate)) {
+      this.activeDayIsOpen = !((isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
+        events.length === 0);
+      this.viewDate = date;
     }
+  }
+
+  handleEvent(action: string, event: CalendarEvent): void {
+    this.router.navigate(['/contest', {id: event.meta.id}]).then(() => {
+    });
+  }
+
+  closeOpenMonthViewDay() {
+    this.activeDayIsOpen = false;
+  }
+
+  getFormattedDateTime(timestamp: number) {
+    return moment(timestamp).format('DD MMM YYYY, hh:mm');
+  }
+
+  switchFilter() {
+    this.isFilterOpen = !this.isFilterOpen;
+    setTimeout(() => {
+      this.ref.markForCheck();
+
+    }, 100);
   }
 
 }

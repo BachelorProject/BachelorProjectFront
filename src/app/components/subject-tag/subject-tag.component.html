@@ -1,4 +1,7 @@
-<div class="container">
-  <div class="circle" [style]="{'background-color':color}"></div>
-  <div class="text">{{subject.name}}</div>
+<div class="subject-content" [ngClass]="mode==='sm'? 'subject-content-sm' : ''">
+  <div *ngIf="!isMoreTag" class="subject-circle" [ngClass]="mode==='sm'? 'subject-circle-sm' : ''"
+       [style]="{'background-color':color}"></div>
+  <div *ngIf="!isMoreTag" class="subject-text" [ngClass]="mode==='sm'? 'subject-text-sm' : ''">{{subject.name}}</div>
+  <div *ngIf="isMoreTag" [title]="moreTitle" class="subject-text" [ngClass]="mode==='sm'? 'subject-text-sm' : ''">
+    +{{moreSubjects.length}}</div>
 </div>
