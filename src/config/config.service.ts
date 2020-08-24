@@ -1,12 +1,16 @@
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {AuthResponse, Tournament} from './config.service.model';
+import {AuthResponse, Subject, Tournament} from './config.service.model';
 
 @Injectable()
 export class ConfigService {
 
   constructor(private http: HttpClient) {
 
+  }
+
+  fetchCategories() {
+    return this.http.get<Subject[]>('subjects');
   }
 
   getTournamentList(from: number, to: number, myContests: boolean, pastContests: boolean, searchString: string, subjectIds: number[]) {
@@ -22,6 +26,10 @@ export class ConfigService {
       }
     });
     return this.http.get<Tournament[]>('tournament/list', {params});
+  }
+
+  getMyTournamentList() {
+    return this.http.get<Tournament[]>('tournament/mylist');
   }
 
   signUp(email, password) {

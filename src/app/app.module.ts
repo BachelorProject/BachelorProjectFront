@@ -42,6 +42,7 @@ import {NgSwitcheryModule} from 'angular-switchery-ios';
 import {NgbModalModule, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {FlatpickrModule} from 'angularx-flatpickr';
 import {FabControllerService} from '../config/FabControllerService';
+import {CategoryService} from '../config/CategoryService';
 
 const appRoutes: Routes = [
   {path: '', component: WelcomeComponent},
@@ -115,6 +116,7 @@ export function provideConfig() {
   ],
   providers: [ConfigService,
     FabControllerService,
+    CategoryService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: APIInterceptor,

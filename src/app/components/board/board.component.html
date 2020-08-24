@@ -31,7 +31,7 @@
           <mat-label>Category</mat-label>
           <mat-select formControlName="categories" multiple
                       (selectionChange)="formValueChanged()">
-            <mat-option *ngFor="let category of categoryList" [value]="category.id">
+            <mat-option *ngFor="let category of categoryService.categories" [value]="category.id">
               <div class="mat-option-prefix" style="background-color: {{getColor(category.color_id)}}" matPrefix></div>
               {{category.name}}
             </mat-option>

@@ -1,13 +1,4 @@
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  HostListener,
-  OnInit,
-  TemplateRef,
-  ViewChild
-} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit} from '@angular/core';
 import {Tournament} from '../../../config/config.service.model';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {ConfigService} from '../../../config/config.service';
@@ -19,6 +10,7 @@ import {CustomDateFormatter} from './custom-date-formatter.provider';
 import * as moment from 'moment';
 import {Router} from '@angular/router';
 import {FabControllerService} from '../../../config/FabControllerService';
+import {CategoryService} from '../../../config/CategoryService';
 
 @Component({
   selector: 'app-board',
@@ -39,62 +31,35 @@ export class BoardComponent implements OnInit, AfterViewInit {
     private configService: ConfigService,
     public router: Router,
     public ref: ChangeDetectorRef,
-    public fab: FabControllerService) {
+    public fab: FabControllerService,
+    public categoryService: CategoryService) {
     fab.icon = '../../../assets/images/ic-material-filter-list.svg';
     fab.onClickListener.subscribe(() => {
       this.switchFilter();
     });
   }
 
+  events: CalendarEvent[] = [];
   tournaments: Tournament[] = [];
+  filterFormGroup: FormGroup;
+
   FETCH_SIZE = 10;
   isFetching = false;
   isSmallScreen = false;
   isFilterOpen = false;
-  categoryList =
-    [{
-      color_id: 1,
-      id: 1,
-      name: 'Mathematics'
-    }, {
-      color_id: 2,
-      id: 2,
-      name: 'Phsyics'
-    }, {
-      color_id: 3,
-      id: 3,
-      name: 'Geography'
-    }, {
-      color_id: 4,
-      id: 4,
-      name: 'Biology'
-    }, {
-      color_id: 5,
-      id: 5,
-      name: 'Chemistry'
-    }];
+  private searchTimeout = undefined;
 
-  filterFormGroup: FormGroup;
-
-
-  @ViewChild('modalContent', {static: true}) modalContent: TemplateRef<any>;
   view: CalendarView = CalendarView.Month;
   viewDate: Date = new Date();
-  modalData: {
-    action: string;
-    event: CalendarEvent;
-  };
   refresh: Subject<any> = new Subject();
-  events: CalendarEvent[] = [];
   activeDayIsOpen = false;
-  private searchTimeout = undefined;
 
   ngAfterViewInit(): void {
     this.scrollToTop();
   }
 
   @HostListener('window:resize', ['$event'])
-  onResize(event) {
+  onResize() {
     this.isSmallScreen = document.body.offsetWidth < 1200;
     if (!this.isSmallScreen) {
       this.isFilterOpen = false;
@@ -123,6 +88,29 @@ export class BoardComponent implements OnInit, AfterViewInit {
       this.isFetching = true;
       this.fetchTournaments(this.tournaments.length, this.tournaments.length + this.FETCH_SIZE);
     }
+    this.configService.getMyTournamentList()
+      .subscribe(
+        value => {
+          this.events = [];
+          for (const elem of value) {
+            this.events.push({
+              start: new Date(elem.nextContestStart),
+              end: new Date(elem.nextContestStart + elem.nextContestDuration * 60 * 1000),
+              title: elem.title,
+              actions: null,
+              allDay: false,
+              resizable: {
+                beforeStart: false,
+                afterEnd: false,
+              },
+              draggable: false,
+              meta: elem
+            });
+          }
+
+          this.refresh.next();
+        }
+      );
   }
 
   formValueChanged() {
@@ -152,66 +140,14 @@ export class BoardComponent implements OnInit, AfterViewInit {
       value => {
         for (const elem of value) {
           this.tournaments.push(elem);
-          this.events.push({
-            start: new Date(elem.nextContestStart),
-            end: new Date(elem.nextContestStart + elem.nextContestDuration * 60 * 1000),
-            title: `${elem.title}. - ${moment(elem.nextContestStart).format('hh:mm')}`,
-            color: {
-              primary: this.getDefaultColor(elem.subjects),
-              secondary: this.getDefaultColor(elem.subjects),
-            },
-            actions: null, // TODO: ???
-            allDay: false,
-            resizable: {
-              beforeStart: false,
-              afterEnd: false,
-            },
-            draggable: false,
-            meta: elem
-          });
         }
         this.isFetching = false;
       }
-      , error => {
+      , () => {
         this.isFetching = false;
       }
     );
 
-    // TEST //
-    for (let i = from; i < to; i++) {
-      const elem = {
-        id: 1,
-        title: 'This is a test contest lol This is a test contest lol This is a test contest lol This is a test contest lol This is a test contest lol',
-        body: 'we are happy to inform you that this is a test header.we are happy to inform you that this is a test header.we are happy to inform you that this is a test header.we are happy to inform you that this is a test header.we are happy to inform you that this is a test header.we are happy to inform you that this is a test header.we are happy to inform you that this is a test header.we are happy to inform you that this is a test header.we are happy to inform you that this is a test header.we are happy to inform you that this is a test header.we are happy to inform you that this is a test header.we are happy to inform you that this is a test header.we are happy to inform you that this is a test header.we are happy to inform you that this is a test header.we are happy to inform you that this is a test header.we are happy to inform you that this is a test header.we are happy to inform you that this is a test header.we are happy to inform you that this is a test header.we are happy to inform you that this is a test header.',
-        imageUrl: 'https://avatar.onlinesoccermanager.nl/03319541v1.png',
-        registrationStart: 1590160650706,
-        registrationEnd: 1599999504638,
-        nextContestStart: 1590161299909,
-        nextContestDuration: 180,
-        subjects: this.categoryList,
-        registeredCount: 3423
-      };
-      this.events.push({
-        start: new Date(elem.nextContestStart),
-        end: new Date(elem.nextContestStart + elem.nextContestDuration * 60 * 1000),
-        title: `${elem.title}. - ${moment(elem.nextContestStart).format('hh:mm')}`,
-        color: {
-          primary: this.getDefaultColor(elem.subjects),
-          secondary: this.getDefaultColor(elem.subjects),
-        },
-        actions: null, // TODO: ???
-        allDay: false,
-        resizable: {
-          beforeStart: false,
-          afterEnd: false,
-        },
-        draggable: false,
-        meta: elem
-      });
-      this.tournaments.push(elem);
-    }
-    // TEST //
-    this.refresh.next();
     const thisClass = this;
     setTimeout(() => {
       thisClass.isFetching = false;
@@ -219,7 +155,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
   }
 
   @HostListener('window:scroll', ['$event']) // for window scroll events
-  onScroll(event) {
+  onScroll() {
     const scrollPos = this.getScrollPosition();
     if (scrollPos > 88.0 + 12.0 * (1 - 50 / (this.tournaments.length + 50))) {
 
@@ -255,22 +191,12 @@ export class BoardComponent implements OnInit, AfterViewInit {
   }
 
   handleEvent(action: string, event: CalendarEvent): void {
-    this.modalData = {event, action};
-    this.router.navigate(['/contest', {id: event.meta.id}]);
+    this.router.navigate(['/contest', {id: event.meta.id}]).then(() => {
+    });
   }
 
   closeOpenMonthViewDay() {
     this.activeDayIsOpen = false;
-  }
-
-  getDefaultColor(subjects: any[]) {
-    if (subjects.length === 0) {
-      return '#000000';
-    } else if (subjects.length === 1) {
-      return this.getColor(subjects[0]);
-    } else {
-      return '#E8AA14';
-    }
   }
 
   getFormattedDateTime(timestamp: number) {
