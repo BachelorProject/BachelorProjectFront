@@ -41,6 +41,7 @@ import {CountdownModule} from 'ngx-countdown';
 import {NgSwitcheryModule} from 'angular-switchery-ios';
 import {NgbModalModule, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {FlatpickrModule} from 'angularx-flatpickr';
+import {FabControllerService} from '../config/FabControllerService';
 
 const appRoutes: Routes = [
   {path: '', component: WelcomeComponent},
@@ -113,6 +114,7 @@ export function provideConfig() {
     NgbModule
   ],
   providers: [ConfigService,
+    FabControllerService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: APIInterceptor,

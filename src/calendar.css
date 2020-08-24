@@ -109,11 +109,7 @@
 }
 
 .cal-month-view .cal-event {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  display: inline-block;
-  margin: 2px;
+  display: none;
 }
 
 .cal-month-view .cal-day-cell.cal-in-month.cal-has-events {
@@ -208,10 +204,6 @@
 
 .cal-month-view .cal-day-cell.cal-drag-over {
   background-color: #e0e0e0 !important;
-}
-
-.cal-month-view .cal-open-day-events {
-  border: solid 1px #ddd;
 }
 
 .cal-week-view {

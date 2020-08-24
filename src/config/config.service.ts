@@ -9,25 +9,26 @@ export class ConfigService {
 
   }
 
-  getTournamentList(fromNum: number, toNum: number, searchString: string, categories: string[], fromDate: number, toDate: number) {
+  getTournamentList(from: number, to: number, myContests: boolean, pastContests: boolean, searchString: string, subjectIds: number[]) {
+    const subjectIdStr: string[] = subjectIds.map(value => value.toString());
     const params = new HttpParams({
       fromObject: {
-        fromNum: fromNum.toString(),
-        toNum: toNum.toString(),
+        from: from.toString(),
+        to: to.toString(),
+        myContests: myContests.toString(),
+        pastContests: pastContests.toString(),
         searchString,
-        categories,
-        fromDate: fromDate.toString(),
-        toDate: toDate.toString()
+        subjectIds: subjectIdStr
       }
     });
     return this.http.get<Tournament[]>('tournament/list', {params});
   }
 
-  signUp(email, password){
-    return  this.http.post<AuthResponse>('signup', {email, password});
+  signUp(email, password) {
+    return this.http.post<AuthResponse>('signup', {email, password});
   }
 
-  signIn(email, password){
+  signIn(email, password) {
     return this.http.post<AuthResponse>('signin', {email, password});
   }
 

@@ -1,5 +1,6 @@
 import {Component, HostListener, OnInit} from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
+import {FabControllerService} from '../config/FabControllerService';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,7 @@ export class AppComponent implements OnInit {
   isScreenSmall = false;
   showHeader = true;
 
-  constructor(public router: Router, public activatedRoute: ActivatedRoute) {
+  constructor(public router: Router, public activatedRoute: ActivatedRoute, public fab: FabControllerService) {
     router.events.subscribe(e => {
       if (e instanceof NavigationEnd) {
         this.activatedRoute.queryParams.subscribe(params => {

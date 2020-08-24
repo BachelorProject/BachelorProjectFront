@@ -1,30 +1,24 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, HostListener, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  HostListener,
+  OnInit,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
 import {Tournament} from '../../../config/config.service.model';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {ConfigService} from '../../../config/config.service';
 import {Utils} from '../../../config/utils';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {CalendarDateFormatter, CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent, CalendarView} from 'angular-calendar';
-import {addDays, addHours, endOfDay, endOfMonth, isSameDay, isSameMonth, startOfDay, subDays} from 'date-fns';
+import {CalendarDateFormatter, CalendarEvent, CalendarView} from 'angular-calendar';
+import {isSameDay, isSameMonth} from 'date-fns';
 import {Subject} from 'rxjs';
 import {CustomDateFormatter} from './custom-date-formatter.provider';
 import * as moment from 'moment';
 import {Router} from '@angular/router';
-
-const colors: any = {
-  red: {
-    primary: '#ad2121',
-    secondary: '#FAE3E3',
-  },
-  blue: {
-    primary: '#1e90ff',
-    secondary: '#D1E8FF',
-  },
-  yellow: {
-    primary: '#e3bc08',
-    secondary: '#FDF1BA',
-  },
-};
+import {FabControllerService} from '../../../config/FabControllerService';
 
 @Component({
   selector: 'app-board',
@@ -40,12 +34,23 @@ const colors: any = {
 })
 export class BoardComponent implements OnInit, AfterViewInit {
 
-  constructor(private formBuilder: FormBuilder, private configService: ConfigService, public router: Router) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private configService: ConfigService,
+    public router: Router,
+    public ref: ChangeDetectorRef,
+    public fab: FabControllerService) {
+    fab.icon = '../../../assets/images/ic-material-filter-list.svg';
+    fab.onClickListener.subscribe(() => {
+      this.switchFilter();
+    });
   }
 
   tournaments: Tournament[] = [];
   FETCH_SIZE = 10;
   isFetching = false;
+  isSmallScreen = false;
+  isFilterOpen = false;
   categoryList =
     [{
       color_id: 1,
@@ -69,41 +74,49 @@ export class BoardComponent implements OnInit, AfterViewInit {
       name: 'Chemistry'
     }];
 
-  // filter
-  searchString = '';
-  categories = [];
-  fromDate = new Date().getTime();
-  toDate = 19999999999999;
-  filterForm: FormGroup;
+  filterFormGroup: FormGroup;
 
 
   @ViewChild('modalContent', {static: true}) modalContent: TemplateRef<any>;
-
   view: CalendarView = CalendarView.Month;
-
   viewDate: Date = new Date();
-
   modalData: {
     action: string;
     event: CalendarEvent;
   };
-
   refresh: Subject<any> = new Subject();
-
   events: CalendarEvent[] = [];
-
   activeDayIsOpen = false;
+  private searchTimeout = undefined;
 
   ngAfterViewInit(): void {
     this.scrollToTop();
   }
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.isSmallScreen = document.body.offsetWidth < 1200;
+    if (!this.isSmallScreen) {
+      this.isFilterOpen = false;
+    }
+    this.fab.isHidden = !this.isSmallScreen;
+  }
+
   ngOnInit(): void {
-    this.filterForm = this.formBuilder.group({
-      searchString: [null, []],
+    this.isSmallScreen = document.body.offsetWidth < 1200;
+    this.fab.isHidden = !this.isSmallScreen;
+    this.filterFormGroup = this.formBuilder.group({
+      search: [null, []],
       categories: [null, []],
-      fromDate: [null, []],
-      toDate: [null, []]
+      myContests: [null, []],
+      pastContests: [null, []]
+    });
+
+    this.filterFormGroup.patchValue({
+      search: '',
+      categories: [],
+      myContests: false,
+      pastContests: false
     });
 
     if (!this.isFetching) {
@@ -112,9 +125,30 @@ export class BoardComponent implements OnInit, AfterViewInit {
     }
   }
 
+  formValueChanged() {
+    console.log('called it');
+    if (this.searchTimeout !== undefined) {
+      clearTimeout(this.searchTimeout);
+    }
+    this.searchTimeout = setTimeout(() => {
+      if (!this.isFetching) {
+        this.isFetching = true;
+        this.tournaments = [];
+        this.fetchTournaments(this.tournaments.length, this.tournaments.length + this.FETCH_SIZE);
+      }
+    }, 1000);
+  }
+
   fetchTournaments(from: number, to: number) {
 
-    this.configService.getTournamentList(from, to, this.searchString, this.categories, this.fromDate, this.toDate).subscribe(
+    this.configService.getTournamentList(
+      from,
+      to,
+      this.filterFormGroup.value.myContests,
+      this.filterFormGroup.value.pastContests,
+      this.filterFormGroup.value.search,
+      this.filterFormGroup.value.categories,
+    ).subscribe(
       value => {
         for (const elem of value) {
           this.tournaments.push(elem);
@@ -133,7 +167,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
               afterEnd: false,
             },
             draggable: false,
-            meta: elem.id
+            meta: elem
           });
         }
         this.isFetching = false;
@@ -172,7 +206,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
           afterEnd: false,
         },
         draggable: false,
-        meta: elem.id
+        meta: elem
       });
       this.tournaments.push(elem);
     }
@@ -189,7 +223,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
     const scrollPos = this.getScrollPosition();
     if (scrollPos > 88.0 + 12.0 * (1 - 50 / (this.tournaments.length + 50))) {
 
-      if (!this.isFetching) {
+      if (!this.isFetching && !this.isFilterOpen) {
         this.isFetching = true;
         this.fetchTournaments(this.tournaments.length, this.tournaments.length + this.FETCH_SIZE);
       }
@@ -208,22 +242,6 @@ export class BoardComponent implements OnInit, AfterViewInit {
     window.scrollTo(0, 0);
   }
 
-  filterWithParams(params) {
-    if (!this.filterForm.valid) {
-      return;
-    }
-    this.categories = params.categories != null ? params.categories : this.categoryList;
-    this.searchString = params.searchString != null ? params.searchString : '';
-    this.fromDate = params.fromDate != null ? new Date(params.fromDate).getTime() : new Date().getTime();
-    this.toDate = params.toDate != null ? new Date(params.toDate).getTime() : 19999999999999;
-    this.tournaments = [];
-
-    if (!this.isFetching) {
-      this.isFetching = true;
-      this.fetchTournaments(this.tournaments.length, this.tournaments.length + this.FETCH_SIZE);
-    }
-  }
-
   getColor(colorId: number) {
     return Utils.subjectColor(colorId);
   }
@@ -238,7 +256,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
 
   handleEvent(action: string, event: CalendarEvent): void {
     this.modalData = {event, action};
-    this.router.navigate(['/contest', { id: event.meta }]);
+    this.router.navigate(['/contest', {id: event.meta.id}]);
   }
 
   closeOpenMonthViewDay() {
@@ -254,4 +272,17 @@ export class BoardComponent implements OnInit, AfterViewInit {
       return '#E8AA14';
     }
   }
+
+  getFormattedDateTime(timestamp: number) {
+    return moment(timestamp).format('DD MMM YYYY, hh:mm');
+  }
+
+  switchFilter() {
+    this.isFilterOpen = !this.isFilterOpen;
+    setTimeout(() => {
+      this.ref.markForCheck();
+
+    }, 100);
+  }
+
 }

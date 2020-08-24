@@ -12,6 +12,7 @@ export class SubjectTagComponent implements OnInit {
   color: string;
   @Input() isMoreTag = false;
   @Input() moreSubjects: Subject[] = [];
+  @Input() mode = 'lg';
   moreTitle = 'non tits';
 
   constructor() {

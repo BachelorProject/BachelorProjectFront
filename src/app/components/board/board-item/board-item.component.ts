@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
+import {AfterViewInit, Component, HostListener, Input, OnInit} from '@angular/core';
 import {Tournament} from '../../../../config/config.service.model';
 import * as moment from 'moment';
 
@@ -11,13 +11,19 @@ export class BoardItemComponent implements OnInit {
   @Input() data: Tournament;
   isRegistered = false;
   timeLeft = 5;
+  isSmallScreen = false;
 
   constructor() {
   }
 
   ngOnInit(): void {
     this.timeLeft = Math.round((this.data.registrationEnd - new Date().getTime()) / 1000);
-    console.log(this.timeLeft);
+    this.isSmallScreen = document.body.offsetWidth < 700;
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.isSmallScreen = document.body.offsetWidth < 700;
   }
 
   floor(num: number) {

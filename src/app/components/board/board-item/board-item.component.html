@@ -1,11 +1,14 @@
-<div class="container" [routerLink]="'/contest/' + data.id ">
-  <img id="user-logo" [src]="data.imageUrl"/>
+<div class="item-container" [routerLink]="'/contest/' + data.id ">
+  <div class="horizontal-flex" [ngClass]="isSmallScreen ? 'sm-header' : '' ">
+    <img id="user-logo" [src]="data.imageUrl"/>
+    <h1 *ngIf="isSmallScreen" class="item-title" [title]="data.title"> {{data.title}}</h1>
+  </div>
   <div class="text-container">
-    <h1 id="item-title" [title]="data.title"> {{data.title}}</h1>
+    <h1 class="item-title" [title]="data.title"> {{data.title}}</h1>
     <div id="item-body" [innerHTML]="data.body"></div>
   </div>
   <div class="right-panel">
-    <div class="horizontal-flex">
+    <div class="horizontal-flex" style="width: 100%;">
       <div class="right-item" title="people registered">
         <img src="../../../assets/images/ic-material-people.svg">
         <p>{{data.registeredCount.toLocaleString()}}</p>
@@ -32,8 +35,8 @@
   </div>
   <div class="subject-container">
     <app-subject-tag *ngFor="let subject of data.subjects.slice(0,2)" [subject]="subject"
-                     class="subject"></app-subject-tag>
+                     class="subject" [mode]="this.isSmallScreen? 'sm' : 'lg'"></app-subject-tag>
     <app-subject-tag *ngIf="data.subjects.length > 2" [isMoreTag]="true"
-                     [moreSubjects]="data.subjects.slice(2)"></app-subject-tag>
+                     [moreSubjects]="data.subjects.slice(2)" [mode]="this.isSmallScreen? 'sm' : 'lg'"></app-subject-tag>
   </div>
 </div>

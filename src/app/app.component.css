@@ -68,3 +68,13 @@
   width: 100%;
 }
 
+
+.filter-fab {
+  background-color: var(--color-header-h1);
+  top: auto;
+  right: 20px;
+  bottom: 10px;
+  left: auto;
+  position: fixed;
+  outline: none;
+}

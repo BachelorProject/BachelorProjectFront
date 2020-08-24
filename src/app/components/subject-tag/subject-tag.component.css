@@ -2,7 +2,7 @@
   font-family: 'Baloo Tamma 2', cursive;
 }
 
-.circle {
+.subject-circle {
   height: 15px;
   width: 15px;
   background-color: red;
@@ -11,7 +11,7 @@
   margin: 2px;
 }
 
-.text {
+.subject-text {
   margin: 2px;
   color : var(--color-text-casual);
   size : 15px;
@@ -19,7 +19,7 @@
   letter-spacing: 1px;
   transform: translateY(1px);
 }
-.container {
+.subject-content {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -31,4 +31,29 @@
   border-radius: 10px;
   background-color: #fff;
   min-width: 28px;
+}
+
+.subject-circle-sm {
+  height: 8px;
+  width: 8px;
+  background-color: red;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 1px;
+}
+
+.subject-text-sm {
+  margin: 1px;
+  color : var(--color-text-casual);
+  font-size : 10px!important;
+  font-weight: 600;
+}
+
+.subject-content-sm {
+  border: solid #707070 0.5px;
+  padding-left: 2px;
+  padding-right: 2px;
+  border-radius: 5px;
+  background-color: #fff;
+  min-width: 16px;
 }
