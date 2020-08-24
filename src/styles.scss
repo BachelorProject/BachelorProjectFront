@@ -76,6 +76,16 @@ html, body {
   height: 60% !important;
 }
 
+.ngx-pagination .current {
+  background-color: #fff!important;
+  color: var(--color-header-h1)!important;
+  font-weight: 600;
+}
+
+pagination-template ul {
+  padding-inline-start: 0!important;
+}
+
 /* Importing Bootstrap SCSS file. */
 @import '~bootstrap/scss/bootstrap';
 

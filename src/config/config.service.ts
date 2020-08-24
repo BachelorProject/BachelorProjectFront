@@ -1,6 +1,8 @@
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {AuthResponse, Subject, Tournament} from './config.service.model';
+import {AuthResponse, LeaderBoardMetaModel, LeaderBoardPlaceModel, Subject, Tournament} from './config.service.model';
+import {of} from 'rxjs';
+import {delay} from 'rxjs/operators';
 
 @Injectable()
 export class ConfigService {
@@ -11,6 +13,28 @@ export class ConfigService {
 
   fetchCategories() {
     return this.http.get<Subject[]>('subjects');
+  }
+
+  getLeaderBoard(from: number, count: number, contestId: number, roundNumber: number) {
+    const params = new HttpParams({
+      fromObject: {
+        from: from.toString(),
+        count: count.toString(),
+        contestId: contestId.toString(),
+        roundNumber: roundNumber.toString()
+      }
+    });
+    return this.http.get<LeaderBoardPlaceModel[]>('leaderboard', {params});
+  }
+
+  getLeaderBoardMeta(contestId: number, roundNumber: number) {
+    const params = new HttpParams({
+      fromObject: {
+        contestId: contestId.toString(),
+        roundNumber: roundNumber.toString()
+      }
+    });
+    return this.http.get<LeaderBoardMetaModel>('leaderboardmeta', {params});
   }
 
   getTournamentList(from: number, to: number, myContests: boolean, pastContests: boolean, searchString: string, subjectIds: number[]) {

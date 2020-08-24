@@ -43,11 +43,14 @@ import {NgbModalModule, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {FlatpickrModule} from 'angularx-flatpickr';
 import {FabControllerService} from '../config/FabControllerService';
 import {CategoryService} from '../config/CategoryService';
+import { LeaderboardComponent } from './components/leaderboard/leaderboard.component';
+import {NgxPaginationModule} from 'ngx-pagination';
 
 const appRoutes: Routes = [
   {path: '', component: WelcomeComponent},
   {path: 'board', component: BoardComponent},
-  {path: '**', component: PageNotFoundComponent}
+  // {path: '**', component: PageNotFoundComponent},
+  {path: 'leaderboard', component: LeaderboardComponent}
 ];
 
 const config = new AuthServiceConfig([
@@ -74,7 +77,8 @@ export function provideConfig() {
     BoardComponent,
     BoardItemComponent,
     SubjectTagComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    LeaderboardComponent
   ],
   imports: [
     BrowserModule,
@@ -112,7 +116,8 @@ export function provideConfig() {
       provide: DateAdapter,
       useFactory: adapterFactory,
     }),
-    NgbModule
+    NgbModule,
+    NgxPaginationModule
   ],
   providers: [ConfigService,
     FabControllerService,

@@ -1,4 +1,5 @@
-export class ConfigServiceModel{}
+export class ConfigServiceModel {
+}
 
 export interface Tournament {
   id: number;
@@ -23,4 +24,19 @@ export interface Subject {
   id: number;
   name: string;
   color_id: number;
+}
+
+export interface LeaderBoardMetaModel {
+  myPlace: LeaderBoardPlaceModel;
+  title: string;
+  contestants: number;
+}
+
+export interface LeaderBoardPlaceModel {
+  rank: number;
+  imageUrl: string;
+  username: string;
+  score: number;
+  userId: number;
+  time: number; // in seconds
 }

@@ -1,0 +1,71 @@
+<div class="leaderboard-container">
+  <h1>{{metaInformation.title}}</h1>
+  <h2>scoreboard</h2>
+  <div class="leaderboard-box">
+    <div class="leaderboard-header">
+      <p style="justify-self: flex-end">Rank</p>
+      <p *ngIf="!isScreenSmall"></p>
+      <p>Username</p>
+      <p *ngIf="!isScreenSmall">Score</p>
+      <p *ngIf="!isScreenSmall">Time</p>
+    </div>
+    <div class="leaderboard-content">
+      <div *ngIf="(this.page - 1) * this.itemsPerPage + 1 > metaInformation.myPlace.rank" class="leaderboard-cell"
+           style="color: var(--color-text-casual)">
+        <p style="justify-self: flex-end">{{metaInformation.myPlace.rank}}</p>
+        <img *ngIf="!isScreenSmall" [src]="metaInformation.myPlace.imageUrl"/>
+        <p>{{metaInformation.myPlace.username}}</p>
+        <p *ngIf="!isScreenSmall">{{metaInformation.myPlace.score.toLocaleString()}}</p>
+        <p *ngIf="!isScreenSmall">{{getFormattedTime(metaInformation.myPlace.time)}}</p>
+      </div>
+      <div
+        *ngFor="let place of leaderBoard | async | paginate:
+        { itemsPerPage: this.itemsPerPage, currentPage: this.page,totalItems: this.metaInformation.contestants }"
+        [ngStyle]="{'color': place.userId === metaInformation.myPlace.userId? '#67879E' : '#6A6A6A'}"
+        class="leaderboard-cell">
+        <p style="justify-self: flex-end">{{place.rank}}</p>
+        <img *ngIf="!isScreenSmall" [src]="place.imageUrl"/>
+        <a href="#"
+           [ngStyle]="{'color': place.userId === metaInformation.myPlace.userId? '#67879E' : '#6A6A6A'}">{{place.username}}</a>
+        <p *ngIf="!isScreenSmall">{{place.score.toLocaleString()}}</p>
+        <p *ngIf="!isScreenSmall">{{getFormattedTime(place.time)}}</p>
+      </div>
+      <div *ngIf="this.page * this.itemsPerPage < metaInformation.myPlace.rank"
+           class="leaderboard-cell" style="color: var(--color-text-casual)">
+        <p style="justify-self: flex-end">{{metaInformation.myPlace.rank}}</p>
+        <img *ngIf="!isScreenSmall" [src]="metaInformation.myPlace.imageUrl"/>
+        <p>{{metaInformation.myPlace.username}}</p>
+        <p *ngIf="!isScreenSmall">{{metaInformation.myPlace.score.toLocaleString()}}</p>
+        <p *ngIf="!isScreenSmall">{{getFormattedTime(metaInformation.myPlace.time)}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="leaderboard-controls">
+    <div class="leaderboard-item-per-page">
+      per page:
+      <div class="per-page-number" (click)="changePageCount(10)"
+           [ngClass]="this.itemsPerPage === 10? 'per-page-selected' : ''">10
+      </div>
+      |
+      <div class="per-page-number" (click)="changePageCount(20)"
+           [ngClass]="this.itemsPerPage === 20? 'per-page-selected' : ''">20
+      </div>
+      |
+      <div class="per-page-number" (click)="changePageCount(30)"
+           [ngClass]="this.itemsPerPage === 30? 'per-page-selected' : ''">30
+      </div>
+      |
+      <div class="per-page-number" (click)="changePageCount(50)"
+           [ngClass]="this.itemsPerPage === 50? 'per-page-selected' : ''">50
+      </div>
+    </div>
+    <pagination-controls [autoHide]="true"
+                         [responsive]="true"
+                         [previousLabel]="''"
+                         [nextLabel]="''"
+                         (pageChange)="changePage($event)"
+                         (pageBoundsCorrection)="changePage($event)"></pagination-controls>
+  </div>
+
+
+</div>
