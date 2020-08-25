@@ -6,7 +6,6 @@ export interface Tournament {
   title: string;
   body: string;
   imageUrl: string;
-  registrationStart: number;
   registrationEnd: number;
   nextContestStart: number;
   nextContestDuration: number;

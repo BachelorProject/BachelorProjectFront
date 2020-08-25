@@ -1,8 +1,6 @@
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {AuthResponse, LeaderBoardMetaModel, LeaderBoardPlaceModel, Subject, Tournament} from './config.service.model';
-import {of} from 'rxjs';
-import {delay} from 'rxjs/operators';
 
 @Injectable()
 export class ConfigService {
@@ -45,11 +43,14 @@ export class ConfigService {
         to: to.toString(),
         myContests: myContests.toString(),
         pastContests: pastContests.toString(),
-        searchString,
         subjectIds: subjectIdStr
       }
     });
-    return this.http.get<Tournament[]>('tournament/list', {params});
+
+    if (searchString.length > 0) {
+      params[searchString] = searchString;
+    }
+    return this.http.get<Tournament[]>('tournament/board_list', {params});
   }
 
   getMyTournamentList() {
