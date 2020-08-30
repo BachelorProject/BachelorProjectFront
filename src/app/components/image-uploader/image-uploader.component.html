@@ -1,0 +1,14 @@
+<div class="uploader-root">
+
+  <div class="upload-with-preview" appDragDrop (onFileDropped)="showFile($event)" (click)="fileInput.click()">
+    <p [hidden]="previewFileSrc !== undefined">
+      Drag & Drop or upload
+    </p>
+    <img [hidden]="previewFileSrc === undefined" [src]="previewFileSrc"/>
+    <div [hidden]="previewFileSrc === undefined" class="image-preview-avatar"></div>
+  </div>
+  <input hidden type="file" #fileInput (change)="showFile($event.target.files)" >
+
+  <button mat-button (click)="uploadFile()">Upload</button>
+  <button mat-button (click)="closeDialog()">Cancel</button>
+</div>

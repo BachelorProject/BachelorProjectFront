@@ -15,42 +15,46 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatNativeDateModule} from '@angular/material/core';
 import {MatSelectModule} from '@angular/material/select';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {CKEditorModule} from '@ckeditor/ckeditor5-angular';
 
-import { MenuComponent } from './components/menu/menu.component';
+import {MenuComponent} from './components/menu/menu.component';
 import {AppComponent} from './app.component';
 import {ConfigService} from '../config/config.service';
-import { WelcomeComponent } from './components/welcome/welcome.component';
-import { BoardComponent } from './components/board/board.component';
-import { BoardItemComponent } from './components/board/board-item/board-item.component';
+import {WelcomeComponent} from './components/welcome/welcome.component';
+import {BoardComponent} from './components/board/board.component';
+import {BoardItemComponent} from './components/board/board-item/board-item.component';
 import {APIInterceptor} from '../config/APIInterceptor';
-import { EditorComponent } from './components/editor/editor.component';
-import { CalendarModule, DateAdapter } from 'angular-calendar';
-import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import {EditorComponent} from './components/editor/editor.component';
+import {CalendarModule, DateAdapter} from 'angular-calendar';
+import {adapterFactory} from 'angular-calendar/date-adapters/date-fns';
 
-import { SocialLoginModule, AuthServiceConfig } from 'angularx-social-login';
-import { GoogleLoginProvider, FacebookLoginProvider } from 'angularx-social-login';
-import { SubjectTagComponent } from './components/subject-tag/subject-tag.component';
-import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import {AuthServiceConfig, FacebookLoginProvider, GoogleLoginProvider, SocialLoginModule} from 'angularx-social-login';
+import {SubjectTagComponent} from './components/subject-tag/subject-tag.component';
+import {PageNotFoundComponent} from './components/page-not-found/page-not-found.component';
 import {CountdownModule} from 'ngx-countdown';
 import {NgSwitcheryModule} from 'angular-switchery-ios';
 import {NgbModalModule, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {FlatpickrModule} from 'angularx-flatpickr';
 import {FabControllerService} from '../config/FabControllerService';
 import {CategoryService} from '../config/CategoryService';
-import { LeaderboardComponent } from './components/leaderboard/leaderboard.component';
+import {LeaderboardComponent} from './components/leaderboard/leaderboard.component';
 import {NgxPaginationModule} from 'ngx-pagination';
+import {ContestComponent} from './components/contest/contest.component';
+import {ImageUploaderComponent} from './components/image-uploader/image-uploader.component';
+import {MatDialogModule} from '@angular/material/dialog';
+import {DragDropDirective} from './components/image-uploader/DragDropDirective';
+import { NgxMatDatetimePickerModule, NgxMatTimepickerModule, NgxMatNativeDateModule } from '@angular-material-components/datetime-picker';
 
 const appRoutes: Routes = [
   {path: '', component: WelcomeComponent},
   {path: 'board', component: BoardComponent},
   // {path: '**', component: PageNotFoundComponent},
-  {path: 'leaderboard', component: LeaderboardComponent}
+  {path: 'leaderboard', component: LeaderboardComponent},
+  {path: 'contest', component: ContestComponent}
 ];
 
 const config = new AuthServiceConfig([
@@ -67,6 +71,7 @@ const config = new AuthServiceConfig([
 export function provideConfig() {
   return config;
 }
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -78,7 +83,10 @@ export function provideConfig() {
     BoardItemComponent,
     SubjectTagComponent,
     PageNotFoundComponent,
-    LeaderboardComponent
+    LeaderboardComponent,
+    ContestComponent,
+    ImageUploaderComponent,
+    DragDropDirective
   ],
   imports: [
     BrowserModule,
@@ -101,7 +109,6 @@ export function provideConfig() {
     MatButtonModule,
     MatTooltipModule,
     MatDatepickerModule,
-    MatNativeDateModule,
     MatSelectModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
@@ -117,7 +124,11 @@ export function provideConfig() {
       useFactory: adapterFactory,
     }),
     NgbModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    MatDialogModule,
+    NgxMatDatetimePickerModule,
+    NgxMatTimepickerModule,
+    NgxMatNativeDateModule
   ],
   providers: [ConfigService,
     FabControllerService,
@@ -131,7 +142,8 @@ export function provideConfig() {
       provide: AuthServiceConfig,
       useFactory: provideConfig
     }],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  exports: [DragDropDirective]
 })
 export class AppModule {
 }

@@ -15,12 +15,10 @@
       <button class="create-button"> create</button>
       <form class="filter-form" [formGroup]="filterFormGroup">
         <div class="switch-container">
-          <ng-switchery (change)="formValueChanged()" class="switch" formControlName="myContests"></ng-switchery>
-          <p>created by me/all</p>
+          <ng-switchery (change)="formValueChanged()" onLabel="created by me/all" class="switch" formControlName="myContests"></ng-switchery>
         </div>
         <div class="switch-container">
-          <ng-switchery (change)="formValueChanged()" class="switch" formControlName="pastContests"></ng-switchery>
-          <p>past contests</p>
+          <ng-switchery (change)="formValueChanged()" onLabel="past contests" class="switch" formControlName="pastContests"></ng-switchery>
         </div>
         <mat-form-field>
           <mat-label>Search</mat-label>

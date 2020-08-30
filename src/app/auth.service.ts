@@ -43,7 +43,7 @@ export class AuthServiceLocal {
       this.configService.signInGoogle(userInfo).subscribe(
         value => {
           console.log('logging value', value);
-          localStorage.setItem('access_token', value.token);
+          window.localStorage.setItem('access_token', value.token);
         }
         , error => {
           // this.snackBar.open('დაფიქსირდა ხარვეზი, სცადეთ მოგვიანებით.', 'კარგი', {duration: 5000});
