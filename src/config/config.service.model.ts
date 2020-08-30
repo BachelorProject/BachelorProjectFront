@@ -6,7 +6,6 @@ export interface Tournament {
   title: string;
   body: string;
   imageUrl: string;
-  registrationStart: number;
   registrationEnd: number;
   nextContestStart: number;
   nextContestDuration: number;
@@ -15,9 +14,9 @@ export interface Tournament {
 }
 
 export interface AuthResponse {
-  success: string;
+  success: boolean;
   token: string;
-  newUser: string;
+  newUser: boolean;
 }
 
 export interface Subject {

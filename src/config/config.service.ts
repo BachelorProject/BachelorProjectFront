@@ -2,14 +2,11 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {AuthResponse, Contest, LeaderBoardMetaModel, LeaderBoardPlaceModel, Subject, Tournament} from './config.service.model';
 import {of} from 'rxjs';
-import {delay} from 'rxjs/operators';
 
 @Injectable()
 export class ConfigService {
 
-  constructor(private http: HttpClient) {
-
-  }
+  constructor(private http: HttpClient) {}
 
   uploadMedia(id: number, type: string, file: File) {
     const formData: FormData = new FormData();
@@ -28,16 +25,16 @@ export class ConfigService {
   }
 
   requestContest(mode: string, id: number) {
-    return of({
-      id: 5324,
-      title: '',
-      body: '',
-      imageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png',
-      registrationEnd: null,
-      subjects: [],
-      status: 'UNPUBLISHED',
-      rounds: [],
-    }).pipe(delay(2000));
+    // return of({
+    //   id: 5324,
+    //   title: '',
+    //   body: '',
+    //   imageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png',
+    //   registrationEnd: null,
+    //   subjects: [],
+    //   status: 'UNPUBLISHED',
+    //   rounds: [],
+    // }).pipe(delay(2000));
     return this.http.post<Contest>('contest', {mode, id}); // id -1 mean create new one. mode = 'edit', 'view'
   }
 
@@ -92,11 +89,14 @@ export class ConfigService {
         to: to.toString(),
         myContests: myContests.toString(),
         pastContests: pastContests.toString(),
-        searchString,
         subjectIds: subjectIdStr
       }
     });
-    return this.http.get<Tournament[]>('tournament/list', {params});
+
+    if (searchString.length > 0) {
+      params[searchString] = searchString;
+    }
+    return this.http.get<Tournament[]>('tournament/board_list', {params});
   }
 
   getMyTournamentList() {
@@ -108,7 +108,7 @@ export class ConfigService {
   }
 
   signIn(email, password) {
-    return this.http.post<AuthResponse>('signin', {email, password});
+     return this.http.post<AuthResponse>('signin', {email, password});
   }
 
   signInFacebook(userInfo) {
@@ -119,12 +119,16 @@ export class ConfigService {
     return this.http.post<AuthResponse>('signin/google', userInfo);
   }
 
-  changePassword(email: any, password: any) {
-    return this.http.post<AuthResponse>('change_password', {email, password});
+  changePassword( password: any) {
+    return this.http.post<AuthResponse>('change_password', {password});
   }
 
 
   recoverPassword(email: string) {
     return this.http.post<AuthResponse>('recover_password_by_email', {email});
+  }
+
+  confirmEmail() {
+    return this.http.get<AuthResponse>('confirm_email');
   }
 }

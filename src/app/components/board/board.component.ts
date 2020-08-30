@@ -33,6 +33,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
     public ref: ChangeDetectorRef,
     public fab: FabControllerService,
     public categoryService: CategoryService) {
+
     fab.icon = '../../../assets/images/ic-material-filter-list.svg';
     fab.onClickListener.subscribe(() => {
       this.switchFilter();

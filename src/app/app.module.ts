@@ -50,8 +50,8 @@ import {DragDropDirective} from './components/image-uploader/DragDropDirective';
 import { NgxMatDatetimePickerModule, NgxMatTimepickerModule, NgxMatNativeDateModule } from '@angular-material-components/datetime-picker';
 
 const appRoutes: Routes = [
-  {path: '', component: WelcomeComponent},
-  {path: 'board', component: BoardComponent},
+  {path: 'auth', component: WelcomeComponent},
+  {path: '', component: BoardComponent},
   // {path: '**', component: PageNotFoundComponent},
   {path: 'leaderboard', component: LeaderboardComponent},
   {path: 'contest', component: ContestComponent}
