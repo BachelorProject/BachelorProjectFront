@@ -15,7 +15,7 @@
       <button class="create-button"> create</button>
       <form class="filter-form" [formGroup]="filterFormGroup">
         <div class="switch-container">
-          <ng-switchery (change)="formValueChanged()" onLabel="created by me/all" class="switch" formControlName="myContests"></ng-switchery>
+          <ng-switchery (change)="formValueChanged()" onLabel="created by all/me" class="switch" formControlName="myContests"></ng-switchery>
         </div>
         <div class="switch-container">
           <ng-switchery (change)="formValueChanged()" onLabel="past contests" class="switch" formControlName="pastContests"></ng-switchery>
