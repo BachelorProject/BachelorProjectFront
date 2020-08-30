@@ -1,6 +1,13 @@
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {AuthResponse, LeaderBoardMetaModel, LeaderBoardPlaceModel, Subject, Tournament} from './config.service.model';
+import {
+  AuthResponse,
+  Contest,
+  LeaderBoardMetaModel,
+  LeaderBoardPlaceModel,
+  Subject,
+  Tournament
+} from './config.service.model';
 import {of} from 'rxjs';
 import {delay} from 'rxjs/operators';
 
@@ -11,7 +18,49 @@ export class ConfigService {
 
   }
 
+  uploadMedia(id: number, type: string, file: File) {
+    const formData: FormData = new FormData();
+    formData.append('id', id.toString());
+    formData.append('type', type);
+    formData.append('file', file);
+    return this.http.post<any>('upload', formData, {
+      reportProgress: true,
+      observe: 'events'
+    });
+  }
+
+  requestContest(mode: string, id: number) {
+    return of({
+      id: 5324,
+      title: '',
+      body: '',
+      imageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png',
+      registrationEnd: null,
+      subjects: [],
+      status: 'UNPUBLISHED',
+      rounds: [],
+    }).pipe(delay(2000));
+    return this.http.post<Contest>('contest', {mode, id}); // id -1 mean create new one. mode = 'edit', 'view'
+  }
+
   fetchCategories() {
+    return of([
+      {
+        id: 1,
+        name: 'მათემატიკა',
+        color_id: 1
+      },
+      {
+        id: 2,
+        name: 'Physics',
+        color_id: 2
+      },
+      {
+        id: 3,
+        name: 'Chemistry',
+        color_id: 3
+      }
+    ]);
     return this.http.get<Subject[]>('subjects');
   }
 
