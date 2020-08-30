@@ -1,13 +1,6 @@
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {
-  AuthResponse,
-  Contest,
-  LeaderBoardMetaModel,
-  LeaderBoardPlaceModel,
-  Subject,
-  Tournament
-} from './config.service.model';
+import {AuthResponse, Contest, LeaderBoardMetaModel, LeaderBoardPlaceModel, Subject, Tournament} from './config.service.model';
 import {of} from 'rxjs';
 import {delay} from 'rxjs/operators';
 
@@ -27,6 +20,11 @@ export class ConfigService {
       reportProgress: true,
       observe: 'events'
     });
+  }
+
+  updateContest(contest: Contest) {
+    contest.rounds.map(elem => elem.questions = []);
+    return this.http.post<any>('contest', JSON.stringify(contest));
   }
 
   requestContest(mode: string, id: number) {

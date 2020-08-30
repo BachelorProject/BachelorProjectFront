@@ -30,6 +30,46 @@
     margin-left: 10px !important;
   }
 
+  .left-panel {
+    width: 80% !important;
+    margin-left: 10%;
+    margin-right: 10%;
+  }
+
+  .head-section {
+    flex-direction: column!important;
+    height: auto!important;
+  }
+
+  .contest-details {
+    padding: 10px;
+  }
+
+  .title-section{
+    margin:0!important;
+  }
+
+  .title-section mat-label {
+    font-size: 16px!important;
+    letter-spacing: 3px!important;
+  }
+
+  .title-section input {
+    font-size: 18px!important;
+  }
+
+  .desc-header {
+    font-size: 14px!important;
+  }
+
+  .datetime-picker {
+    margin:0!important;
+  }
+
+  .main-action-btn {
+    margin-left: 0!important;
+  }
+
 }
 
 .subject {
@@ -536,6 +576,7 @@ h3 {
 .datetime-picker {
   width: 300px;
   margin-right: 25px;
+  max-width: 100%;
 
 }
 
@@ -602,4 +643,9 @@ h3 {
 .main-action-btn:hover {
   opacity: .8;
   translate: all 100ms linear;
+}
+
+.sm-btn-margin{
+  margin-top: 10px;
+  margin-bottom: 10px;
 }

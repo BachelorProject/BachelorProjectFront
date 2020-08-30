@@ -48,7 +48,7 @@ export interface Contest {
   imageUrl: string;
   registrationEnd: number;
   subjectIds: number[];
-  status: string; //   'UNPUBLISHED', 'REGISTRATION_ON', 'REGISTRATION_OVER', 'ONGOING', 'CANCELLED', 'COMPLETED'
+  status: string; //   'UNPUBLISHED', 'REGISTRATION ON', 'REGISTRATION OVER', 'ONGOING', 'CANCELLED', 'COMPLETED'
   rounds: ContestRound[];
 }
 

@@ -17,9 +17,10 @@
         </div>
         <div class="vertical-flex" style="width: 100%; ">
           <h2 class="desc-header">contest description</h2>
-          <app-editor class="desc-editor"></app-editor>
+          <app-editor [toolbar]="isSmallScreen? smallToolbar : defaultToolbar" class="desc-editor"></app-editor>
         </div>
-        <div class="horizontal-flex">
+        <div [ngClass]="isSmallScreen? 'vertical-flex' : 'horizontal-flex'"
+             style="width: 100%">
           <mat-form-field class="datetime-picker">
             <input matInput [ngxMatDatetimePicker]="picker" placeholder="Deadline"
                    (dateChange)="contest.registrationEnd = $event.value.valueOf()">
@@ -39,18 +40,22 @@
             </mat-select>
           </mat-form-field>
         </div>
-        <div class="horizontal-flex contest-bottom-buttons">
+        <div [ngClass]="isSmallScreen? 'vertical-flex' : 'horizontal-flex'"
+             class="contest-bottom-buttons">
           <div class="status-container">
             <div style="background-color: {{getStatusColor()}}" class="status-color"></div>
             {{contest.status}}
           </div>
 
-          <div class="horizontal-flex" style="width: auto">
-            <button [hidden]="contest.status === 'COMPLETED' || contest.status === 'CANCELED'" class="main-action-btn"
-                    style="background-color: #EF6351">
+          <div [ngClass]="isSmallScreen? 'vertical-flex' : 'horizontal-flex'" style="width: auto">
+            <button (click)="cancelContest()"
+                    [ngClass]="isSmallScreen? 'sm-btn-margin' : ''"
+                    [hidden]="contest.status === 'COMPLETED' || contest.status === 'CANCELLED'" class="main-action-btn"
+                    style="background-color: #EF6351;">
               cancel
             </button>
-            <button [hidden]="contest.status === 'COMPLETED' || contest.status === 'CANCELED'" class="main-action-btn"
+            <button (click)="mainAction()" [hidden]="contest.status === 'COMPLETED' || contest.status === 'CANCELLED'"
+                    class="main-action-btn"
                     style="background-color: {{getMainBtnStatusColor()}}">
               {{getMainBtnStatusText()}}
             </button>
@@ -111,7 +116,7 @@
         </div>
         <mat-form-field class="datetime-picker">
           <input value="{{getOrDefault(round.startTime, -1, '')}}"
-            matInput [ngxMatDatetimePicker]="picker" placeholder="Start Time"
+                 matInput [ngxMatDatetimePicker]="picker" placeholder="Start Time"
                  (dateChange)="round.startTime = $event.value.valueOf()">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <ngx-mat-datetime-picker #picker>

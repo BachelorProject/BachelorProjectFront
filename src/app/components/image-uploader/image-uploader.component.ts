@@ -23,7 +23,9 @@ export class ImageUploaderComponent {
   previewFileSrc: string | ArrayBuffer = undefined;
 
   showFile(event) {
-    console.log(event);
+    if (event[0].type !== 'image/jpeg' && event[0].type !== 'image/png' && event[0].type !== 'image/gif') {
+      return;
+    }
     this.imagePreview = event[0];
     const reader = new FileReader();
 

@@ -33,9 +33,12 @@ export class ContestComponent implements OnInit {
       .subscribe(value => {
         this.contest = value;
         this.isFetching = false;
+        setInterval( () => {
+          this.updateContest();
+        }, 15000);
       }, error => {
       });
-    fab.icon = '../../../assets/images/ic-material-filter-list.svg';
+    fab.icon = '../../../assets/images/ic-metro-trophy.svg';
     fab.onClickListener.subscribe(() => {
       this.switchFilter();
     });
@@ -44,6 +47,12 @@ export class ContestComponent implements OnInit {
   isFetching = false;
   isSmallScreen = false;
   isFilterOpen = false;
+  defaultToolbar = [
+    'heading', '|', 'bold', 'italic', 'fontBackgroundColor', 'fontColor', 'fontSize', 'fontFamily', 'link', 'bulletedList', 'numberedList', '|', 'strikethrough', 'horizontalLine', 'highLight', 'mathType', 'chemType', 'subscript', 'superscript', 'underline', '|', 'indent', 'outdent', 'alignment', '|', 'imageUpload', 'mediaEmbed', 'blockQuote', 'insertTable', 'code', 'codeBlock', 'specialCharacters', 'undo', 'redo'
+  ];
+  smallToolbar = [
+    'bold', 'italic', 'fontColor', 'fontSize', 'fontFamily', 'bulletedList', 'numberedList', '|', 'strikethrough', 'subscript', 'superscript', 'underline'
+  ];
 
   @HostListener('window:resize', ['$event'])
   onResize() {
@@ -137,9 +146,9 @@ export class ContestComponent implements OnInit {
     switch (this.contest.status) {
       case 'UNPUBLISHED':
         return '#1BE7FF';
-      case 'REGISTRATION_ON':
+      case 'REGISTRATION ON':
         return '#6EEB83';
-      case 'REGISTRATION_OVER':
+      case 'REGISTRATION OVER':
         return '#E4FF1A';
       case 'ONGOING':
         return '#E8AA14';
@@ -154,8 +163,8 @@ export class ContestComponent implements OnInit {
     switch (this.contest.status) {
       case 'UNPUBLISHED':
         return '#6EEB83';
-      case 'REGISTRATION_ON':
-      case 'REGISTRATION_OVER':
+      case 'REGISTRATION ON':
+      case 'REGISTRATION OVER':
       case 'ONGOING':
         return '#6C63FF';
     }
@@ -165,11 +174,27 @@ export class ContestComponent implements OnInit {
     switch (this.contest.status) {
       case 'UNPUBLISHED':
         return 'Publish';
-      case 'REGISTRATION_ON':
-      case 'REGISTRATION_OVER':
+      case 'REGISTRATION ON':
+      case 'REGISTRATION OVER':
       case 'ONGOING':
         return 'Update';
     }
+  }
+
+  updateContest() {
+    this.configService.updateContest(this.contest);
+  }
+
+  cancelContest() {
+    this.contest.status = 'CANCELLED';
+    this.updateContest();
+  }
+
+  mainAction() {
+    if (this.contest.status === 'UNPUBLISHED') {
+      this.contest.status = 'REGISTRATION ON';
+    }
+    this.updateContest();
   }
 
 }
