@@ -1,11 +1,11 @@
 <div class="item-container" [routerLink]="'/contest/' + data.id ">
   <div class="horizontal-flex" [ngClass]="isSmallScreen ? 'sm-header' : '' ">
-    <img id="user-logo" [src]="data.imageUrl"/>
+    <img class="user-logo" [src]="'http://localhost:3000/' +  data.imageUrl"/>
     <h1 *ngIf="isSmallScreen" class="item-title" [title]="data.title"> {{data.title}}</h1>
   </div>
   <div class="text-container">
     <h1 class="item-title" [title]="data.title"> {{data.title}}</h1>
-    <div id="item-body" [innerHTML]="data.body"></div>
+    <div class="item-body" [innerHTML]="data.body"></div>
   </div>
   <div class="right-panel">
     <div class="horizontal-flex" style="width: 100%;">
@@ -24,7 +24,7 @@
     </div>
     <div class="register-button-container">
       <button class="unregistered" (click)="register($event)">register</button>
-      <p id="register-countDown">
+      <p class="register-countDown">
         <countdown *ngIf="timeLeft < 86400" [config]="{ leftTime: this.timeLeft, format: 'h:m:s' }"></countdown>
         <ng-container *ngIf="timeLeft >= 86400" >
           {{floor(timeLeft/86400)}} day(s)

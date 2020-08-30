@@ -39,23 +39,6 @@ export class ConfigService {
   }
 
   fetchCategories() {
-    return of([
-      {
-        id: 1,
-        name: 'მათემატიკა',
-        color_id: 1
-      },
-      {
-        id: 2,
-        name: 'Physics',
-        color_id: 2
-      },
-      {
-        id: 3,
-        name: 'Chemistry',
-        color_id: 3
-      }
-    ]);
     return this.http.get<Subject[]>('subjects');
   }
 
@@ -83,24 +66,33 @@ export class ConfigService {
 
   getTournamentList(from: number, to: number, myContests: boolean, pastContests: boolean, searchString: string, subjectIds: number[]) {
     const subjectIdStr: string[] = subjectIds.map(value => value.toString());
-    const params = new HttpParams({
+
+    let params = new HttpParams({
       fromObject: {
         from: from.toString(),
         to: to.toString(),
         myContests: myContests.toString(),
         pastContests: pastContests.toString(),
-        subjectIds: subjectIdStr
+        subjectIds: subjectIdStr.join(',')
       }
     });
-
     if (searchString.length > 0) {
-      params[searchString] = searchString;
+      params = new HttpParams({
+        fromObject: {
+          from: from.toString(),
+          to: to.toString(),
+          myContests: myContests.toString(),
+          pastContests: pastContests.toString(),
+          subjectIds: subjectIdStr.join(','),
+          searchString
+        }
+      });
     }
     return this.http.get<Tournament[]>('tournament/board_list', {params});
   }
 
   getMyTournamentList() {
-    return this.http.get<Tournament[]>('tournament/mylist');
+    return this.http.get<Tournament[]>('tournament/registered_list');
   }
 
   signUp(email, password) {

@@ -8,7 +8,7 @@
     margin-left: 10px !important;
   }
 
-  #user-logo {
+  .user-logo {
     width: 50px !important;
     height: 50px !important;
     margin-right: 10px !important;
@@ -54,7 +54,7 @@
   position: relative;
 }
 
-#user-logo {
+.user-logo {
   width: 70px;
   height: 70px;
   border-radius: 45px;
@@ -94,7 +94,7 @@
   width: 100%;
 }
 
-#item-body {
+.item-body {
   color: var(--color-text-casual);
   font-size: 15px;
   font-weight: 500;
@@ -202,7 +202,7 @@
 
 }
 
-#register-countDown {
+.register-countDown {
   margin: 0;
   font-size: 12px;
   font-weight: 500;
