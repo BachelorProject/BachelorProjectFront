@@ -28,6 +28,11 @@ export class WelcomeComponent implements OnInit {
         this.state = 'recover password';
       }
       this.recoverEmail = params.recoverEmail;
+
+      const confirmationToken = params.confirmationToken;
+      if (confirmationToken != null){
+        authService.confirmEmail(confirmationToken);
+      }
     });
   }
 
@@ -151,15 +156,13 @@ export class WelcomeComponent implements OnInit {
   }
 
   onSubmitChangePassword(post) {
-    // add token
-    if (this.recoverEmail !== null && post.password !== null) {
-      this.authService.changePassword(this.recoverEmail, post.password, this.recoverToken);
+    if (post.password !== null) {
+      this.authService.changePassword(post.password, this.recoverToken);
     }
   }
 
   onSubmitRecover(post) {
     if (post.email !== null) {
-      // Todo: mariam daamate es servisi.
       this.authService.recoverPassword(post.email);
     }
   }

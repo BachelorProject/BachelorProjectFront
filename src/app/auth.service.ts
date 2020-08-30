@@ -1,11 +1,12 @@
-import { Injectable} from '@angular/core';
-import { Router } from '@angular/router';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {Router} from '@angular/router';
+import {HttpClient, HttpHeaders, HttpErrorResponse} from '@angular/common/http';
+import {Observable, throwError} from 'rxjs';
+import {catchError, map} from 'rxjs/operators';
 import {AuthService} from 'angularx-social-login';
 import {FacebookLoginProvider, GoogleLoginProvider} from 'angularx-social-login';
 import {ConfigService} from '../config/config.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,9 @@ export class AuthServiceLocal {
   headers = new HttpHeaders().set('Content-Type', 'application/json');
 
   constructor(private httpClient: HttpClient, public router: Router,
-              private configService: ConfigService, private authService: AuthService){}
+              private configService: ConfigService, private authService: AuthService,
+              private snackBar: MatSnackBar ) {
+  }
 
   getAccessToken() {
     return localStorage.getItem('access_token');
@@ -46,13 +49,14 @@ export class AuthServiceLocal {
           window.localStorage.setItem('access_token', value.token);
           window.location.href = '/';
         }
-        , () => {});
+        , () => {
+        });
     });
   }
 
   signInWithFB() {
     this.authService.signIn(FacebookLoginProvider.PROVIDER_ID).then(r => {
-      console.log( 'authtoken' , r.authToken, r.email, r.name);
+      console.log('authtoken', r.authToken, r.email, r.name);
 
       const userInfo = {
         first_name: r.firstName,
@@ -67,13 +71,36 @@ export class AuthServiceLocal {
           localStorage.setItem('access_token', value.token);
           window.location.href = '/';
         }
-        , () => {});
+        , () => {
+        });
     });
   }
 
 
-  signUp(email, password){
+  signUp(email, password) {
     this.configService.signUp(email, password).subscribe(
+      value => {
+        console.log(value);
+        this.snackBar.open('Confirmation e-mail sent.', 'Ok', {duration: 5000});
+      }
+      , () => {
+      });
+  }
+
+  confirmEmail(confirmationToken) {
+    localStorage.setItem('access_token', confirmationToken);
+    this.configService.confirmEmail().subscribe(
+      value => {
+        console.log(value);
+        localStorage.setItem('access_token', value.token);
+        window.location.href = '/';
+      }
+      , () => {
+      });
+  }
+
+  signIn(email, password) {
+    this.configService.signIn(email, password).subscribe(
       value => {
         console.log(value);
         localStorage.setItem('access_token', value.token);
@@ -82,22 +109,13 @@ export class AuthServiceLocal {
       , () => {});
   }
 
-  signIn(email, password){
-    this.configService.signIn(email, password).subscribe(
+  changePassword(password, accessToken) {
+    localStorage.setItem('access_token', accessToken);
+    this.configService.changePassword(password).subscribe(
       value => {
         console.log(value);
         localStorage.setItem('access_token', value.token);
         window.location.href = '/';
-      }
-      , error => {});
-  }
-
-  changePassword(email, password, accessToken){
-    localStorage.setItem('access_token', accessToken);
-    this.configService.changePassword(email, password).subscribe(
-      value => {
-        console.log(value);
-        localStorage.setItem('access_token', value.token);
       }
       , error => {
         console.log(error);
@@ -109,7 +127,7 @@ export class AuthServiceLocal {
   }
 
   getUserProfile(id): Observable<any> {
-    return this.httpClient.get(`${this.API_URL}/users/profile/${id}`, { headers: this.headers }).pipe(
+    return this.httpClient.get(`${this.API_URL}/users/profile/${id}`, {headers: this.headers}).pipe(
       map((res: Response) => {
         return res || {};
       }),
@@ -137,46 +155,50 @@ export class AuthServiceLocal {
     //   this.router.navigate(['users/login']);
     // }
   }
-  signOut(){
+
+  signOut() {
     this.authService.signOut();
   }
 
 
-  recoverPassword(email: string){
+  recoverPassword(email: string) {
     this.configService.recoverPassword(email).subscribe(
       value => {
         console.log(value);
+        this.snackBar.open('Password recovery e-mail sent.', 'Ok', {duration: 5000});
       }
-      , () => {});
+      , () => {
+      });
   }
 }
-  /// ?????????
 
-  // private user: SocialUser;
-  // private loggedIn: boolean;
-  //
-  // ngOnInit() {
-  //   this.createForm();
-  //   // this.authService.authState.subscribe((user) => {
-  //   //   this.user = user;
-  //   //   this.loggedIn = (user != null);
-  //   // });
-  // }
+/// ?????????
 
-  // register(user: User): Observable<any> {
-  //   return this.httpClient.post(`${this.API_URL}/users/register`, user).pipe(
-  //     catchError(this.handleError)
-  //   );
-  // }
+// private user: SocialUser;
+// private loggedIn: boolean;
+//
+// ngOnInit() {
+//   this.createForm();
+//   // this.authService.authState.subscribe((user) => {
+//   //   this.user = user;
+//   //   this.loggedIn = (user != null);
+//   // });
+// }
 
-  // login(user: User) {
-  //   return this.httpClient.post<any>(`${this.API_URL}/users/login`, user)
-  //     .subscribe((res: any) => {
-  //       localStorage.setItem('access_token', res.token);
-  //       this.getUserProfile(res._id).subscribe((res) => {
-  //         this.currentUser = res;
-  //         this.router.navigate(['users/profile/' + res.msg._id]);
-  //       });
-  //     });
-  // }
+// register(user: User): Observable<any> {
+//   return this.httpClient.post(`${this.API_URL}/users/register`, user).pipe(
+//     catchError(this.handleError)
+//   );
+// }
+
+// login(user: User) {
+//   return this.httpClient.post<any>(`${this.API_URL}/users/login`, user)
+//     .subscribe((res: any) => {
+//       localStorage.setItem('access_token', res.token);
+//       this.getUserProfile(res._id).subscribe((res) => {
+//         this.currentUser = res;
+//         this.router.navigate(['users/profile/' + res.msg._id]);
+//       });
+//     });
+// }
 

@@ -121,12 +121,16 @@ export class ConfigService {
     return this.http.post<AuthResponse>('signin/google', userInfo);
   }
 
-  changePassword(email: any, password: any) {
-    return this.http.post<AuthResponse>('change_password', {email, password});
+  changePassword( password: any) {
+    return this.http.post<AuthResponse>('change_password', {password});
   }
 
 
   recoverPassword(email: string) {
     return this.http.post<AuthResponse>('recover_password_by_email', {email});
+  }
+
+  confirmEmail() {
+    return this.http.get<AuthResponse>('confirm_email');
   }
 }
