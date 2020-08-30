@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {Observable, throwError} from 'rxjs';
 import {environment} from '../environments/environment';
 import {AuthServiceLocal} from '../app/auth.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {ConfigService} from './config.service';
+import {catchError} from 'rxjs/operators';
 
 @Injectable()
 export class APIInterceptor implements HttpInterceptor {
@@ -32,14 +32,18 @@ export class APIInterceptor implements HttpInterceptor {
     }
 
     // @ts-ignore
-    return next.handle(this.apiReq).subscribe(
-      ignore => { }
-      , error => {
-        if (error.status === 401) {
+    return next.handle(this.apiReq).pipe(
+      catchError(error => {
+        if (error.status === 401 || error.status === 403) {
           this.authService.logout();
         }
-        this.snackBar.open('An error has occurred. Please try again later.', 'Ok', {duration: 5000});
-      }
+        let defaultErr = 'An error has occurred. Please try again later';
+        if (error.error.message){
+          defaultErr = error.error.message;
+        }
+        this.snackBar.open(defaultErr, 'Ok', {duration: 5000});
+        return throwError(error);
+      })
     );
   }
 }

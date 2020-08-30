@@ -9,14 +9,11 @@ import {
   Tournament
 } from './config.service.model';
 import {of} from 'rxjs';
-import {delay} from 'rxjs/operators';
 
 @Injectable()
 export class ConfigService {
 
-  constructor(private http: HttpClient) {
-
-  }
+  constructor(private http: HttpClient) {}
 
   uploadMedia(id: number, type: string, file: File) {
     const formData: FormData = new FormData();
@@ -30,16 +27,16 @@ export class ConfigService {
   }
 
   requestContest(mode: string, id: number) {
-    return of({
-      id: 5324,
-      title: '',
-      body: '',
-      imageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png',
-      registrationEnd: null,
-      subjects: [],
-      status: 'UNPUBLISHED',
-      rounds: [],
-    }).pipe(delay(2000));
+    // return of({
+    //   id: 5324,
+    //   title: '',
+    //   body: '',
+    //   imageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png',
+    //   registrationEnd: null,
+    //   subjects: [],
+    //   status: 'UNPUBLISHED',
+    //   rounds: [],
+    // }).pipe(delay(2000));
     return this.http.post<Contest>('contest', {mode, id}); // id -1 mean create new one. mode = 'edit', 'view'
   }
 
@@ -113,7 +110,7 @@ export class ConfigService {
   }
 
   signIn(email, password) {
-    return this.http.post<AuthResponse>('signin', {email, password});
+     return this.http.post<AuthResponse>('signin', {email, password});
   }
 
   signInFacebook(userInfo) {

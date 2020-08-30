@@ -44,13 +44,9 @@ export class AuthServiceLocal {
         value => {
           console.log('logging value', value);
           window.localStorage.setItem('access_token', value.token);
+          window.location.href = '/';
         }
-        , error => {
-          // this.snackBar.open('დაფიქსირდა ხარვეზი, სცადეთ მოგვიანებით.', 'კარგი', {duration: 5000});
-          // this.isFetching = false;
-          console.log('error in subscribe');
-        }
-      );
+        , () => {});
     });
   }
 
@@ -69,13 +65,9 @@ export class AuthServiceLocal {
         value => {
           console.log('logging value', value);
           localStorage.setItem('access_token', value.token);
+          window.location.href = '/';
         }
-        , error => {
-          // this.snackBar.open('დაფიქსირდა ხარვეზი, სცადეთ მოგვიანებით.', 'კარგი', {duration: 5000});
-          // this.isFetching = false;
-          console.log('error in subscribe');
-        }
-      );
+        , () => {});
     });
   }
 
@@ -85,13 +77,9 @@ export class AuthServiceLocal {
       value => {
         console.log(value);
         localStorage.setItem('access_token', value.token);
+        window.location.href = '/';
       }
-      , error => {
-        // this.snackBar.open('დაფიქსირდა ხარვეზი, სცადეთ მოგვიანებით.', 'კარგი', {duration: 5000});
-        // this.isFetching = false;
-        console.log('error in subscribe');
-      }
-    );
+      , () => {});
   }
 
   signIn(email, password){
@@ -99,13 +87,9 @@ export class AuthServiceLocal {
       value => {
         console.log(value);
         localStorage.setItem('access_token', value.token);
+        window.location.href = '/';
       }
-      , error => {
-        // this.snackBar.open('დაფიქსირდა ხარვეზი, სცადეთ მოგვიანებით.', 'კარგი', {duration: 5000});
-        // this.isFetching = false;
-        console.log('error in subscribe');
-      }
-    );
+      , error => {});
   }
 
   changePassword(email, password, accessToken){
@@ -148,7 +132,7 @@ export class AuthServiceLocal {
   // todo
   logout() {
     localStorage.removeItem('access_token');
-    window.location.href = '/';
+    window.location.href = '/auth';
     // if (localStorage.removeItem('access_token') == null) {
     //   this.router.navigate(['users/login']);
     // }
@@ -163,11 +147,7 @@ export class AuthServiceLocal {
       value => {
         console.log(value);
       }
-      , error => {
-        // this.snackBar.open('დაფიქსირდა ხარვეზი, სცადეთ მოგვიანებით.', 'კარგი', {duration: 5000});
-        // this.isFetching = false;
-        console.log('error in subscribe');
-      });
+      , () => {});
   }
 }
   /// ?????????

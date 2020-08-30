@@ -14,9 +14,9 @@ export interface Tournament {
 }
 
 export interface AuthResponse {
-  success: string;
+  success: boolean;
   token: string;
-  newUser: string;
+  newUser: boolean;
 }
 
 export interface Subject {
