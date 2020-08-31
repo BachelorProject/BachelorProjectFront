@@ -53,9 +53,10 @@ import { QuestionComponent } from './components/contest/question/question.compon
 const appRoutes: Routes = [
   {path: 'auth', component: WelcomeComponent},
   {path: '', component: BoardComponent},
+  {path: 'question', component: QuestionComponent},
   {path: 'editor', component: EditorComponent},
-  // {path: '**', component: PageNotFoundComponent},
   {path: 'leaderboard', component: LeaderboardComponent},
+  // {path: '**', component: PageNotFoundComponent},
   {path: 'contest', component: ContestComponent}
 ];
 

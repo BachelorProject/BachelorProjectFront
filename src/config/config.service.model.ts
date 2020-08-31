@@ -66,6 +66,6 @@ export interface ContestQuestion {
   question: string;
   options: string[];
   score: number;
-  type: string; // 'MULTIPLE_CHOICE', 'ONE_CHOICE'
+  type: string; // 'MULTIPLE CHOICE', 'ONE CHOICE'
   correctAnswer: number[];
 }

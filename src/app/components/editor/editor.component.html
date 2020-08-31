@@ -1,5 +1,5 @@
-<ckeditor [editor]="Editor" data="{{initialData}}" *ngIf="isEditable"
+<ckeditor [editor]="Editor" [(ngModel)]="data" *ngIf="isEditable"
           [config]="{ placeholder: placeholder, toolbar : toolbar}"
           (change)="onChange($event)"></ckeditor>
-<ckeditor [editor]="Editor" data="{{initialData}}" *ngIf="!isEditable" [config]="{ toolbar: [  ] } "
+<ckeditor [editor]="Editor" [(ngModel)]="data" *ngIf="!isEditable" [config]="{ toolbar: [  ] } "
           [disabled]="true"></ckeditor>

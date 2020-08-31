@@ -10,6 +10,7 @@ import {
   Tournament
 } from './config.service.model';
 import {of} from 'rxjs';
+import {delay} from 'rxjs/operators';
 
 @Injectable()
 export class ConfigService {
@@ -17,7 +18,22 @@ export class ConfigService {
   constructor(private http: HttpClient) {
   }
 
+  updateQuestions(questions: ContestQuestion[], contestId: number, roundId: number) {
+    return this.http.post<any>('contest', JSON.stringify({questions, contestId, roundId}));
+  }
+
   getQuestions(contest: number, round: number) {
+    const data: ContestQuestion[] = [];
+    for (let i = 0; i < 11; i++) {
+      data.push({
+        question: 'ragaca kitxva',
+        options: ['pasuxi1', 'pasuxi2', 'pasuxi3'],
+        score: null,
+        type: 'MULTIPLE CHOICE',
+        correctAnswer: [2],
+      });
+    }
+    return of(data).pipe(delay(300));
     const params = new HttpParams({
       fromObject: {
         contest: contest.toString(),
