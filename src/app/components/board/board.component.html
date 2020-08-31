@@ -15,7 +15,7 @@
       <button class="create-button"> create</button>
       <form class="filter-form" [formGroup]="filterFormGroup">
         <div class="switch-container">
-          <ng-switchery (change)="formValueChanged()" onLabel="created by me/all" class="switch" formControlName="myContests"></ng-switchery>
+          <ng-switchery (change)="formValueChanged()" onLabel="created by all/me" class="switch" formControlName="myContests"></ng-switchery>
         </div>
         <div class="switch-container">
           <ng-switchery (change)="formValueChanged()" onLabel="past contests" class="switch" formControlName="pastContests"></ng-switchery>
@@ -30,7 +30,7 @@
           <mat-select formControlName="categories" multiple
                       (selectionChange)="formValueChanged()">
             <mat-option *ngFor="let category of categoryService.categories" [value]="category.id">
-              <div class="mat-option-prefix" style="background-color: {{getColor(category.color_id)}}" matPrefix></div>
+              <div class="mat-option-prefix" style="background-color: {{getColor(category.colorId)}}" matPrefix></div>
               {{category.name}}
             </mat-option>
           </mat-select>

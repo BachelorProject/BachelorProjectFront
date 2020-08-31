@@ -26,7 +26,7 @@ export class SubjectTagComponent implements OnInit {
     }
     this.moreTitle = this.moreTitle.substr(0, this.moreTitle.length - 1);
     if (this.subject != null) {
-      this.color = Utils.subjectColor(this.subject.color_id);
+      this.color = Utils.subjectColor(this.subject.colorId);
     }
   }
 

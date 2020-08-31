@@ -96,7 +96,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
           for (const elem of value) {
             this.events.push({
               start: new Date(elem.nextContestStart),
-              end: new Date(elem.nextContestStart + elem.nextContestDuration * 60 * 1000),
+              end: new Date(elem.nextContestStart + 1),
               title: elem.title,
               actions: null,
               allDay: false,

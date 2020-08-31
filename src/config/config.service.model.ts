@@ -22,7 +22,7 @@ export interface AuthResponse {
 export interface Subject {
   id: number;
   name: string;
-  color_id: number;
+  colorId: number;
 }
 
 export interface LeaderBoardMetaModel {

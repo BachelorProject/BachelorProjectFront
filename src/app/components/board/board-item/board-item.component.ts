@@ -12,6 +12,7 @@ export class BoardItemComponent implements OnInit {
   isRegistered = false;
   timeLeft = 5;
   isSmallScreen = false;
+  window = window;
 
   constructor() {
   }

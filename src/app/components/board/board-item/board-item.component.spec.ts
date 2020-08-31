@@ -25,7 +25,7 @@ describe('BoardItemComponent', () => {
       nextContestStart: 1590161250706,
       nextContestDuration: 180,
       subjects: [{
-        color_id: 1,
+        colorId: 1,
         id: 1,
         name: 'Mathematics'
       }],

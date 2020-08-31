@@ -33,7 +33,7 @@
             <mat-select multiple
                         (selectionChange)="contest.subjectIds = $event.value">
               <mat-option *ngFor="let category of categoryService.categories" [value]="category.id - 1">
-                <div class="mat-option-prefix" style="background-color: {{getColor(category.color_id)}}"
+                <div class="mat-option-prefix" style="background-color: {{getColor(category.colorId)}}"
                      matPrefix></div>
                 {{category.name}}
               </mat-option>
