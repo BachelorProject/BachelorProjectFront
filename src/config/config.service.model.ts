@@ -57,7 +57,7 @@ export interface ContestRound {
   duration: number;
   placeToPass: number; // -1 means this is not passing criteria
   pointsToPass: number; // -1 means this is not passing criteria
-  questions: ContestQuestion[];
+  questions: number;
   status: string; //   'ACTIVE', 'ONGOING', 'CANCELLED', 'COMPLETED'
   startTime: number;
 }
@@ -67,4 +67,5 @@ export interface ContestQuestion {
   options: string[];
   score: number;
   type: string; // 'MULTIPLE_CHOICE', 'ONE_CHOICE'
+  correctAnswer: number[];
 }

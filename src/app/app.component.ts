@@ -17,7 +17,8 @@ export class AppComponent implements OnInit {
       if (e instanceof NavigationEnd) {
         this.activatedRoute.queryParams.subscribe(params => {
           const urlTree = this.router.parseUrl(this.router.url);
-          this.showHeader = urlTree.root.children.primary != null;
+          console.log(urlTree.root.children.primary.segments[0].path);
+          this.showHeader = urlTree.root.children.primary.segments[0].path !== 'auth';
         });
       }
     });

@@ -75,6 +75,10 @@ html, body {
   height: 60% !important;
 }
 
+ckeditor {
+  border: solid 1px rgba(112, 112, 112, 0.4);
+}
+
 .ngx-pagination .current {
   background-color: #fff!important;
   color: var(--color-header-h1)!important;

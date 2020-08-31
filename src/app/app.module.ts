@@ -48,10 +48,12 @@ import {ImageUploaderComponent} from './components/image-uploader/image-uploader
 import {MatDialogModule} from '@angular/material/dialog';
 import {DragDropDirective} from './components/image-uploader/DragDropDirective';
 import { NgxMatDatetimePickerModule, NgxMatTimepickerModule, NgxMatNativeDateModule } from '@angular-material-components/datetime-picker';
+import { QuestionComponent } from './components/contest/question/question.component';
 
 const appRoutes: Routes = [
   {path: 'auth', component: WelcomeComponent},
   {path: '', component: BoardComponent},
+  {path: 'editor', component: EditorComponent},
   // {path: '**', component: PageNotFoundComponent},
   {path: 'leaderboard', component: LeaderboardComponent},
   {path: 'contest', component: ContestComponent}
@@ -86,7 +88,8 @@ export function provideConfig() {
     LeaderboardComponent,
     ContestComponent,
     ImageUploaderComponent,
-    DragDropDirective
+    DragDropDirective,
+    QuestionComponent
   ],
   imports: [
     BrowserModule,

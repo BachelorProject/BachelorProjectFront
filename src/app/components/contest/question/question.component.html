@@ -1,0 +1,24 @@
+<div class="contest-container">
+  <div class="question-content">
+    <div [hidden]="isSmallScreen && isFilterOpen" class="left-panel">
+      <div [hidden]="isFetching" class="question-details">
+
+      </div>
+      <div [hidden]="!isFetching" class="skeleton">
+        <div class="horizontal-flex">
+          <div class="skeleton-circle"></div>
+          <div class="skeleton-rect"></div>
+        </div>
+        <div class="skeleton-rect" style="width: 70%;"></div>
+        <div class="skeleton-rect"></div>
+      </div>
+    </div>
+    <div [hidden]="isSmallScreen && !isFilterOpen" class="right-panel">
+
+    </div>
+
+  </div>
+
+</div>
+
+

@@ -1,12 +1,31 @@
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {AuthResponse, Contest, LeaderBoardMetaModel, LeaderBoardPlaceModel, Subject, Tournament} from './config.service.model';
+import {
+  AuthResponse,
+  Contest,
+  ContestQuestion,
+  LeaderBoardMetaModel,
+  LeaderBoardPlaceModel,
+  Subject,
+  Tournament
+} from './config.service.model';
 import {of} from 'rxjs';
 
 @Injectable()
 export class ConfigService {
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
+
+  getQuestions(contest: number, round: number) {
+    const params = new HttpParams({
+      fromObject: {
+        contest: contest.toString(),
+        round: round.toString()
+      }
+    });
+    return this.http.get<ContestQuestion[]>('questions', {params});
+  }
 
   uploadMedia(id: number, type: string, file: File) {
     const formData: FormData = new FormData();
@@ -20,7 +39,6 @@ export class ConfigService {
   }
 
   updateContest(contest: Contest) {
-    contest.rounds.map(elem => elem.questions = []);
     return this.http.post<any>('contest', JSON.stringify(contest));
   }
 
@@ -108,7 +126,7 @@ export class ConfigService {
   }
 
   signIn(email, password) {
-     return this.http.post<AuthResponse>('signin', {email, password});
+    return this.http.post<AuthResponse>('signin', {email, password});
   }
 
   signInFacebook(userInfo) {
@@ -119,7 +137,7 @@ export class ConfigService {
     return this.http.post<AuthResponse>('signin/google', userInfo);
   }
 
-  changePassword( password: any) {
+  changePassword(password: any) {
     return this.http.post<AuthResponse>('change_password', {password});
   }
 

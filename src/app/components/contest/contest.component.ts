@@ -105,7 +105,7 @@ export class ContestComponent implements OnInit {
       duration: -1,
       placeToPass: -1,
       pointsToPass: -1,
-      questions: [],
+      questions: 0,
       status: 'ACTIVE',
       startTime: -1
     });
