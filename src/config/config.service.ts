@@ -29,16 +29,25 @@ export class ConfigService {
   uploadMedia(id: number, type: string, file: File) {
     const formData: FormData = new FormData();
     formData.append('id', id.toString());
-    formData.append('type', type);
     formData.append('file', file);
-    return this.http.post<any>('upload', formData, {
-      reportProgress: true,
-      observe: 'events'
-    });
+
+    if (type === 'profileAvatar') {
+      return this.http.post<any>('set_profile_picture', formData,  {
+        reportProgress: true,
+        observe: 'events'
+      });
+    } else if (type === 'contestAvatar') {
+      return this.http.post<any>('set_contest_picture', formData,  {
+        reportProgress: true,
+        observe: 'events'
+      });
+    }
   }
 
   updateContest(contest: Contest) {
     return this.http.post<any>('contest', JSON.stringify(contest));
+    // id -1 mean create new one. mode = 'edit', 'view'
+
   }
 
   requestContest(mode: string, id: number) {
@@ -52,7 +61,14 @@ export class ConfigService {
     //   status: 'UNPUBLISHED',
     //   rounds: [],
     // }).pipe(delay(2000));
-    return this.http.post<Contest>('contest', {mode, id}); // id -1 mean create new one. mode = 'edit', 'view'
+
+    const params = new HttpParams({
+      fromObject: {
+        mode,
+        id: id.toString()
+      }
+    });
+    return this.http.get<Contest>('contest', {params});
   }
 
   fetchCategories() {
