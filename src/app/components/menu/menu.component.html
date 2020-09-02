@@ -1,7 +1,7 @@
 <div class="menu-container" style="flex-direction:{{direction}}">
   <a class="item item-absolute" (click)="getUpcomingOrBoard()">
     <img class="icon" src="../../../assets/images/ic-upcoming-contest.svg">
-    <div class="red-notif"></div>
+    <div [hidden]="upcomingTournament.catId == -1" class="red-notif"></div>
   </a>
   <a class="item" [routerLink]="'profile'">
     <img class="profile-icon"

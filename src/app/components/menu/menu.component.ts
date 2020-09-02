@@ -15,7 +15,7 @@ export class MenuComponent implements OnInit {
   constructor(public configService: ConfigService,
               public router: Router,
               private authService: AuthServiceLocal,
-              private upcomingTournament: UpcomingTournamentService
+              public upcomingTournament: UpcomingTournamentService
   ) {
   }
 
