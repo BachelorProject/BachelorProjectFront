@@ -1,0 +1,25 @@
+.not-found-container {
+  margin-left: 25%;
+  margin-right: 25%;
+  display: flex;
+  width: 50%;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+}
+
+.not-found-container img {
+  max-height: 50vh;
+}
+
+.not-found-container h2 {
+  letter-spacing: 2px;
+  font-size: 20px;
+  color: #6A6A6A;
+}
+
+h2 a {
+  text-decoration: none;
+  cursor: pointer;
+  color: #1B73F0;
+}

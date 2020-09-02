@@ -1,10 +1,10 @@
 <div class="app-container">
   <mat-toolbar *ngIf="this.showHeader" class="header">
-    <div class="logo-container">
+    <div class="logo-container" [routerLink]="'/'">
       <img id="logo" src="../assets/images/logo.svg">
-      <p>OLYMPO</p>
+      <p [hidden]="isScreenSmall">OLYMPO</p>
     </div>
-    <app-menu *ngIf="!isScreenSmall" [direction]="'row'"></app-menu>
+    <app-menu [direction]="'row'"></app-menu>
 <!--    <img *ngIf="isScreenSmall" src="../assets/images/menu-icon-material.svg" (click)="drawer.toggle()" class="menu-icon">-->
   </mat-toolbar>
 

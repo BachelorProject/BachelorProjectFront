@@ -17,7 +17,9 @@
         </div>
         <div class="vertical-flex" style="width: 100%; ">
           <h2 class="desc-header">contest description</h2>
-          <app-editor [toolbar]="isSmallScreen? smallToolbar : defaultToolbar" class="desc-editor"></app-editor>
+          <app-editor [(data)]="contest.body"
+                      [placeholder]="'Add contest description...'"
+            [toolbar]="isSmallScreen? smallToolbar : defaultToolbar" class="desc-editor"></app-editor>
         </div>
         <div [ngClass]="isSmallScreen? 'vertical-flex' : 'horizontal-flex'"
              style="width: 100%">
@@ -63,7 +65,7 @@
 
         </div>
         <div class="subject-container">
-          <app-subject-tag *ngFor="let subject of getFirstSubjects()" [subject]="categoryService.categories[subject]"
+          <app-subject-tag *ngFor="let subject of getFirstSubjects()" [subject]="categoryService.getCategoryById(subject)"
                            class="subject" [mode]="this.isSmallScreen? 'sm' : 'lg'"></app-subject-tag>
           <app-subject-tag *ngIf="contest.subjectIds !== undefined && contest.subjectIds.length > 2" [isMoreTag]="true"
                            [moreSubjects]="getMoreSubjects()"

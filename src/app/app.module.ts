@@ -47,16 +47,23 @@ import {ContestComponent} from './components/contest/contest.component';
 import {ImageUploaderComponent} from './components/image-uploader/image-uploader.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import {DragDropDirective} from './components/image-uploader/DragDropDirective';
-import { NgxMatDatetimePickerModule, NgxMatTimepickerModule, NgxMatNativeDateModule } from '@angular-material-components/datetime-picker';
-import { QuestionComponent } from './components/contest/question/question.component';
+import {NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerModule} from '@angular-material-components/datetime-picker';
+import {QuestionComponent} from './components/contest/question/question.component';
+import {ProfileComponent} from './components/profile/profile.component';
+import { ChartModule } from 'angular2-chartjs';
+import {MatMomentDateModule} from '@angular/material-moment-adapter';
+import {UpcomingTournamentService} from '../config/UpcomingTournamentService';
+import {ChangePasswordComponent} from './components/change-password/change-password.component';
 
 const appRoutes: Routes = [
   {path: 'auth', component: WelcomeComponent},
   {path: '', component: BoardComponent},
+  {path: 'question', component: QuestionComponent},
   {path: 'editor', component: EditorComponent},
-  // {path: '**', component: PageNotFoundComponent},
   {path: 'leaderboard', component: LeaderboardComponent},
-  {path: 'contest', component: ContestComponent}
+  {path: 'profile', component: ProfileComponent},
+  {path: 'contest', component: ContestComponent},
+  {path: '**', component: PageNotFoundComponent}
 ];
 
 const config = new AuthServiceConfig([
@@ -89,7 +96,9 @@ export function provideConfig() {
     ContestComponent,
     ImageUploaderComponent,
     DragDropDirective,
-    QuestionComponent
+    QuestionComponent,
+    ProfileComponent,
+    ChangePasswordComponent
   ],
   imports: [
     BrowserModule,
@@ -131,11 +140,15 @@ export function provideConfig() {
     MatDialogModule,
     NgxMatDatetimePickerModule,
     NgxMatTimepickerModule,
-    NgxMatNativeDateModule
+    NgxMatNativeDateModule,
+    ChartModule,
+    MatDatepickerModule,
+    MatMomentDateModule
   ],
   providers: [ConfigService,
     FabControllerService,
     CategoryService,
+    UpcomingTournamentService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: APIInterceptor,

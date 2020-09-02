@@ -2,7 +2,45 @@
   <div class="question-content">
     <div [hidden]="isSmallScreen && isFilterOpen" class="left-panel">
       <div [hidden]="isFetching" class="question-details">
-
+        <h2>Question {{curr + 1}}</h2>
+        <div class="question-block">
+          <app-editor [toolbar]="isSmallScreen? smallToolbar : defaultToolbar"
+                      [(data)]="data[curr].question" [placeholder]="'Type a Question...'"></app-editor>
+        </div>
+        <div *ngFor="let option of data[curr].options; index as i; trackBy: trackByFn"
+             class="question-option question-block">
+          <div [hidden]="!isSmallScreen" class="vertical-flex" style="width: 100%;">
+            <div class="horizontal-flex" style="width: 100%; justify-content: space-between;">
+              <img (click)="removeOption(i)"
+                   src="../../../../assets/images/ic-awesome-trash-alt.svg">
+              <button [ngClass]="data[curr].correctAnswer.indexOf(i) !== -1 ? 'correct-green' : ''"
+                      (click)="clickCorrect(i)">
+                correct
+              </button>
+            </div>
+            <app-editor style="width: 100%;" [toolbar]="isSmallScreen? smallToolbar : defaultToolbar"
+                        [(data)]="data[curr].options[i]"
+                        [placeholder]="'Type an Option...'"></app-editor>
+          </div>
+          <div [hidden]="isSmallScreen" class="horizontal-flex">
+            <img (click)="removeOption(i)"
+                 src="../../../../assets/images/ic-awesome-trash-alt.svg">
+            <app-editor [toolbar]="isSmallScreen? smallToolbar : defaultToolbar"
+                        [(data)]="data[curr].options[i]"
+                        [placeholder]="'Type an Option...'"></app-editor>
+            <button [ngClass]="data[curr].correctAnswer.indexOf(i) !== -1 ? 'correct-green' : ''"
+                    (click)="clickCorrect(i)">
+              correct
+            </button>
+          </div>
+        </div>
+        <div class="question-option question-block">
+          <img (click)="addAnswer()"
+               src="../../../../assets/images/ic-awesome-plus.svg">
+          <app-editor [toolbar]="isSmallScreen? smallToolbar : defaultToolbar"
+                      [(data)]="newAnswer"
+                      [placeholder]="'Add new answer...'"></app-editor>
+        </div>
       </div>
       <div [hidden]="!isFetching" class="skeleton">
         <div class="horizontal-flex">
@@ -14,7 +52,35 @@
       </div>
     </div>
     <div [hidden]="isSmallScreen && !isFilterOpen" class="right-panel">
-
+      <button class="create-button" (click)="saveQuestions()"> save questions</button>
+      <div class="question-block question-params">
+        <h3>score</h3>
+        <mat-form-field class="simple-input" appearance="none">
+          <input value="{{data[curr].score && data[curr].score >= 0 ? data[curr].score.toString() : ''}}"
+                 (change)="data[curr].score = $event.target.value" matInput autocomplete="off"
+                 [placeholder]="'Question score...'"
+                 (keypress)="numberOnly($event)">
+        </mat-form-field>
+        <h3>Type</h3>
+        <mat-form-field class="simple-input" appearance="none">
+          <mat-select [(value)]="data[curr].type" (selectionChange)="data[curr].correctAnswer = []">
+            <mat-option [value]="'ONE CHOICE'">
+              Single Choice
+            </mat-option>
+            <mat-option [value]="'MULTIPLE CHOICE'">
+              Multiple choice
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <h2 style="align-self: flex-start">Questions</h2>
+      <div class="question-grid">
+        <div class="question-grid-item"
+             [ngClass]="j===curr ? 'question-grid-item-active' : ''" *ngFor="let question of data; index as j"
+             (click)="curr = j">{{j + 1}}</div>
+        <div class="question-grid-item"
+             (click)="appendQuestion()" style="font-size: 36px">+</div>
+      </div>
     </div>
 
   </div>

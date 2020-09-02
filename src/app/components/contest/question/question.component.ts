@@ -3,8 +3,6 @@ import {ContestQuestion} from '../../../../config/config.service.model';
 import {ConfigService} from '../../../../config/config.service';
 import {Router} from '@angular/router';
 import {FabControllerService} from '../../../../config/FabControllerService';
-import {Utils} from '../../../../config/utils';
-import {ImageUploaderComponent} from '../../image-uploader/image-uploader.component';
 
 @Component({
   selector: 'app-question',
@@ -13,7 +11,11 @@ import {ImageUploaderComponent} from '../../image-uploader/image-uploader.compon
 })
 export class QuestionComponent implements OnInit {
 
-  data: ContestQuestion[];
+  data: ContestQuestion[] = [];
+  curr = 0;
+  newAnswer = '';
+  contestId: number;
+  roundId: number;
 
   constructor(
     private configService: ConfigService,
@@ -23,26 +25,21 @@ export class QuestionComponent implements OnInit {
     if (!this.isFetching) {
       this.isFetching = true;
     }
-    fab.icon = '../../../assets/images/ic-metro-trophy.svg';
+    fab.icon = '../../../assets/images/ic-material-list.svg';
     fab.onClickListener.subscribe(() => {
       this.switchFilter();
     });
 
     // TODO: get params later from url
-    const contestId = 2;
-    const roundId = 1;
-    this.configService.getQuestions(contestId, roundId)
+    this.contestId = 1;
+    this.roundId = 1;
+    this.configService.getQuestions(this.contestId, this.roundId)
       .subscribe(value => {
         this.data = value;
         if (this.data.length === 0) {
-          this.data.push({
-            question: '',
-            options: [],
-            score: -1,
-            type: '',
-            correctAnswer: []
-          });
+          this.appendQuestion();
         }
+        this.isFetching = false;
       }, () => {
       });
   }
@@ -84,6 +81,66 @@ export class QuestionComponent implements OnInit {
       return false;
     }
     return true;
+  }
+
+  clickCorrect(i) {
+    console.log(i);
+    console.log(this.data);
+    console.log(this.data[this.curr].type);
+    switch (this.data[this.curr].type) {
+      case 'MULTIPLE CHOICE':
+        const indexOfCorrect = this.data[this.curr].correctAnswer.indexOf(i);
+        if (indexOfCorrect === -1) {
+          this.data[this.curr].correctAnswer.push(i);
+        } else {
+          this.data[this.curr].correctAnswer.splice(indexOfCorrect, 1);
+        }
+        this.data[this.curr].correctAnswer.sort((a, b) => {
+          return a - b;
+        });
+        break;
+      case 'ONE CHOICE':
+        this.data[this.curr].correctAnswer = [i];
+        break;
+    }
+  }
+
+  trackByFn(index, item) {
+    return index;
+  }
+
+  addAnswer() {
+    this.data[this.curr].options.push(this.newAnswer);
+    this.newAnswer = '';
+  }
+
+  removeOption(index) {
+    this.data[this.curr].options.splice(index, 1);
+    const indexOfCorrect = this.data[this.curr].correctAnswer.indexOf(index);
+    if (indexOfCorrect !== -1) {
+      this.data[this.curr].correctAnswer.splice(indexOfCorrect, 1);
+    }
+    if (this.data[this.curr].options.length === 0) {
+      const oldCurr = this.curr;
+      this.curr = Math.max(0, this.curr - 1);
+      if (this.data.length > 1) {
+        this.data.splice(oldCurr, 1);
+      }
+    }
+  }
+
+  appendQuestion() {
+    this.data.push({
+      question: '',
+      options: ['', ''],
+      score: null,
+      type: 'ONE CHOICE',
+      correctAnswer: []
+    });
+  }
+
+  saveQuestions() {
+    this.configService.updateQuestions(this.data, this.contestId, this.roundId); // TODO: subscribe and show updating status
   }
 
 }

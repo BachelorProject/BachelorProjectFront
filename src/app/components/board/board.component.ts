@@ -48,6 +48,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
   isFetching = false;
   isSmallScreen = false;
   isFilterOpen = false;
+  loadedAll = false;
   private searchTimeout = undefined;
 
   view: CalendarView = CalendarView.Month;
@@ -138,7 +139,12 @@ export class BoardComponent implements OnInit, AfterViewInit {
       this.filterFormGroup.value.search,
       this.filterFormGroup.value.categories,
     ).subscribe(
+      // @ts-ignore
       value => {
+        if (value.length === 0 ){
+          this.loadedAll = true;
+        }
+        console.log(value);
         for (const elem of value) {
           this.tournaments.push(elem);
         }

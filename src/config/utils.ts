@@ -29,7 +29,7 @@ export class Utils {
     }
   }
 
-  public static subjectColor(color: number) {
+  public static subjectColor(color: number): string {
     switch (color) {
       case 0:
         return '#96C8ED';

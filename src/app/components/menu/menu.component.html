@@ -1,15 +1,14 @@
-<div class="menu-container" style="flex-direction:{{direction}}" >
-  <a class="item item-absolute" [routerLink]="'upcoming'"> <!-- TODO: add upcoming -->
+<div class="menu-container" style="flex-direction:{{direction}}">
+  <a class="item item-absolute" (click)="getUpcomingOrBoard()">
     <img class="icon" src="../../../assets/images/ic-upcoming-contest.svg">
-    <div class="red-notif" > </div>
-  </a>
-  <a class="item" [routerLink]="'board'">
-    <img class="icon" src="../../../assets/images/ic-dashboard.svg">
+    <div [hidden]="upcomingTournament.catId == -1" class="red-notif"></div>
   </a>
   <a class="item" [routerLink]="'profile'">
-    <img class="profile-icon" src="../../../assets/images/profile-example.png">
+    <img class="profile-icon"
+         [routerLink]="'/profile'"
+         [src]="configService.currUser !== undefined? configService.currUser.profileImageUrl : 'config ../../../assets/images/default-avatar.png'">
   </a>
-  <a class="item" [routerLink]="'logout'">
+  <a class="item" (click)="logout()">
     <img class="icon" src="../../../assets/images/ic-logout.svg">
   </a>
 </div>

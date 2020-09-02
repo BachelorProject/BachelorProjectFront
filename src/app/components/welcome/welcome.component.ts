@@ -110,7 +110,7 @@ export class WelcomeComponent implements OnInit {
 
   getErrorPasswordRegister() {
     return this.registerFormGroup.get('password').hasError('required') ? 'Field is required (At least 8 characters, one uppercase letter and one number)' :
-      this.registerFormGroup.get('password').hasError('requirements') ? 'Password requirements are not met. (At least eight characters, one uppercase letter and one number.)' : '';
+      this.registerFormGroup.get('password').hasError('requirements') ? 'Password requirements: At least 8 characters, 1 uppercase letter and 1 number.' : '';
   }
 
   getErrorRePasswordRegister() {
@@ -118,7 +118,7 @@ export class WelcomeComponent implements OnInit {
   }
   getErrorPasswordNewPass() {
     return this.newPassFromGroup.get('password').hasError('required') ? 'Field is required (At least 8 characters, one uppercase letter and one number)' :
-      this.newPassFromGroup.get('password').hasError('requirements') ? 'Password requirements are not met. (At least eight characters, one uppercase letter and one number.)' : '';
+      this.newPassFromGroup.get('password').hasError('requirements') ? 'Password requirements: At least 8 characters, 1 uppercase letter and 1 number.' : '';
   }
 
   getErrorRePasswordNewPass() {
