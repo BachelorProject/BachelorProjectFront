@@ -26,6 +26,10 @@
     font-size: 14px!important;
   }
 
+  .right-panel {
+    width: 100%!important;
+  }
+
 }
 
 .sm-header{
@@ -94,7 +98,7 @@
   width: 100%;
 }
 
-.item-body {
+.board-item-body {
   color: var(--color-text-casual);
   font-size: 15px;
   font-weight: 500;
@@ -102,6 +106,10 @@
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 4;
   overflow: hidden;
+}
+
+.board-item-body h2 {
+  font-size: 15px!important;
 }
 
 .subject-container {

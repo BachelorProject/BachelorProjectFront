@@ -43,24 +43,20 @@ export class ImageUploaderComponent {
   uploadFile() {
     this.isUploading = true;
     this.progress = 1;
-    this.dialogRef.close(this.previewFileSrc); // wesit ertertma qveda eventma unda daabrunos roca morcheba.
     this.configService.uploadMedia(this.data.id, this.data.type, this.imagePreview)
       .subscribe((httpEvent: HttpEvent<any>) => {
         switch (httpEvent.type) {
           case HttpEventType.Sent:
-            console.log('Request has been made!');
             break;
           case HttpEventType.ResponseHeader:
             this.isUploading = false;
             this.progress = 0;
-            console.log('Response header has been received!');
+            this.dialogRef.close(this.previewFileSrc);
             break;
           case HttpEventType.UploadProgress:
             this.progress = Math.round(httpEvent.loaded / httpEvent.total * 100);
-            console.log(`Uploaded! ${this.progress}%`);
             break;
           case HttpEventType.Response:
-            console.log('Response has been received!');
             this.progress = 0;
         }
       });

@@ -17,6 +17,7 @@ export interface AuthResponse {
   success: boolean;
   token: string;
   newUser: boolean;
+  currentUser: UserInformation;
 }
 
 export interface Subject {
@@ -68,4 +69,34 @@ export interface ContestQuestion {
   score: number;
   type: string; // 'MULTIPLE CHOICE', 'ONE CHOICE'
   correctAnswer: number[];
+}
+
+export interface UserInformation {
+  userId: number;
+  firstName: string;
+  lastName: string;
+  gender: string;
+  birthDay: number; // timestamp
+  education: string;
+  username: string;
+  profileImageUrl: string;
+  email: string;
+  subjects: SubjectStat[];
+}
+
+export interface SubjectStat {
+  subjectId: number;
+  subjectStats: SubjectStatEntry[];
+}
+
+export interface SubjectStatEntry {
+  timestamp: number;
+  score: number;
+}
+
+export interface PastContest {
+  imageUrl: string;
+  title: string;
+  subjectIds: number[];
+  contestId: number;
 }

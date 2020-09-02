@@ -6,8 +6,10 @@ import {
   ContestQuestion,
   LeaderBoardMetaModel,
   LeaderBoardPlaceModel,
+  PastContest,
   Subject,
-  Tournament
+  Tournament,
+  UserInformation
 } from './config.service.model';
 import {of} from 'rxjs';
 import {delay} from 'rxjs/operators';
@@ -15,7 +17,132 @@ import {delay} from 'rxjs/operators';
 @Injectable()
 export class ConfigService {
 
+  currUser: UserInformation = {
+    userId: 1,
+    firstName: 'Dima',
+    lastName: 'Rogava',
+    gender: 'male',
+    birthDay: 1598986873144, // timestamp
+    education: 'Freeuni',
+    username: 'Rogavactive',
+    profileImageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png',
+    email: 'droga16@freeuni.edu.ge',
+    subjects: [{
+      subjectId: 1,
+      subjectStats: [{
+        timestamp: 15699685410000,
+        score: 1241
+      },
+        {
+          timestamp: 15752389410000,
+          score: 4231
+        },
+        {
+          timestamp: 15857797410000,
+          score: 5431
+        },
+        {
+          timestamp: 15910501410000,
+          score: 3931
+        }
+      ]
+    },
+      {
+        subjectId: 2,
+        subjectStats: [{
+          timestamp: 15699685410000,
+          score: 4441
+        },
+          {
+            timestamp: 15752389410000,
+            score: 4231
+          },
+          {
+            timestamp: 15857797410000,
+            score: 3431
+          },
+          {
+            timestamp: 15910501410000,
+            score: 4131
+          },
+          {
+            timestamp: 15963205410000,
+            score: 3931
+          }
+        ]
+      }],
+  };
+
   constructor(private http: HttpClient) {
+  }
+
+  getNearestUpcomingTournament() {
+    return of(1243).pipe(delay(2000));
+    return this.http.get<number>('upcoming_tournament');
+  }
+
+  getPastContests(userId: number) {
+    const params = new HttpParams({
+      fromObject: {
+        userId: userId.toString()
+      }
+    });
+    const data: PastContest[] = [
+      {
+        imageUrl: 'https://avatar.onlinesoccermanager.nl/03319541v1.png',
+        title: 'asdDFADFD df SDF ASDF SADFV ASDF XFV ASDGA DG ASDG ASDG ASD ASDF ASSDFasdf df adsf asadsf adf asdf asdf a',
+        subjectIds: [1, 2, 3],
+        contestId: 1,
+      },
+      {
+        imageUrl: 'https://avatar.onlinesoccermanager.nl/03319541v1.png',
+        title: 'asdDFADFD df SDF ASDF SADFV ASDF XFV ASDGA DG ASDG ASDG ASD ASDF ASSDFasdf df adsf asadsf adf asdf asdf a',
+        subjectIds: [1, 2, 3],
+        contestId: 1,
+      },
+      {
+        imageUrl: 'https://avatar.onlinesoccermanager.nl/03319541v1.png',
+        title: 'asdDFADFD df SDF ASDF SADFV ASDF XFV ASDGA DG ASDG ASDG ASD ASDF ASSDFasdf df adsf asadsf adf asdf asdf a',
+        subjectIds: [1, 2, 3],
+        contestId: 1,
+      }
+      , {
+        imageUrl: 'https://avatar.onlinesoccermanager.nl/03319541v1.png',
+        title: 'asdDFADFD df SDF ASDF SADFV ASDF XFV ASDGA DG ASDG ASDG ASD ASDF ASSDFasdf df adsf asadsf adf asdf asdf a',
+        subjectIds: [1, 2, 3],
+        contestId: 1,
+      }, {
+        imageUrl: 'https://avatar.onlinesoccermanager.nl/03319541v1.png',
+        title: 'asdDFADFD df SDF ASDF SADFV ASDF XFV ASDGA DG ASDG ASDG ASD ASDF ASSDFasdf df adsf asadsf adf asdf asdf a',
+        subjectIds: [1, 2, 3],
+        contestId: 1,
+      }, {
+        imageUrl: 'https://avatar.onlinesoccermanager.nl/03319541v1.png',
+        title: 'asdDFADFD df SDF ASDF SADFV ASDF XFV ASDGA DG ASDG ASDG ASD ASDF ASSDFasdf df adsf asadsf adf asdf asdf a',
+        subjectIds: [1, 2, 3],
+        contestId: 1,
+      }, {
+        imageUrl: 'https://avatar.onlinesoccermanager.nl/03319541v1.png',
+        title: 'asdDFADFD df SDF ASDF SADFV ASDF XFV ASDGA DG ASDG ASDG ASD ASDF ASSDFasdf df adsf asadsf adf asdf asdf a',
+        subjectIds: [1, 2, 3],
+        contestId: 1,
+      }
+    ];
+    return of(data);
+    return this.http.get<PastContest[]>('past_contests', {params});
+  }
+
+  getUserInfo(userId: number) {
+    const params = new HttpParams({
+      fromObject: {
+        userId: userId.toString()
+      }
+    });
+    return this.http.get<UserInformation>('profile', {params});
+  }
+
+  updateUserInfo(info: UserInformation) {
+    return this.http.post<any>('contest', JSON.stringify(info));
   }
 
   updateQuestions(questions: ContestQuestion[], contestId: number, roundId: number) {
@@ -59,20 +186,44 @@ export class ConfigService {
   }
 
   requestContest(mode: string, id: number) {
-    // return of({
-    //   id: 5324,
-    //   title: '',
-    //   body: '',
-    //   imageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png',
-    //   registrationEnd: null,
-    //   subjects: [],
-    //   status: 'UNPUBLISHED',
-    //   rounds: [],
-    // }).pipe(delay(2000));
+    const data: Contest = {
+      id: 5324,
+      title: '',
+      body: '',
+      imageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png',
+      registrationEnd: null,
+      subjectIds: [1, 2, 3],
+      status: 'UNPUBLISHED',
+      rounds: [],
+    };
+    return of(data).pipe(delay(2000));
     return this.http.post<Contest>('contest', {mode, id}); // id -1 mean create new one. mode = 'edit', 'view'
   }
 
   fetchCategories() {
+    const data: Subject[] = [
+      {
+        id: 0,
+        name: 'Mathematics',
+        colorId: 0,
+      },
+      {
+        id: 1,
+        name: 'Physics',
+        colorId: 1,
+      },
+      {
+        id: 2,
+        name: 'Chemistry',
+        colorId: 2
+      },
+      {
+        id: 3,
+        name: 'Biology',
+        colorId: 3,
+      }
+    ];
+    return of(data);
     return this.http.get<Subject[]>('subjects');
   }
 
@@ -147,6 +298,10 @@ export class ConfigService {
 
   changePassword(password: any) {
     return this.http.post<AuthResponse>('change_password', {password});
+  }
+
+  updatePassword(oldPassword: string, newPassword: string) {
+    return this.http.post<string>('update_password', {oldPassword, newPassword});
   }
 
 

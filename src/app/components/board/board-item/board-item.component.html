@@ -1,11 +1,11 @@
 <div class="item-container" [routerLink]="'/contest/' + data.id ">
   <div class="horizontal-flex" [ngClass]="isSmallScreen ? 'sm-header' : '' ">
-    <img class="user-logo" [src]="'http://localhost:3000/' +  data.imageUrl"/>
+    <img class="user-logo" [src]="data.imageUrl"/>
     <h1 *ngIf="isSmallScreen" class="item-title" [title]="data.title"> {{data.title}}</h1>
   </div>
   <div class="text-container">
     <h1 class="item-title" [title]="data.title"> {{data.title}}</h1>
-    <div class="item-body" [innerHTML]="data.body"></div>
+    <div class="board-item-body" [innerHTML]="data.body"></div>
   </div>
   <div class="right-panel">
     <div class="horizontal-flex" style="width: 100%;">

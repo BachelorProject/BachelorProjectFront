@@ -1,0 +1,143 @@
+<div class="profile-container">
+  <div class="question-content">
+    <div [hidden]="isSmallScreen && isFilterOpen || isFetching > 0" class="left-panel">
+      <div class="sector vertical-flex" style="width: 100%">
+        <div class="horizontal-flex">
+          <div class="avatar-container">
+            <img [src]="data.profileImageUrl">
+            <div class="avatar-change" (click)="openAvatarChange()"> Change</div>
+          </div>
+          <div class="vertical-flex" style="margin-left: 10px; align-items: flex-start; width: calc(100% - 100px);">
+            <p class="info-fullname"
+               title="{{data.firstName + ' ' + data.lastName}}">{{data.firstName + ' ' + data.lastName}}</p>
+            <p class="info-username">@{{data.username}}</p>
+          </div>
+        </div>
+        <div class="info-grid">
+          <img src="../../../assets/images/ic-material-school.svg">
+          <p title="{{data.education}}">{{data.education}}</p>
+          <img src="../../../assets/images/ic-material-email.svg">
+          <p title="{{data.email}}">{{data.email}}</p>
+          <img src="../../../assets/images/ic-metro-trophy.png"
+               style="filter: opacity(.5) drop-shadow(0 0 0  {{getSubjectColor()}});">
+          <div class="subject-points">
+            {{categoryService.getCategoryById(currentSubjectId) !== undefined ? categoryService.getCategoryById(currentSubjectId).name : ''}}
+            :
+            <p>{{getCurrentSubjectPoints().toLocaleString()}}</p>
+          </div>
+        </div>
+        <div class="edit-icon" (click)="viewInfoClick()">
+          {{viewingInfo ? 'Close Info' : 'View Info'}}
+        </div>
+      </div>
+      <h2 style="align-self: flex-start">Categories</h2>
+      <div style="width: 100%" class="subject-list">
+        <app-subject-tag class="subject-item" *ngFor="let subject of data.subjects; index as i"
+                         [subject]="categoryService.getCategoryById(subject.subjectId)"
+                         (click)="currentSubjectId = subject.subjectId; currSubjectIndex = i"></app-subject-tag>
+      </div>
+
+    </div>
+    <div [hidden]="(isSmallScreen && (!isFilterOpen || viewingInfo)) || viewingInfo" class="right-panel">
+      <div [hidden]="isFetching > 0" class="question-details">
+        <div class="sector vertical-flex" style="width: 100%; height: fit-content">
+          <chart style="width: 100%;  height: fit-content" [type]="chartType" [data]="chartData"
+                 [options]="chartOptions"></chart>
+          <mat-form-field class="simple-input category-dropdown" appearance="none">
+            <mat-label>Category</mat-label>
+            <mat-select [(value)]="currentStats" (selectionChange)="updateChart()">
+              <mat-option *ngFor="let stat of data.subjects" [value]="stat">
+                {{categoryService.getCategoryById(stat.subjectId).name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <h2 style="align-self: flex-start">Categories</h2>
+        <div class="sector horizontal-flex past-contest" style="margin-bottom: 40px; cursor: pointer; outline: none"
+             [routerLink]="['/contest']" [queryParams]="{id: pastContest.contestId}"
+             *ngFor="let pastContest of pastContests">
+          <img [src]="pastContest.imageUrl">
+          <h4> {{pastContest.title}}</h4>
+          <div class="subject-container">
+            <app-subject-tag *ngFor="let subject of getSubjectsFromContest(pastContest.subjectIds).slice(0,2)"
+                             [subject]="subject"
+                             class="subject" [mode]="this.isSmallScreen? 'sm' : 'lg'"></app-subject-tag>
+            <app-subject-tag *ngIf="getSubjectsFromContest(pastContest.subjectIds).length > 2"
+                             [isMoreTag]="true"
+                             [moreSubjects]="getSubjectsFromContest(pastContest.subjectIds).slice(2)"
+                             [mode]="this.isSmallScreen? 'sm' : 'lg'"></app-subject-tag>
+          </div>
+        </div>
+      </div>
+      <div [hidden]="isFetching == 0" class="skeleton">
+        <div class="horizontal-flex">
+          <div class="skeleton-circle"></div>
+          <div class="skeleton-rect"></div>
+        </div>
+        <div class="skeleton-rect" style="width: 70%;"></div>
+        <div class="skeleton-rect"></div>
+      </div>
+    </div>
+
+    <div [hidden]="((isSmallScreen && (!isFilterOpen || !viewingInfo)) || !viewingInfo) || isFetching > 0"
+         class="right-panel vertical-flex">
+      <h2 style="align-self: flex-start; margin-top: -30px">Personal Info</h2>
+      <div class="sector profile-info-sector">
+        <p>First Name</p>
+        <mat-form-field class="simple-input" appearance="none">
+          <input [value]="data.firstName"
+                 matInput autocomplete="off" [disabled]="!inEditMode">
+        </mat-form-field>
+        <p>Last Name</p>
+        <mat-form-field class="simple-input" appearance="none">
+          <input [value]="data.lastName"
+                 matInput autocomplete="off" [disabled]="!inEditMode">
+        </mat-form-field>
+        <p>Gender</p>
+        <mat-form-field class="simple-input" appearance="none">
+          <mat-select [(value)]="data.gender" [disabled]="!inEditMode">
+            <mat-option [value]="'male'"> Male</mat-option>
+            <mat-option [value]="'female'"> Female</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <p>Birthday</p>
+        <mat-form-field class="simple-input" appearance="none">
+          <input matInput [matDatepicker]="picker" [value]="getDate(data.birthDay)" [disabled]="!inEditMode">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <p>Education</p>
+        <mat-form-field class="simple-input" appearance="none">
+          <input [value]="data.education"
+                 matInput autocomplete="off" [disabled]="!inEditMode">
+        </mat-form-field>
+        <div class="edit-icon" (click)="editInfoClick()">
+          {{!inEditMode ? 'Edit Info' : 'Save Info'}}
+        </div>
+      </div>
+
+      <h2 style="align-self: flex-start">Account Info</h2>
+      <div class="sector profile-info-sector">
+        <p>Username</p>
+        <mat-form-field class="simple-input" appearance="none">
+          <input [value]="data.username"
+                 matInput autocomplete="off" [disabled]="!inEditMode">
+        </mat-form-field>
+        <p>Email</p>
+        <mat-form-field class="simple-input" appearance="none">
+          <input [value]="data.email"
+                 matInput autocomplete="off" [disabled]="!inEditMode">
+        </mat-form-field>
+        <p>Password</p>
+        <mat-form-field class="simple-input" appearance="none">
+          <input [value]="'****'" (click)="updatePass()"
+                 matInput autocomplete="off" [disabled]="!inEditMode">
+        </mat-form-field>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+

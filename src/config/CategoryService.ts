@@ -10,7 +10,18 @@ export class CategoryService {
     configService.fetchCategories()
       .subscribe(value => {
         this.categories = value;
-      });
+      }, error => {});
+  }
+
+  getCategoryById(catId: number) {
+    const id = this.categories.map(elem => {
+      return elem.id;
+    }).indexOf(catId);
+    if ( id === -1) {
+      return undefined;
+    } else {
+      return this.categories[id];
+    }
   }
 
 }

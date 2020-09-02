@@ -65,7 +65,7 @@
 
         </div>
         <div class="subject-container">
-          <app-subject-tag *ngFor="let subject of getFirstSubjects()" [subject]="categoryService.categories[subject]"
+          <app-subject-tag *ngFor="let subject of getFirstSubjects()" [subject]="categoryService.getCategoryById(subject)"
                            class="subject" [mode]="this.isSmallScreen? 'sm' : 'lg'"></app-subject-tag>
           <app-subject-tag *ngIf="contest.subjectIds !== undefined && contest.subjectIds.length > 2" [isMoreTag]="true"
                            [moreSubjects]="getMoreSubjects()"

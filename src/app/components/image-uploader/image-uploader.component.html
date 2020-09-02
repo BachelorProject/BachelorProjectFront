@@ -11,4 +11,5 @@
 
   <button mat-button (click)="uploadFile()">Upload</button>
   <button mat-button (click)="closeDialog()">Cancel</button>
+  <div>{{isUploading? progress.toString() + '%' : ''}}</div>
 </div>

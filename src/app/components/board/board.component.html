@@ -2,7 +2,7 @@
   <div class="board-content">
     <div [hidden]="isSmallScreen && isFilterOpen" class="left-panel">
       <app-board-item [data]="tournament" *ngFor="let tournament of tournaments"></app-board-item>
-      <div class="skeleton">
+      <div [hidden]="loadedAll" class="skeleton">
         <div class="horizontal-flex">
           <div class="skeleton-circle"></div>
           <div class="skeleton-rect"></div>

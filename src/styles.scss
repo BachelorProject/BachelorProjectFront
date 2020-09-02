@@ -113,6 +113,11 @@ pagination-template ul {
   font-family: 'Baloo Tamma 2', cursive;
 }
 
+.simple-input .mat-icon-button{
+  width: auto!important;
+  height: auto!important;
+}
+
 /* Importing Bootstrap SCSS file. */
 @import '~bootstrap/scss/bootstrap';
 
