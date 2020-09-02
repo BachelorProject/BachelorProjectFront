@@ -9,7 +9,6 @@ import {
   Subject,
   Tournament
 } from './config.service.model';
-import {of} from 'rxjs';
 
 @Injectable()
 export class ConfigService {
@@ -79,7 +78,7 @@ export class ConfigService {
         roundNumber: roundNumber.toString()
       }
     });
-    return this.http.get<LeaderBoardMetaModel>('leaderboardmeta', {params});
+    return this.http.get<LeaderBoardMetaModel>('leader_board_meta', {params});
   }
 
   getTournamentList(from: number, to: number, myContests: boolean, pastContests: boolean, searchString: string, subjectIds: number[]) {

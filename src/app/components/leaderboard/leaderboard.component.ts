@@ -26,8 +26,8 @@ export class LeaderboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.isScreenSmall = document.body.offsetWidth < 1000;
-    this.contestId = 123;
-    this.roundNumber = 1; // TODO: set this values here from route params
+    this.contestId = 1;
+    this.roundNumber = 7; // TODO: set this values here from route params
     this.configService.getLeaderBoardMeta(this.contestId, this.roundNumber)
       .subscribe(res => {
         this.metaInformation = res;
@@ -36,7 +36,7 @@ export class LeaderboardComponent implements OnInit {
   }
 
   @HostListener('window:resize', ['$event'])
-  onResize(event) {
+  onResize() {
     this.isScreenSmall = document.body.offsetWidth < 1000;
   }
 
