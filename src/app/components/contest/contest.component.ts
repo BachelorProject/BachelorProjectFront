@@ -95,7 +95,7 @@ export class ContestComponent implements OnInit {
 
   addEmptyRound() {
     this.rounds.push({
-      roundNo: -1,
+      id: -1,
       strictMode: false,
       isOpen: false,
       duration: -1,

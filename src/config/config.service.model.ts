@@ -53,6 +53,7 @@ export interface Contest {
 }
 
 export interface ContestRound {
+  id: number;
   roundNo: number;
   strictMode: boolean;
   isOpen: boolean;
