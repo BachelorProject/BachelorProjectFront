@@ -1,6 +1,7 @@
 import {AfterViewInit, Component, HostListener, Input, OnInit} from '@angular/core';
 import {Tournament} from '../../../../config/config.service.model';
 import * as moment from 'moment';
+import {ConfigService} from '../../../../config/config.service';
 
 @Component({
   selector: 'app-board-item',
@@ -9,16 +10,20 @@ import * as moment from 'moment';
 })
 export class BoardItemComponent implements OnInit {
   @Input() data: Tournament;
-  isRegistered = false;
+  @Input() isRegistered = false;
+  @Input() pastContest = false;
   timeLeft = 5;
   isSmallScreen = false;
   window = window;
 
-  constructor() {
+  constructor(public configService: ConfigService) {
   }
 
   ngOnInit(): void {
     this.timeLeft = Math.round((this.data.registrationEnd - new Date().getTime()) / 1000);
+    if (this.timeLeft < 0 ) {
+      this.timeLeft = 1;
+    }
     this.isSmallScreen = document.body.offsetWidth < 700;
   }
 
@@ -36,11 +41,13 @@ export class BoardItemComponent implements OnInit {
     if (this.isRegistered) {
       return;
     }
-    // do some logic and on response call this bellow
-    const registerButton = evt.currentTarget;
-    registerButton.classList = ['registered'];
-    registerButton.innerText = 'registered';
-    this.isRegistered = true;
+    this.configService.registerToContest(this.data.id)
+      .subscribe(() => {
+        const registerButton = evt.currentTarget;
+        registerButton.classList = ['registered'];
+        registerButton.innerText = 'registered';
+        this.isRegistered = true;
+      });
   }
 
   getFormattedDateTime(timestamp: number) {

@@ -8,7 +8,7 @@ export interface Tournament {
   imageUrl: string;
   registrationEnd: number;
   nextContestStart: number;
-  nextContestDuration: number;
+  nextContestDuration: number; // minutes
   subjects: Subject[];
   registeredCount: number;
 }

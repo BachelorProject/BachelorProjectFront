@@ -40,6 +40,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
     });
   }
 
+  myContestIds: number[];
   events: CalendarEvent[] = [];
   tournaments: Tournament[] = [];
   filterFormGroup: FormGroup;
@@ -94,6 +95,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
       .subscribe(
         value => {
           this.events = [];
+          this.myContestIds = [];
           for (const elem of value) {
             this.events.push({
               start: new Date(elem.nextContestStart),
@@ -108,6 +110,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
               draggable: false,
               meta: elem
             });
+            this.myContestIds.push(elem.id);
           }
 
           this.refresh.next();
@@ -116,7 +119,6 @@ export class BoardComponent implements OnInit, AfterViewInit {
   }
 
   formValueChanged() {
-    console.log('called it');
     if (this.searchTimeout !== undefined) {
       clearTimeout(this.searchTimeout);
     }
@@ -130,7 +132,6 @@ export class BoardComponent implements OnInit, AfterViewInit {
   }
 
   fetchTournaments(from: number, to: number) {
-
     this.configService.getTournamentList(
       from,
       to,
@@ -144,7 +145,6 @@ export class BoardComponent implements OnInit, AfterViewInit {
         if (value.length === 0 ){
           this.loadedAll = true;
         }
-        console.log(value);
         for (const elem of value) {
           this.tournaments.push(elem);
         }
@@ -198,8 +198,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
   }
 
   handleEvent(action: string, event: CalendarEvent): void {
-    this.router.navigate(['/contest', {id: event.meta.id}]).then(() => {
-    });
+    this.router.navigate(['/contest'], {queryParams: {id: event.meta.id}});
   }
 
   closeOpenMonthViewDay() {

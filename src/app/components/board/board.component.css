@@ -208,6 +208,7 @@ h3 {
   position: relative;
   margin-top: 20px;
   margin-bottom: 20px;
+  cursor: pointer;
 }
 
 .event-container h2 {

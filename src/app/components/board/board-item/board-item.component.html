@@ -1,4 +1,4 @@
-<div class="item-container" [routerLink]="'/contest/' + data.id ">
+<div class="item-container" [routerLink]="['/contest']" [queryParams]="{id: data.id}">
   <div class="horizontal-flex" [ngClass]="isSmallScreen ? 'sm-header' : '' ">
     <img class="user-logo" [src]="data.imageUrl"/>
     <h1 *ngIf="isSmallScreen" class="item-title" [title]="data.title"> {{data.title}}</h1>
@@ -22,12 +22,17 @@
       <img src="../../../assets/images/ic-material-today.svg">
       <p>{{getFormattedDateTime(data.nextContestStart)}}</p>
     </div>
-    <div class="register-button-container">
-      <button class="unregistered" (click)="register($event)">register</button>
+    <div [hidden]="pastContest" class="register-button-container">
+      <button [ngClass]="isRegistered? 'registered' : 'unregistered' " (click)="register($event)">
+        {{isRegistered ? 'registered' : 'register'}}
+      </button>
       <p class="register-countDown">
-        <countdown *ngIf="timeLeft < 86400" [config]="{ leftTime: this.timeLeft, format: 'h:m:s' }"></countdown>
-        <ng-container *ngIf="timeLeft >= 86400" >
-          {{floor(timeLeft/86400)}} day(s)
+        <countdown *ngIf="timeLeft < 3600" [config]="{ leftTime: this.timeLeft, format: 'm:s' }"></countdown>
+        <countdown *ngIf="timeLeft < 86400 && timeLeft >= 3600"
+                   [config]="{ leftTime: this.timeLeft, format: 'h:m:s' , notify: [ 3601 ]}"
+                   (event)="timeLeft = 3599"></countdown>
+        <ng-container *ngIf="timeLeft >= 86400">
+          {{floor(timeLeft / 86400)}} day(s)
         </ng-container>
         left.
       </p>

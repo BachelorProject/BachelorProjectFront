@@ -5,7 +5,8 @@ import {
   Contest,
   ContestQuestion,
   LeaderBoardMetaModel,
-  LeaderBoardPlaceModel, PastContest,
+  LeaderBoardPlaceModel,
+  PastContest,
   Subject,
   Tournament,
   UserInformation
@@ -175,12 +176,12 @@ export class ConfigService {
     formData.append('avatar', file);
 
     if (type === 'profileAvatar') {
-      return this.http.post<any>('set_profile_picture', formData,  {
+      return this.http.post<any>('set_profile_picture', formData, {
         reportProgress: true,
         observe: 'events'
       });
     } else if (type === 'contestAvatar') {
-      return this.http.post<any>('set_contest_picture', formData,  {
+      return this.http.post<any>('set_contest_picture', formData, {
         reportProgress: true,
         observe: 'events'
       });
@@ -189,6 +190,10 @@ export class ConfigService {
 
   updateContest(contest: Contest) {
     return this.http.post<any>('contest', JSON.stringify(contest));
+  }
+
+  registerToContest(contestId: number) {
+    return this.http.post<any>('register_contest', {contestId});
   }
 
   requestContest(mode: string, id: number) {
@@ -263,6 +268,22 @@ export class ConfigService {
   }
 
   getTournamentList(from: number, to: number, myContests: boolean, pastContests: boolean, searchString: string, subjectIds: number[]) {
+    const data: Tournament[] = [];
+    for (let i = from; i < to; i++) {
+      data.push({
+        id: i,
+        title: `asdasd ${i}`,
+        body: `some body once told me  ${i}`,
+        imageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png',
+        registrationEnd: new Date().getTime() + 1000000,
+        nextContestStart: new Date().getTime(),
+        nextContestDuration: i * 10,
+        subjects: [],
+        registeredCount: 1000 - 15 * i
+      });
+    }
+    return of(data).pipe(delay(1000));
+
     const subjectIdStr: string[] = subjectIds.map(value => value.toString());
 
     let params = new HttpParams({
@@ -290,6 +311,18 @@ export class ConfigService {
   }
 
   getMyTournamentList() {
+    const data: Tournament[] = [{
+      id: 3,
+      title: 'asdasd',
+      body: 'some body once told me',
+      imageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png',
+      registrationEnd: new Date().getTime(),
+      nextContestStart: new Date().getTime(),
+      nextContestDuration: 180,
+      subjects: [],
+      registeredCount: 3321
+    }];
+    return of(data).pipe(delay(1000));
     return this.http.get<Tournament[]>('tournament/registered_list');
   }
 

@@ -84,9 +84,6 @@ export class QuestionComponent implements OnInit {
   }
 
   clickCorrect(i) {
-    console.log(i);
-    console.log(this.data);
-    console.log(this.data[this.curr].type);
     switch (this.data[this.curr].type) {
       case 'MULTIPLE CHOICE':
         const indexOfCorrect = this.data[this.curr].correctAnswer.indexOf(i);

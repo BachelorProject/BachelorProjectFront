@@ -195,6 +195,7 @@
 
 .registered {
   background-color: #6EEB83;
+  cursor: auto!important;
   animation: register-animation 300ms ease-out;
 }
 

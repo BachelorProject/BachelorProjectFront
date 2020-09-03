@@ -90,8 +90,6 @@ export class ProfileComponent implements OnInit {
           });
       });
 
-    console.log(this.userId);
-
     fab.icon = '../../../assets/images/ic-metro-profile.svg';
     fab.onClickListener.subscribe(() => {
       this.switchFilter();
@@ -159,7 +157,6 @@ export class ProfileComponent implements OnInit {
   }
 
   updateChart() {
-    console.log(this.currentStats);
     const chartLabels = this.currentStats.subjectStats.map(elem => {
       return moment(elem.timestamp).format('DD MMM');
     });

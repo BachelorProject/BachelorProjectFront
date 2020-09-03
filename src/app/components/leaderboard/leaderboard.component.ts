@@ -39,6 +39,10 @@ export class LeaderboardComponent implements OnInit {
             .subscribe(res => {
               this.metaInformation = res;
               this.reloadPage();
+            }, error => {
+              if (error.status === 404 ) {
+                this.router.navigate(['**']);
+              }
             });
         }
       });

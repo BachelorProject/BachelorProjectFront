@@ -122,7 +122,6 @@ export class WelcomeComponent implements OnInit {
   }
 
   getErrorRePasswordNewPass() {
-    console.log(this.newPassFromGroup.get('repassword').errors);
     return this.newPassFromGroup.get('repassword').hasError('required') ? 'Field is required' : 'Passwords does not match.';
   }
 

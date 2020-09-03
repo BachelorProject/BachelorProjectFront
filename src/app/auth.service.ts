@@ -32,7 +32,6 @@ export class AuthServiceLocal {
 
   signInWithGoogle() {
     this.authService.signIn(GoogleLoginProvider.PROVIDER_ID).then(r => {
-      console.log('GoogleLoginProvider  THEN: ', r);
 
       const userInfo = {
         first_name: r.firstName,
@@ -41,11 +40,9 @@ export class AuthServiceLocal {
         google_email: r.email,
         photo_url: r.photoUrl
       };
-      console.log('userInfo  THEN: ', userInfo);
 
       this.configService.signInGoogle(userInfo).subscribe(
         value => {
-          console.log('logging value', value);
           window.localStorage.setItem('access_token', value.token);
           window.location.href = '/';
           this.configService.currUser = value.currentUser;
@@ -57,7 +54,6 @@ export class AuthServiceLocal {
 
   signInWithFB() {
     this.authService.signIn(FacebookLoginProvider.PROVIDER_ID).then(r => {
-      console.log('authtoken', r.authToken, r.email, r.name);
 
       const userInfo = {
         first_name: r.firstName,
@@ -68,7 +64,6 @@ export class AuthServiceLocal {
       };
       this.configService.signInFacebook(userInfo).subscribe(
         value => {
-          console.log('logging value', value);
           localStorage.setItem('access_token', value.token);
           window.location.href = '/';
           this.configService.currUser = value.currentUser;
@@ -82,7 +77,6 @@ export class AuthServiceLocal {
   signUp(email, password) {
     this.configService.signUp(email, password).subscribe(
       value => {
-        console.log(value);
         this.snackBar.open('Confirmation e-mail sent.', 'Ok', {duration: 5000});
       }
       , () => {
@@ -93,7 +87,6 @@ export class AuthServiceLocal {
     localStorage.setItem('access_token', confirmationToken);
     this.configService.confirmEmail().subscribe(
       value => {
-        console.log(value);
         localStorage.setItem('access_token', value.token);
         window.location.href = '/';
         this.configService.currUser = value.currentUser;
@@ -105,7 +98,6 @@ export class AuthServiceLocal {
   signIn(email, password) {
     this.configService.signIn(email, password).subscribe(
       value => {
-        console.log(value);
         localStorage.setItem('access_token', value.token);
         window.location.href = '/';
         this.configService.currUser = value.currentUser;
@@ -117,16 +109,11 @@ export class AuthServiceLocal {
     localStorage.setItem('access_token', accessToken);
     this.configService.changePassword(password).subscribe(
       value => {
-        console.log(value);
         localStorage.setItem('access_token', value.token);
         window.location.href = '/';
         this.configService.currUser = value.currentUser;
       }
       , error => {
-        console.log(error);
-        // this.snackBar.open('დაფიქსირდა ხარვეზი, სცადეთ მოგვიანებით.', 'კარგი', {duration: 5000});
-        // this.isFetching = false;
-        console.log('error in subscribe');
       }
     );
   }
@@ -169,7 +156,6 @@ export class AuthServiceLocal {
   recoverPassword(email: string) {
     this.configService.recoverPassword(email).subscribe(
       value => {
-        console.log(value);
         this.snackBar.open('Password recovery e-mail sent.', 'Ok', {duration: 5000});
       }
       , () => {

@@ -1,8 +1,9 @@
 <div class="board-container">
   <div class="board-content">
     <div [hidden]="isSmallScreen && isFilterOpen" class="left-panel">
-      <app-board-item [data]="tournament" *ngFor="let tournament of tournaments"></app-board-item>
-      <div [hidden]="loadedAll" class="skeleton">
+      <app-board-item [data]="tournament" [pastContest]="filterFormGroup? filterFormGroup.value.pastContests : false"
+                      [isRegistered]="myContestIds && tournament && myContestIds.indexOf(tournament.id) !== -1" *ngFor="let tournament of tournaments"></app-board-item>
+      <div [hidden]="!isFetching" class="skeleton">
         <div class="horizontal-flex">
           <div class="skeleton-circle"></div>
           <div class="skeleton-rect"></div>
@@ -12,13 +13,15 @@
       </div>
     </div>
     <div [hidden]="isSmallScreen && !isFilterOpen" class="right-panel">
-      <button class="create-button"> create</button>
+      <button class="create-button" [routerLink]="['/contest']" [queryParams]="{id: -1}"> create</button>
       <form class="filter-form" [formGroup]="filterFormGroup">
         <div class="switch-container">
-          <ng-switchery (change)="formValueChanged()" onLabel="created by all/me" class="switch" formControlName="myContests"></ng-switchery>
+          <ng-switchery (change)="formValueChanged()" onLabel="created by all/me" class="switch"
+                        formControlName="myContests"></ng-switchery>
         </div>
         <div class="switch-container">
-          <ng-switchery (change)="formValueChanged()" onLabel="past contests" class="switch" formControlName="pastContests"></ng-switchery>
+          <ng-switchery (change)="formValueChanged()" onLabel="past contests" class="switch"
+                        formControlName="pastContests"></ng-switchery>
         </div>
         <mat-form-field>
           <mat-label>Search</mat-label>

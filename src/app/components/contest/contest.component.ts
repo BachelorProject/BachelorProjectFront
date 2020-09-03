@@ -95,7 +95,6 @@ export class ContestComponent implements OnInit {
   onPointsSwitchChange(value, roundId) {
     const pointsVal = this.pointsElem.nativeElement.value;
     this.contest.rounds[roundId].pointsToPass = !value ? -1 : pointsVal.length > 0 ? pointsVal : -1;
-    console.log(this.contest);
   }
 
   addEmptyRound() {
@@ -126,7 +125,6 @@ export class ContestComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
       if (result !== undefined) {
         this.contest.imageUrl = result;
       }
