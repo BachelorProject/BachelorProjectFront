@@ -128,7 +128,7 @@ export class ProfileComponent implements OnInit {
   }
 
   getSubjectColor() {
-    if (this.categoryService.categories.length === 0) {
+    if (this.data.subjects.length === 0) {
       return Utils.subjectColor(99);
     }
     return Utils.subjectColor(this.categoryService.getCategoryById(this.currentSubjectId).colorId);
@@ -191,8 +191,10 @@ export class ProfileComponent implements OnInit {
     this.configService.getUserInfo(userId)
       .subscribe(value => {
         this.data = value;
-        this.currSubjectIndex = 0;
-        this.currentSubjectId = this.data.subjects[this.currSubjectIndex].subjectId;
+        if (this.data.subjects.length > 0){
+          this.currSubjectIndex = 0;
+          this.currentSubjectId = this.data.subjects[this.currSubjectIndex].subjectId;
+        }
         this.userId = value.userId;
         this.configService.getPastContests(this.userId)
           .subscribe(pastContests => {
