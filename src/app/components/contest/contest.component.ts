@@ -33,7 +33,7 @@ export class ContestComponent implements OnInit {
       .subscribe(value => {
         this.contest = value;
         this.isFetching = false;
-        setInterval( () => {
+        setInterval(() => {
           this.updateContest();
         }, 15000);
       }, error => {
@@ -100,6 +100,7 @@ export class ContestComponent implements OnInit {
 
   addEmptyRound() {
     this.contest.rounds.push({
+      roundNo: -1, // todo
       strictMode: false,
       isOpen: false,
       duration: -1,

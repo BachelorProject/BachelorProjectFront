@@ -5,7 +5,7 @@ import {
   Contest,
   ContestQuestion,
   LeaderBoardMetaModel,
-  LeaderBoardPlaceModel,
+  LeaderBoardPlaceModel, PastContest,
   Subject,
   Tournament,
   UserInformation
@@ -172,7 +172,7 @@ export class ConfigService {
   uploadMedia(id: number, type: string, file: File) {
     const formData: FormData = new FormData();
     formData.append('id', id.toString());
-    formData.append('file', file);
+    formData.append('avatar', file);
 
     if (type === 'profileAvatar') {
       return this.http.post<any>('set_profile_picture', formData,  {
@@ -236,7 +236,7 @@ export class ConfigService {
         roundNumber: roundNumber.toString()
       }
     });
-    return this.http.get<LeaderBoardMetaModel>('leaderboardmeta', {params});
+    return this.http.get<LeaderBoardMetaModel>('leader_board_meta', {params});
   }
 
   getTournamentList(from: number, to: number, myContests: boolean, pastContests: boolean, searchString: string, subjectIds: number[]) {
