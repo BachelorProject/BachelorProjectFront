@@ -4,7 +4,7 @@
       <div [hidden]="isFetching" class="contest-details">
         <div class="head-section">
           <div class="avatar-container">
-            <img [src]="contest.imageUrl">
+            <img [src]="contest ? contest.imageUrl : '../../../assets/images/default-avatar.png'">
             <div class="avatar-change" (click)="openAvatarChange()"> Change</div>
           </div>
           <div class="title-section">
@@ -15,9 +15,9 @@
             </mat-form-field>
           </div>
         </div>
-        <div class="vertical-flex" style="width: 100%; ">
+        <div class="vertical-flex" style="width: 100%;">
           <h2 class="desc-header">contest description</h2>
-          <app-editor [(data)]="contest.body"
+          <app-editor *ngIf="contest" [(data)]="contest.body"
                       [placeholder]="'Add contest description...'"
             [toolbar]="isSmallScreen? smallToolbar : defaultToolbar" class="desc-editor"></app-editor>
         </div>
@@ -25,16 +25,15 @@
              style="width: 100%">
           <mat-form-field class="datetime-picker">
             <input matInput [ngxMatDatetimePicker]="picker" placeholder="Deadline"
-                   (dateChange)="contest.registrationEnd = $event.value.valueOf()">
+                   (dateChange)="setRegisterDate($event.value.valueOf())">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <ngx-mat-datetime-picker #picker>
             </ngx-mat-datetime-picker>
           </mat-form-field>
-          <mat-form-field class="datetime-picker">
+          <mat-form-field *ngIf="contest" class="datetime-picker">
             <mat-label>Category</mat-label>
-            <mat-select multiple
-                        (selectionChange)="contest.subjectIds = $event.value">
-              <mat-option *ngFor="let category of categoryService.categories" [value]="category.id - 1">
+            <mat-select multiple [(value)]="contest.subjectIds">
+              <mat-option *ngFor="let category of categoryService.categories" [value]="category.id">
                 <div class="mat-option-prefix" style="background-color: {{getColor(category.colorId)}}"
                      matPrefix></div>
                 {{category.name}}
@@ -46,17 +45,23 @@
              class="contest-bottom-buttons">
           <div class="status-container">
             <div style="background-color: {{getStatusColor()}}" class="status-color"></div>
-            {{contest.status}}
+            {{contest ? contest.status : ''}}
           </div>
 
           <div [ngClass]="isSmallScreen? 'vertical-flex' : 'horizontal-flex'" style="width: auto">
+            <button (click)="saveContest()" #saveBtn
+                    [ngClass]="isSmallScreen? 'sm-btn-margin' : ''"
+                    [hidden]="!contest || contest.status !== 'UNPUBLISHED' " class="main-action-btn save-btn"
+                    style="background-color: #fff;">
+              <img src="../../../assets/images/ic-material-save.svg">
+            </button>
             <button (click)="cancelContest()"
                     [ngClass]="isSmallScreen? 'sm-btn-margin' : ''"
-                    [hidden]="contest.status === 'COMPLETED' || contest.status === 'CANCELLED'" class="main-action-btn"
+                    [hidden]="!contest || contest.status === 'COMPLETED' || contest.status === 'CANCELLED'" class="main-action-btn"
                     style="background-color: #EF6351;">
               cancel
             </button>
-            <button (click)="mainAction()" [hidden]="contest.status === 'COMPLETED' || contest.status === 'CANCELLED'"
+            <button (click)="mainAction()" [hidden]="!contest || contest.status === 'COMPLETED' || contest.status === 'CANCELLED'"
                     class="main-action-btn"
                     style="background-color: {{getMainBtnStatusColor()}}">
               {{getMainBtnStatusText()}}
@@ -67,7 +72,7 @@
         <div class="subject-container">
           <app-subject-tag *ngFor="let subject of getFirstSubjects()" [subject]="categoryService.getCategoryById(subject)"
                            class="subject" [mode]="this.isSmallScreen? 'sm' : 'lg'"></app-subject-tag>
-          <app-subject-tag *ngIf="contest.subjectIds !== undefined && contest.subjectIds.length > 2" [isMoreTag]="true"
+          <app-subject-tag *ngIf="contest && contest.subjectIds && contest.subjectIds.length > 2" [isMoreTag]="true"
                            [moreSubjects]="getMoreSubjects()"
                            [mode]="this.isSmallScreen? 'sm' : 'lg'"></app-subject-tag>
         </div>
@@ -83,7 +88,7 @@
     </div>
     <div [hidden]="isSmallScreen && !isFilterOpen" class="right-panel">
       <button class="create-button" (click)="addEmptyRound()"> add round</button>
-      <div class="round-container" *ngFor="let round of contest.rounds; index as i">
+      <div class="round-container" *ngFor="let round of rounds; index as i">
         <h2> round {{i + 1}}</h2>
         <ng-switchery [(ngModel)]="round.strictMode" onLabel="enable strict mode"
                       class="switch"></ng-switchery>
@@ -125,10 +130,9 @@
           </ngx-mat-datetime-picker>
         </mat-form-field>
         <div [ngClass]="isSmallScreen? 'vertical-flex round-btn-sm' : 'horizontal-flex'" class="round-buttons">
-          <button (click)="contest.rounds.splice(i, 1)" class="round-btn" style="margin-top: 5px;"> remove</button>
+          <button (click)="rounds.splice(i, 1)" class="round-btn" style="margin-top: 5px;"> remove</button>
           <div class="vertical-flex">
             <button class="questions-btn round-btn "> edit questions</button>
-            <p class="questions-container">{{round.questions.length}} Question(s)</p>
           </div>
         </div>
       </div>

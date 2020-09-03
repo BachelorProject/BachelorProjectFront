@@ -73,21 +73,11 @@ export class ProfileComponent implements OnInit {
       .queryParams
       .subscribe(params => {
         this.userId = params.userId || -1;
-        if (this.userId === -1 || this.userId.toString() === this.configService.currUser.userId.toString()) {
-          this.data = this.configService.currUser;
-          this.currSubjectIndex = 0;
-          this.currentSubjectId = this.data.subjects[this.currSubjectIndex].subjectId;
-          this.userId = this.data.userId;
+        if (this.userId === -1) {
+          this.getInfo(this.configService.currUser.userId);
         } else {
           this.getInfo(this.userId);
         }
-        this.isFetching++;
-        this.configService.getPastContests(this.userId)
-          .subscribe(value => {
-            this.pastContests = value;
-            this.isFetching--;
-          }, () => {
-          });
       });
 
     fab.icon = '../../../assets/images/ic-metro-profile.svg';
@@ -96,7 +86,7 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  isFetching = 0;
+  isFetching = false;
   isSmallScreen = false;
   isFilterOpen = false;
   viewingInfo = false;
@@ -197,14 +187,19 @@ export class ProfileComponent implements OnInit {
   }
 
   getInfo(userId: number) {
-    this.isFetching++;
+    this.isFetching = true;
     this.configService.getUserInfo(userId)
       .subscribe(value => {
         this.data = value;
         this.currSubjectIndex = 0;
         this.currentSubjectId = this.data.subjects[this.currSubjectIndex].subjectId;
-        this.isFetching--;
         this.userId = value.userId;
+        this.configService.getPastContests(this.userId)
+          .subscribe(pastContests => {
+            this.pastContests = pastContests;
+            this.isFetching = false;
+          }, () => {
+          });
       }, () => {
       });
   }

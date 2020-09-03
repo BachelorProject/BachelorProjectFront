@@ -4,7 +4,7 @@ import {Router} from '@angular/router';
 import {FabControllerService} from '../../../config/FabControllerService';
 import {CategoryService} from '../../../config/CategoryService';
 import {Utils} from '../../../config/utils';
-import {Contest} from '../../../config/config.service.model';
+import {Contest, ContestRound} from '../../../config/config.service.model';
 import {ImageUploaderComponent} from '../image-uploader/image-uploader.component';
 import {MatDialog} from '@angular/material/dialog';
 
@@ -16,8 +16,10 @@ import {MatDialog} from '@angular/material/dialog';
 export class ContestComponent implements OnInit {
 
   contest: Contest;
+  rounds: ContestRound[] = [];
   @ViewChild('pointsInput') pointsElem: ElementRef;
   @ViewChild('placeInput') placeElem: ElementRef;
+  @ViewChild('saveBtn') saveBtnElem: ElementRef;
 
   constructor(
     private configService: ConfigService,
@@ -29,13 +31,10 @@ export class ContestComponent implements OnInit {
     if (!this.isFetching) {
       this.isFetching = true;
     }
-    configService.requestContest('edit', -1)
+    configService.requestContest(-1)
       .subscribe(value => {
         this.contest = value;
         this.isFetching = false;
-        setInterval(() => {
-          this.updateContest();
-        }, 15000);
       }, error => {
       });
     fab.icon = '../../../assets/images/ic-metro-trophy.svg';
@@ -81,31 +80,27 @@ export class ContestComponent implements OnInit {
 
   numberOnly(event): boolean {
     const charCode = (event.which) ? event.which : event.keyCode;
-    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-      return false;
-    }
-    return true;
+    return !(charCode > 31 && (charCode < 48 || charCode > 57));
   }
 
   onPlaceSwitchChange(value, roundId) {
     const placeVal = this.placeElem.nativeElement.value;
-    this.contest.rounds[roundId].placeToPass = !value ? -1 : placeVal.length > 0 ? placeVal : -1;
+    this.rounds[roundId].placeToPass = !value ? -1 : placeVal.length > 0 ? placeVal : -1;
   }
 
   onPointsSwitchChange(value, roundId) {
     const pointsVal = this.pointsElem.nativeElement.value;
-    this.contest.rounds[roundId].pointsToPass = !value ? -1 : pointsVal.length > 0 ? pointsVal : -1;
+    this.rounds[roundId].pointsToPass = !value ? -1 : pointsVal.length > 0 ? pointsVal : -1;
   }
 
   addEmptyRound() {
-    this.contest.rounds.push({
-      roundNo: -1, // todo
+    this.rounds.push({
+      roundNo: -1,
       strictMode: false,
       isOpen: false,
       duration: -1,
       placeToPass: -1,
       pointsToPass: -1,
-      questions: 0,
       status: 'ACTIVE',
       startTime: -1
     });
@@ -132,68 +127,128 @@ export class ContestComponent implements OnInit {
   }
 
   getMoreSubjects() {
-    return this.contest.subjectIds.slice(2).map((id) => {
-      return this.categoryService.categories[id];
-    });
+    if (this.contest && this.contest.subjectIds && this.categoryService.categories) {
+      return this.contest.subjectIds.slice(2).map((id) => {
+        return this.categoryService.getCategoryById(id);
+      });
+    } else {
+      return [];
+    }
   }
 
   getFirstSubjects() {
-    return this.contest !== undefined && this.contest.subjectIds !== undefined ? this.contest.subjectIds.slice(0, 2) : [];
+    return this.contest && this.contest.subjectIds ? this.contest.subjectIds.slice(0, 2) : [];
   }
 
   getStatusColor() {
-    switch (this.contest.status) {
-      case 'UNPUBLISHED':
-        return '#1BE7FF';
-      case 'REGISTRATION ON':
-        return '#6EEB83';
-      case 'REGISTRATION OVER':
-        return '#E4FF1A';
-      case 'ONGOING':
-        return '#E8AA14';
-      case 'CANCELLED':
-        return '#EF6351';
-      case 'COMPLETED':
-        return '#375063';
+    if (this.contest) {
+      switch (this.contest.status) {
+        case 'UNPUBLISHED':
+          return '#1BE7FF';
+        case 'REGISTRATION ON':
+          return '#6EEB83';
+        case 'REGISTRATION OVER':
+          return '#E4FF1A';
+        case 'ONGOING':
+          return '#E8AA14';
+        case 'CANCELLED':
+          return '#EF6351';
+        case 'COMPLETED':
+          return '#375063';
+      }
+    } else {
+      return '#1BE7FF';
     }
   }
 
   getMainBtnStatusColor() {
-    switch (this.contest.status) {
-      case 'UNPUBLISHED':
-        return '#6EEB83';
-      case 'REGISTRATION ON':
-      case 'REGISTRATION OVER':
-      case 'ONGOING':
-        return '#6C63FF';
+    if (this.contest) {
+      switch (this.contest.status) {
+        case 'UNPUBLISHED':
+          return '#6EEB83';
+        case 'REGISTRATION ON':
+        case 'REGISTRATION OVER':
+        case 'ONGOING':
+          return '#6C63FF';
+      }
+    } else {
+      return '#6C63FF';
     }
   }
 
   getMainBtnStatusText() {
-    switch (this.contest.status) {
-      case 'UNPUBLISHED':
-        return 'Publish';
-      case 'REGISTRATION ON':
-      case 'REGISTRATION OVER':
-      case 'ONGOING':
-        return 'Update';
+    if (this.contest) {
+      switch (this.contest.status) {
+        case 'UNPUBLISHED':
+          return 'Publish';
+        case 'REGISTRATION ON':
+        case 'REGISTRATION OVER':
+        case 'ONGOING':
+          return 'Update';
+      }
+    } else {
+      return 'Update';
     }
   }
 
-  updateContest() {
-    this.configService.updateContest(this.contest);
+  saveContest() {
+    this.configService.updateContest(this.contest)
+      .subscribe(value => {
+        this.saveBtnElem.nativeElement.animate([
+          // keyframes
+          { backgroundColor: '#6EEB83' },
+          { backgroundColor: '#6EEB83' },
+          { backgroundColor: '#fff' }
+        ], {
+          duration: 1000,
+          easing: 'linear'
+        });
+      }, error => {
+        this.saveBtnElem.nativeElement.animate([
+          // keyframes
+          { backgroundColor: '#EF6351' },
+          { backgroundColor: '#EF6351' },
+          { backgroundColor: '#fff' }
+        ], {
+          duration: 1000,
+          easing: 'linear'
+        });
+      });
   }
 
   cancelContest() {
+    const oldStatus = this.contest.status;
     this.contest.status = 'CANCELLED';
-    this.updateContest();
+    this.configService.updateContest(this.contest)
+      .subscribe(() => {
+      }, () => {
+        this.contest.status = oldStatus;
+      });
   }
 
   mainAction() {
+    const oldStatus = this.contest.status;
     if (this.contest.status === 'UNPUBLISHED') {
       this.contest.status = 'REGISTRATION ON';
+      this.configService.updateContest(this.contest)
+        .subscribe(() => {
+        }, () => {
+          this.contest.status = oldStatus;
+        });
+    } else if (this.contest.status === 'REGISTRATION ON') {
+      this.configService.registerToContest(this.contest.id)
+        .subscribe(() => {
+          this.contest.isRegistered = true;
+        }, () => {
+          this.contest.status = oldStatus;
+        });
     }
-    this.updateContest();
+  }
+
+  setRegisterDate(date) {
+    if (this.contest) {
+      this.contest.registrationEnd = date;
+    }
   }
 
 }

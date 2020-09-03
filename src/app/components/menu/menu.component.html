@@ -6,7 +6,7 @@
   <a class="item" [routerLink]="'profile'">
     <img class="profile-icon"
          [routerLink]="'/profile'"
-         [src]="configService.currUser !== undefined? configService.currUser.profileImageUrl : 'config ../../../assets/images/default-avatar.png'">
+         [src]="configService.currUser !== undefined? configService.currUser.profileImageUrl : '../../../assets/images/default-avatar.png'">
   </a>
   <a class="item" (click)="logout()">
     <img class="icon" src="../../../assets/images/ic-logout.svg">

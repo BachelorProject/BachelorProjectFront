@@ -3,7 +3,7 @@ import {Injectable} from '@angular/core';
 import {
   AuthResponse,
   Contest,
-  ContestQuestion,
+  ContestQuestion, CurrentUserInformation,
   LeaderBoardMetaModel,
   LeaderBoardPlaceModel,
   PastContest,
@@ -17,60 +17,9 @@ import {delay} from 'rxjs/operators';
 @Injectable()
 export class ConfigService {
 
-  currUser: UserInformation = {
+  currUser: CurrentUserInformation = {
     userId: 1,
-    firstName: 'Dima',
-    lastName: 'Rogava',
-    gender: 'male',
-    birthDay: 1598986873144, // timestamp
-    education: 'Freeuni',
-    username: 'Rogavactive',
-    profileImageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png',
-    email: 'droga16@freeuni.edu.ge',
-    subjects: [{
-      subjectId: 1,
-      subjectStats: [{
-        timestamp: 15699685410000,
-        score: 1241
-      },
-        {
-          timestamp: 15752389410000,
-          score: 4231
-        },
-        {
-          timestamp: 15857797410000,
-          score: 5431
-        },
-        {
-          timestamp: 15910501410000,
-          score: 3931
-        }
-      ]
-    },
-      {
-        subjectId: 2,
-        subjectStats: [{
-          timestamp: 15699685410000,
-          score: 4441
-        },
-          {
-            timestamp: 15752389410000,
-            score: 4231
-          },
-          {
-            timestamp: 15857797410000,
-            score: 3431
-          },
-          {
-            timestamp: 15910501410000,
-            score: 4131
-          },
-          {
-            timestamp: 15963205410000,
-            score: 3931
-          }
-        ]
-      }],
+    profileImageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png'
   };
 
   constructor(private http: HttpClient) {
@@ -196,22 +145,21 @@ export class ConfigService {
     return this.http.post<any>('register_contest', {contestId});
   }
 
-  requestContest(mode: string, id: number) {
-    // const data: Contest = {
-    //   id: 5324,
-    //   title: '',
-    //   body: '',
-    //   imageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png',
-    //   registrationEnd: null,
-    //   subjectIds: [1, 2, 3],
-    //   status: 'UNPUBLISHED',
-    //   rounds: [],
-    // };
-    // return of(data).pipe(delay(2000));
-    //
+  requestContest(id: number) {
+    const data: Contest = {
+      id,
+      title: 'The best contest eva',
+      body: 'Wohoooooooooo contest\n awesome body\n foo\n bar\n bla <h2> u drunk m8? </h2>',
+      imageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png',
+      registrationEnd: null,
+      subjectIds: [1, 2, 3],
+      status: 'UNPUBLISHED',
+      isRegistered: false
+    };
+    return of(data).pipe(delay(2000));
+
     const params = new HttpParams({
       fromObject: {
-        mode,
         id: id.toString()
       }
     });
@@ -219,6 +167,22 @@ export class ConfigService {
   }
 
   fetchCategories() {
+    const data: Subject[] = [{
+      id: 1,
+      name: 'Mathematics',
+      colorId: 1
+    },
+    {
+      id: 2,
+      name: 'Physics',
+      colorId: 2
+    },
+    {
+      id: 3,
+      name: 'Chemistry',
+      colorId: 3
+    }];
+    return of(data).pipe(delay(1000));
     return this.http.get<Subject[]>('subjects');
   }
 

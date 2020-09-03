@@ -1,6 +1,6 @@
 <div class="profile-container">
   <div class="question-content">
-    <div [hidden]="isSmallScreen && isFilterOpen || isFetching > 0" class="left-panel">
+    <div [hidden]="isSmallScreen && isFilterOpen || isFetching" class="left-panel">
       <div class="sector vertical-flex" style="width: 100%">
         <div class="horizontal-flex">
           <div class="avatar-container">
@@ -39,7 +39,7 @@
 
     </div>
     <div [hidden]="(isSmallScreen && (!isFilterOpen || viewingInfo)) || viewingInfo" class="right-panel">
-      <div [hidden]="isFetching > 0" class="question-details">
+      <div [hidden]="isFetching" class="question-details">
         <div class="sector vertical-flex" style="width: 100%; height: fit-content">
           <chart style="width: 100%;  height: fit-content" [type]="chartType" [data]="chartData"
                  [options]="chartOptions"></chart>
@@ -52,7 +52,7 @@
             </mat-select>
           </mat-form-field>
         </div>
-        <h2 style="align-self: flex-start">Categories</h2>
+        <h2 style="align-self: flex-start">History</h2>
         <div class="sector horizontal-flex past-contest" style="margin-bottom: 40px; cursor: pointer; outline: none"
              [routerLink]="['/contest']" [queryParams]="{id: pastContest.contestId}"
              *ngFor="let pastContest of pastContests">
@@ -69,7 +69,7 @@
           </div>
         </div>
       </div>
-      <div [hidden]="isFetching == 0" class="skeleton">
+      <div [hidden]="!isFetching" class="skeleton">
         <div class="horizontal-flex">
           <div class="skeleton-circle"></div>
           <div class="skeleton-rect"></div>
@@ -79,7 +79,7 @@
       </div>
     </div>
 
-    <div [hidden]="((isSmallScreen && (!isFilterOpen || !viewingInfo)) || !viewingInfo) || isFetching > 0"
+    <div [hidden]="((isSmallScreen && (!isFilterOpen || !viewingInfo)) || !viewingInfo) || isFetching"
          class="right-panel vertical-flex">
       <h2 style="align-self: flex-start; margin-top: -30px">Personal Info</h2>
       <div class="sector profile-info-sector">

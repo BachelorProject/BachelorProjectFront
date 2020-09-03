@@ -76,6 +76,7 @@
   justify-content: center;
   flex-direction: row;
   padding-top: 50px;
+  background-color: #FBFBFB;
 }
 
 .question-content {

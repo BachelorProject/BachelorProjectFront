@@ -17,7 +17,7 @@ export interface AuthResponse {
   success: boolean;
   token: string;
   newUser: boolean;
-  currentUser: UserInformation;
+  currentUser: CurrentUserInformation;
 }
 
 export interface Subject {
@@ -49,7 +49,7 @@ export interface Contest {
   registrationEnd: number;
   subjectIds: number[];
   status: string; //   'UNPUBLISHED', 'REGISTRATION ON', 'REGISTRATION OVER', 'ONGOING', 'CANCELLED', 'COMPLETED'
-  rounds: ContestRound[];
+  isRegistered: boolean;
 }
 
 export interface ContestRound {
@@ -59,7 +59,6 @@ export interface ContestRound {
   duration: number;
   placeToPass: number; // -1 means this is not passing criteria
   pointsToPass: number; // -1 means this is not passing criteria
-  questions: number;
   status: string; //   'ACTIVE', 'ONGOING', 'CANCELLED', 'COMPLETED'
   startTime: number;
 }
@@ -70,6 +69,11 @@ export interface ContestQuestion {
   score: number;
   type: string; // 'MULTIPLE CHOICE', 'ONE CHOICE'
   correctAnswer: number[];
+}
+
+export interface CurrentUserInformation {
+  userId: number;
+  profileImageUrl: string;
 }
 
 export interface UserInformation {
