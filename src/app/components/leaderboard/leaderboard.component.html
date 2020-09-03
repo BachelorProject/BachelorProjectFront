@@ -1,5 +1,5 @@
 <div class="leaderboard-container">
-  <h1>{{metaInformation.title}}</h1>
+  <h1>{{metaInformation ? metaInformation.title : '' }}</h1>
   <h2>scoreboard</h2>
   <div class="leaderboard-box">
     <div class="leaderboard-header">
@@ -10,33 +10,41 @@
       <p *ngIf="!isScreenSmall">Time</p>
     </div>
     <div class="leaderboard-content">
-      <div *ngIf="(this.page - 1) * this.itemsPerPage + 1 > metaInformation.myPlace.rank" class="leaderboard-cell"
-           style="color: var(--color-text-casual)">
-        <p style="justify-self: flex-end">{{metaInformation.myPlace.rank}}</p>
+      <div
+        *ngIf="metaInformation && metaInformation.myPlace && (this.page - 1) * this.itemsPerPage + 1 > metaInformation.myPlace.rank"
+        class="leaderboard-cell"
+        style="color: var(--color-text-casual)">
+        <p style="justify-self: flex-end">{{metaInformation ? metaInformation.myPlace.rank : ''}}</p>
         <img *ngIf="!isScreenSmall" [src]="metaInformation.myPlace.imageUrl"/>
-        <p>{{metaInformation.myPlace.username}}</p>
+        <p>{{metaInformation && metaInformation.myPlace ? metaInformation.myPlace.username : ''}}</p>
         <p *ngIf="!isScreenSmall">{{metaInformation.myPlace.score.toLocaleString()}}</p>
         <p *ngIf="!isScreenSmall">{{getFormattedTime(metaInformation.myPlace.time)}}</p>
       </div>
       <div
         *ngFor="let place of leaderBoard | async | paginate:
-        { itemsPerPage: this.itemsPerPage, currentPage: this.page,totalItems: this.metaInformation.contestants }"
-        [ngStyle]="{'color': place.userId === metaInformation.myPlace.userId? '#67879E' : '#6A6A6A'}"
+        { itemsPerPage: itemsPerPage, currentPage: page, totalItems: metaInformation ? metaInformation.contestants : 0 }"
+        [ngStyle]="{'color': metaInformation && metaInformation.myPlace && place.userId === metaInformation.myPlace.userId? '#67879E' : '#6A6A6A'}"
         class="leaderboard-cell">
         <p style="justify-self: flex-end">{{place.rank}}</p>
         <img *ngIf="!isScreenSmall" [src]="place.imageUrl"/>
-        <a href="#"
-           [ngStyle]="{'color': place.userId === metaInformation.myPlace.userId? '#67879E' : '#6A6A6A'}">{{place.username}}</a>
+        <a [routerLink]="['/profile']" [queryParams]="{id: place.userId}"
+           [ngStyle]="{'color': metaInformation && metaInformation.myPlace && place.userId === metaInformation.myPlace.userId? '#67879E' : '#6A6A6A'}">
+          {{place.username}}</a>
         <p *ngIf="!isScreenSmall">{{place.score.toLocaleString()}}</p>
         <p *ngIf="!isScreenSmall">{{getFormattedTime(place.time)}}</p>
       </div>
-      <div *ngIf="this.page * this.itemsPerPage < metaInformation.myPlace.rank"
-           class="leaderboard-cell" style="color: var(--color-text-casual)">
-        <p style="justify-self: flex-end">{{metaInformation.myPlace.rank}}</p>
-        <img *ngIf="!isScreenSmall" [src]="metaInformation.myPlace.imageUrl"/>
-        <p>{{metaInformation.myPlace.username}}</p>
-        <p *ngIf="!isScreenSmall">{{metaInformation.myPlace.score.toLocaleString()}}</p>
-        <p *ngIf="!isScreenSmall">{{getFormattedTime(metaInformation.myPlace.time)}}</p>
+      <div
+        *ngIf="metaInformation && metaInformation.myPlace && this.page * this.itemsPerPage < metaInformation.myPlace.rank"
+        class="leaderboard-cell" style="color: var(--color-text-casual)">
+        <p
+          style="justify-self: flex-end">{{metaInformation && metaInformation.myPlace ? metaInformation.myPlace.rank : ''}}</p>
+        <img *ngIf="!isScreenSmall"
+             [src]="metaInformation && metaInformation.myPlace ? metaInformation.myPlace.imageUrl : ''"/>
+        <p>{{metaInformation && metaInformation.myPlace ? metaInformation.myPlace.username : ''}}</p>
+        <p
+          *ngIf="!isScreenSmall">{{metaInformation && metaInformation.myPlace ? metaInformation.myPlace.score.toLocaleString() : ''}}</p>
+        <p
+          *ngIf="!isScreenSmall">{{getFormattedTime(metaInformation && metaInformation.myPlace ? metaInformation.myPlace.time : 1)}}</p>
       </div>
     </div>
   </div>

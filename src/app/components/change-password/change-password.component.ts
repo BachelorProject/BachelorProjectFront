@@ -1,5 +1,5 @@
-import {Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {MatDialogRef} from '@angular/material/dialog';
 import {ConfigService} from '../../../config/config.service';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
@@ -8,7 +8,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
   templateUrl: './change-password.component.html',
   styleUrls: ['./change-password.component.css']
 })
-export class ChangePasswordComponent implements OnInit {
+export class ChangePasswordComponent implements OnInit, AfterViewInit {
 
   newPassFromGroup: FormGroup;
   passwordsMatch = true;
@@ -28,6 +28,14 @@ export class ChangePasswordComponent implements OnInit {
     });
   }
 
+  ngAfterViewInit(): void {
+    this.newPassFromGroup.patchValue({
+      password: '',
+      newPassword: '',
+      reNewPassword: ''
+    });
+  }
+
   checkPasswordRegister(control) {
     const enteredPassword = control.value;
     const passwordCheck = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/;
@@ -44,7 +52,6 @@ export class ChangePasswordComponent implements OnInit {
   }
 
   getErrorRePasswordNewPass() {
-    console.log(this.newPassFromGroup.get('reNewPassword').errors);
     return this.newPassFromGroup.get('reNewPassword').hasError('required') ? 'Field is required' : 'Passwords does not match.';
   }
 
@@ -59,7 +66,8 @@ export class ChangePasswordComponent implements OnInit {
               this.oldPassword.nativeElement.focus();
               this.oldPassword.nativeElement.select();
             }
-          }, error => { }
+          }, error => {
+          }
         );
     }
   }

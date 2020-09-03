@@ -41,6 +41,9 @@ export class ImageUploaderComponent {
   }
 
   uploadFile() {
+    if (this.imagePreview === undefined) {
+      return;
+    }
     this.isUploading = true;
     this.progress = 1;
     this.configService.uploadMedia(this.data.id, this.data.type, this.imagePreview)

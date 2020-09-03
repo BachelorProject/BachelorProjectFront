@@ -227,22 +227,45 @@ export class ConfigService {
     return this.http.get<Subject[]>('subjects');
   }
 
-  getLeaderBoard(from: number, count: number, contestId: number, roundNumber: number) {
+  getLeaderBoard(from: number, count: number, roundNumber: number) {
+    const data: LeaderBoardPlaceModel[] = [];
+    for (let i = from; i < from + count; i++) {
+      data.push({
+        rank: i,
+        imageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png',
+        username: `dzimka ${i}`,
+        score: roundNumber,
+        userId: i,
+        time: 100 + 3 * i
+      });
+    }
+    return of(data).pipe(delay(1000));
     const params = new HttpParams({
       fromObject: {
         from: from.toString(),
         count: count.toString(),
-        contestId: contestId.toString(),
         roundNumber: roundNumber.toString()
       }
     });
     return this.http.get<LeaderBoardPlaceModel[]>('leaderboard', {params});
   }
 
-  getLeaderBoardMeta(contestId: number, roundNumber: number) {
+  getLeaderBoardMeta(roundNumber: number) {
+    const data: LeaderBoardMetaModel = {
+      contestants: 92,
+      myPlace: {
+        rank: 37,
+        imageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png',
+        username: `dzimka ${37}`,
+        score: roundNumber,
+        userId: 37,
+        time: 100 + 3 * 37
+      },
+      title: 'King\'s'
+    };
+    return of(data).pipe(delay(1000));
     const params = new HttpParams({
       fromObject: {
-        contestId: contestId.toString(),
         roundNumber: roundNumber.toString()
       }
     });

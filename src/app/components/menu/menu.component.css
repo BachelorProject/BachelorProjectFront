@@ -16,11 +16,13 @@
   margin-right: 15px;
   transform: translateY(-3px);
   border-radius: 50%;
+  outline: none;
 }
 
 .item{
   height: 35px;
   cursor: pointer;
+  outline: none;
 }
 
 .item-absolute {

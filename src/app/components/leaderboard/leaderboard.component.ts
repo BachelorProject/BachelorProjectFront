@@ -1,8 +1,9 @@
 import {Component, HostListener, OnInit} from '@angular/core';
 import {LeaderBoardMetaModel, LeaderBoardPlaceModel} from '../../../config/config.service.model';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {ConfigService} from '../../../config/config.service';
 import {tap} from 'rxjs/operators';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-leaderboard',
@@ -11,27 +12,35 @@ import {tap} from 'rxjs/operators';
 })
 export class LeaderboardComponent implements OnInit {
 
-  contestId: number;
-  roundNumber: number;
+  roundId: number;
   itemsPerPage = 10;
   page = 1;
-  leaderBoard: Observable<LeaderBoardPlaceModel[]>;
+  leaderBoard: Observable<LeaderBoardPlaceModel[]> = of([]);
   total: number;
   loading = false;
   metaInformation: LeaderBoardMetaModel;
   isScreenSmall = false;
 
-  constructor(private configService: ConfigService) {
+  constructor(private configService: ConfigService,
+              private route: ActivatedRoute,
+              private router: Router) {
   }
 
   ngOnInit(): void {
     this.isScreenSmall = document.body.offsetWidth < 1000;
-    this.contestId = 123;
-    this.roundNumber = 1; // TODO: set this values here from route params
-    this.configService.getLeaderBoardMeta(this.contestId, this.roundNumber)
-      .subscribe(res => {
-        this.metaInformation = res;
-        this.reloadPage();
+    this.route
+      .queryParams
+      .subscribe(params => {
+        this.roundId = params.id || -1;
+        if (this.roundId === -1) {
+          this.router.navigate(['**']);
+        } else {
+          this.configService.getLeaderBoardMeta(this.roundId)
+            .subscribe(res => {
+              this.metaInformation = res;
+              this.reloadPage();
+            });
+        }
       });
   }
 
@@ -47,7 +56,7 @@ export class LeaderboardComponent implements OnInit {
   reloadPage() {
     this.loading = true;
     this.leaderBoard = this.configService.getLeaderBoard(
-      (this.page - 1) * this.itemsPerPage, this.itemsPerPage, this.contestId, this.roundNumber)
+      (this.page - 1) * this.itemsPerPage, this.itemsPerPage, this.roundId)
       .pipe(tap(() => {
         this.loading = false;
       }));

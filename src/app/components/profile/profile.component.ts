@@ -77,13 +77,6 @@ export class ProfileComponent implements OnInit {
           this.data = this.configService.currUser;
           this.currSubjectIndex = 0;
           this.currentSubjectId = this.data.subjects[this.currSubjectIndex].subjectId;
-          this.router.navigate(
-            [],
-            {
-              relativeTo: this.route,
-              queryParams: {userId: this.data.userId},
-              queryParamsHandling: 'merge', // remove to replace all query params by provided
-            });
           this.userId = this.data.userId;
         } else {
           this.getInfo(this.userId);
