@@ -138,7 +138,7 @@ export class ConfigService {
         userId: userId.toString()
       }
     });
-    return this.http.get<UserInformation>('profile', {params});
+    return this.http.get<UserInformation>('user_info', {params});
   }
 
   updateUserInfo(info: UserInformation) {
@@ -150,17 +150,17 @@ export class ConfigService {
   }
 
   getQuestions(contest: number, round: number) {
-    const data: ContestQuestion[] = [];
-    for (let i = 0; i < 11; i++) {
-      data.push({
-        question: 'ragaca kitxva',
-        options: ['pasuxi1', 'pasuxi2', 'pasuxi3'],
-        score: null,
-        type: 'MULTIPLE CHOICE',
-        correctAnswer: [2],
-      });
-    }
-    return of(data).pipe(delay(300));
+    // const data: ContestQuestion[] = [];
+    // for (let i = 0; i < 11; i++) {
+    //   data.push({
+    //     question: 'ragaca kitxva',
+    //     options: ['pasuxi1', 'pasuxi2', 'pasuxi3'],
+    //     score: null,
+    //     type: 'MULTIPLE CHOICE',
+    //     correctAnswer: [2],
+    //   });
+    // }
+    // return of(data).pipe(delay(300));
     const params = new HttpParams({
       fromObject: {
         contest: contest.toString(),
@@ -189,7 +189,7 @@ export class ConfigService {
   }
 
   updateContest(contest: Contest) {
-    return this.http.post<any>('contest', JSON.stringify(contest));
+    return this.http.post<any>('update_contest', JSON.stringify(contest));
   }
 
   registerToContest(contestId: number) {
@@ -223,18 +223,18 @@ export class ConfigService {
   }
 
   getLeaderBoard(from: number, count: number, roundNumber: number) {
-    const data: LeaderBoardPlaceModel[] = [];
-    for (let i = from; i < from + count; i++) {
-      data.push({
-        rank: i,
-        imageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png',
-        username: `dzimka ${i}`,
-        score: roundNumber,
-        userId: i,
-        time: 100 + 3 * i
-      });
-    }
-    return of(data).pipe(delay(1000));
+    // const data: LeaderBoardPlaceModel[] = [];
+    // for (let i = from; i < from + count; i++) {
+    //   data.push({
+    //     rank: i,
+    //     imageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png',
+    //     username: `dzimka ${i}`,
+    //     score: roundNumber,
+    //     userId: i,
+    //     time: 100 + 3 * i
+    //   });
+    // }
+    // return of(data).pipe(delay(1000));
     const params = new HttpParams({
       fromObject: {
         from: from.toString(),
@@ -246,19 +246,19 @@ export class ConfigService {
   }
 
   getLeaderBoardMeta(roundNumber: number) {
-    const data: LeaderBoardMetaModel = {
-      contestants: 92,
-      myPlace: {
-        rank: 37,
-        imageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png',
-        username: `dzimka ${37}`,
-        score: roundNumber,
-        userId: 37,
-        time: 100 + 3 * 37
-      },
-      title: 'King\'s'
-    };
-    return of(data).pipe(delay(1000));
+    // const data: LeaderBoardMetaModel = {
+    //   contestants: 92,
+    //   myPlace: {
+    //     rank: 37,
+    //     imageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png',
+    //     username: `dzimka ${37}`,
+    //     score: roundNumber,
+    //     userId: 37,
+    //     time: 100 + 3 * 37
+    //   },
+    //   title: 'King\'s'
+    // };
+    // return of(data).pipe(delay(1000));
     const params = new HttpParams({
       fromObject: {
         roundNumber: roundNumber.toString()
@@ -268,21 +268,21 @@ export class ConfigService {
   }
 
   getTournamentList(from: number, to: number, myContests: boolean, pastContests: boolean, searchString: string, subjectIds: number[]) {
-    const data: Tournament[] = [];
-    for (let i = from; i < to; i++) {
-      data.push({
-        id: i,
-        title: `asdasd ${i}`,
-        body: `some body once told me  ${i}`,
-        imageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png',
-        registrationEnd: new Date().getTime() + 1000000,
-        nextContestStart: new Date().getTime(),
-        nextContestDuration: i * 10,
-        subjects: [],
-        registeredCount: 1000 - 15 * i
-      });
-    }
-    return of(data).pipe(delay(1000));
+    // const data: Tournament[] = [];
+    // for (let i = from; i < to; i++) {
+    //   data.push({
+    //     id: i,
+    //     title: `asdasd ${i}`,
+    //     body: `some body once told me  ${i}`,
+    //     imageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png',
+    //     registrationEnd: new Date().getTime() + 1000000,
+    //     nextContestStart: new Date().getTime(),
+    //     nextContestDuration: i * 10,
+    //     subjects: [],
+    //     registeredCount: 1000 - 15 * i
+    //   });
+    // }
+    // return of(data).pipe(delay(1000));
 
     const subjectIdStr: string[] = subjectIds.map(value => value.toString());
 
@@ -311,18 +311,18 @@ export class ConfigService {
   }
 
   getMyTournamentList() {
-    const data: Tournament[] = [{
-      id: 3,
-      title: 'asdasd',
-      body: 'some body once told me',
-      imageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png',
-      registrationEnd: new Date().getTime(),
-      nextContestStart: new Date().getTime(),
-      nextContestDuration: 180,
-      subjects: [],
-      registeredCount: 3321
-    }];
-    return of(data).pipe(delay(1000));
+    // const data: Tournament[] = [{
+    //   id: 3,
+    //   title: 'asdasd',
+    //   body: 'some body once told me',
+    //   imageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png',
+    //   registrationEnd: new Date().getTime(),
+    //   nextContestStart: new Date().getTime(),
+    //   nextContestDuration: 180,
+    //   subjects: [],
+    //   registeredCount: 3321
+    // }];
+    // return of(data).pipe(delay(1000));
     return this.http.get<Tournament[]>('tournament/registered_list');
   }
 
