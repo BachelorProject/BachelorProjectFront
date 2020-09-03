@@ -123,6 +123,7 @@ export class ProfileComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
         this.data.profileImageUrl = result;
+        this.configService.currUser.profileImageUrl = result;
       }
     });
   }

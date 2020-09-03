@@ -3,7 +3,7 @@ import {Injectable} from '@angular/core';
 import {
   AuthResponse,
   Contest,
-  ContestQuestion, CurrentUserInformation,
+  ContestQuestion, ContestRound, CurrentUserInformation,
   LeaderBoardMetaModel,
   LeaderBoardPlaceModel,
   PastContest,
@@ -81,6 +81,25 @@ export class ConfigService {
     return this.http.get<PastContest[]>('past_contests', {params});
   }
 
+  saveRounds(rounds: ContestRound[]) {
+    return this.http.post<any>('save_rounds',  JSON.stringify(rounds));
+  }
+
+  addRound(contestId: number) {
+    const data: ContestRound = {
+      id: 1231,
+      password: '',
+      isClosed: false,
+      duration: null,
+      placeToPass: null,
+      pointsToPass: null,
+      status: 'ACTIVE', //   'ACTIVE', 'ONGOING', 'CANCELLED', 'COMPLETED'
+      startTime: null
+    };
+    return of(data).pipe(delay(1000));
+    return this.http.post<ContestRound>('add_round', {contestId});
+  }
+
   getUserInfo(userId: number) {
     const params = new HttpParams({
       fromObject: {
@@ -154,7 +173,8 @@ export class ConfigService {
       registrationEnd: null,
       subjectIds: [1, 2, 3],
       status: 'UNPUBLISHED',
-      isRegistered: false
+      isRegistered: false,
+      createUser: 1
     };
     return of(data).pipe(delay(2000));
 

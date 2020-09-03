@@ -50,17 +50,18 @@ export interface Contest {
   subjectIds: number[];
   status: string; //   'UNPUBLISHED', 'REGISTRATION ON', 'REGISTRATION OVER', 'ONGOING', 'CANCELLED', 'COMPLETED'
   isRegistered: boolean;
+  createUser: number;
 }
 
 export interface ContestRound {
   id: number;
-  strictMode: boolean;
-  isOpen: boolean;
+  isClosed: boolean;
   duration: number;
   placeToPass: number; // -1 means this is not passing criteria
   pointsToPass: number; // -1 means this is not passing criteria
   status: string; //   'ACTIVE', 'ONGOING', 'CANCELLED', 'COMPLETED'
   startTime: number;
+  password: '';
 }
 
 export interface ContestQuestion {

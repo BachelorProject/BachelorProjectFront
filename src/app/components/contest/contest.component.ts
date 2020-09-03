@@ -17,12 +17,13 @@ export class ContestComponent implements OnInit {
 
   contest: Contest;
   rounds: ContestRound[] = [];
-  @ViewChild('pointsInput') pointsElem: ElementRef;
-  @ViewChild('placeInput') placeElem: ElementRef;
+  hide = true;
+  openedContestState = 'view';
   @ViewChild('saveBtn') saveBtnElem: ElementRef;
+  @ViewChild('saveRounds') saveRoundsBtnElem: ElementRef;
 
   constructor(
-    private configService: ConfigService,
+    public configService: ConfigService,
     public router: Router,
     public ref: ChangeDetectorRef,
     public fab: FabControllerService,
@@ -35,6 +36,7 @@ export class ContestComponent implements OnInit {
       .subscribe(value => {
         this.contest = value;
         this.isFetching = false;
+        this.setOpenedContestState();
       }, error => {
       });
     fab.icon = '../../../assets/images/ic-metro-trophy.svg';
@@ -84,25 +86,64 @@ export class ContestComponent implements OnInit {
   }
 
   onPlaceSwitchChange(value, roundId) {
-    const placeVal = this.placeElem.nativeElement.value;
-    this.rounds[roundId].placeToPass = !value ? -1 : placeVal.length > 0 ? placeVal : -1;
+    if (value === 'true') {
+      console.log(value);
+      this.rounds[roundId].placeToPass = 0;
+    } else {
+      console.log(value);
+      this.rounds[roundId].placeToPass = undefined;
+    }
   }
 
-  onPointsSwitchChange(value, roundId) {
-    const pointsVal = this.pointsElem.nativeElement.value;
-    this.rounds[roundId].pointsToPass = !value ? -1 : pointsVal.length > 0 ? pointsVal : -1;
+  onPassSwitchChange(value, roundId) {
+    this.rounds[roundId].password = '';
+  }
+
+
+    onPointsSwitchChange(value, roundId) {
+    console.log(value === 'true');
+    if (value) {
+      this.rounds[roundId].pointsToPass = 0;
+    } else {
+      this.rounds[roundId].pointsToPass = undefined;
+    }
   }
 
   addEmptyRound() {
-    this.rounds.push({
-      id: -1,
-      strictMode: false,
-      isOpen: false,
-      duration: -1,
-      placeToPass: -1,
-      pointsToPass: -1,
-      status: 'ACTIVE',
-      startTime: -1
+    if (!this.contest) {
+      return;
+    }
+    this.configService.addRound(this.contest.id)
+      .subscribe(value => {
+        this.rounds.push(value);
+      });
+  }
+
+  saveRound() {
+    if (!this.contest) {
+      return;
+    }
+    console.log(this.rounds);
+    this.configService.saveRounds(this.rounds).subscribe(value => {
+      this.saveRoundsBtnElem.nativeElement.animate([
+        // keyframes
+        {backgroundColor: '#6EEB83'},
+        {backgroundColor: '#6EEB83'},
+        {backgroundColor: '#fff'}
+      ], {
+        duration: 5000,
+        easing: 'linear'
+      });
+    }, error => {
+      this.saveRoundsBtnElem.nativeElement.animate([
+        // keyframes
+        {backgroundColor: '#EF6351'},
+        {backgroundColor: '#EF6351'},
+        {backgroundColor: '#fff'}
+      ], {
+        duration: 5000,
+        easing: 'linear'
+      });
     });
   }
 
@@ -112,6 +153,19 @@ export class ContestComponent implements OnInit {
 
   getIsEqual(arg0, arg1) {
     return arg0 === arg1;
+  }
+
+  setStartTime(idx, evt) {
+    console.log(evt.value.valueOf());
+    this.rounds[idx].startTime = evt.value.valueOf();
+  }
+
+  getStartDate(index) {
+    if (this.rounds[index].startTime) {
+      return new Date(this.rounds[index].startTime);
+    } else {
+      return '';
+    }
   }
 
   openAvatarChange() {
@@ -167,8 +221,6 @@ export class ContestComponent implements OnInit {
         case 'UNPUBLISHED':
           return '#6EEB83';
         case 'REGISTRATION ON':
-        case 'REGISTRATION OVER':
-        case 'ONGOING':
           return '#6C63FF';
       }
     } else {
@@ -184,7 +236,7 @@ export class ContestComponent implements OnInit {
         case 'REGISTRATION ON':
         case 'REGISTRATION OVER':
         case 'ONGOING':
-          return 'Update';
+          return 'Register';
       }
     } else {
       return 'Update';
@@ -196,21 +248,21 @@ export class ContestComponent implements OnInit {
       .subscribe(value => {
         this.saveBtnElem.nativeElement.animate([
           // keyframes
-          { backgroundColor: '#6EEB83' },
-          { backgroundColor: '#6EEB83' },
-          { backgroundColor: '#fff' }
+          {backgroundColor: '#6EEB83'},
+          {backgroundColor: '#6EEB83'},
+          {backgroundColor: '#fff'}
         ], {
-          duration: 1000,
+          duration: 5000,
           easing: 'linear'
         });
       }, error => {
         this.saveBtnElem.nativeElement.animate([
           // keyframes
-          { backgroundColor: '#EF6351' },
-          { backgroundColor: '#EF6351' },
-          { backgroundColor: '#fff' }
+          {backgroundColor: '#EF6351'},
+          {backgroundColor: '#EF6351'},
+          {backgroundColor: '#fff'}
         ], {
-          duration: 1000,
+          duration: 5000,
           easing: 'linear'
         });
       });
@@ -223,26 +275,35 @@ export class ContestComponent implements OnInit {
       .subscribe(() => {
       }, () => {
         this.contest.status = oldStatus;
+        this.setOpenedContestState();
       });
+    this.setOpenedContestState();
   }
 
   mainAction() {
     const oldStatus = this.contest.status;
     if (this.contest.status === 'UNPUBLISHED') {
-      this.contest.status = 'REGISTRATION ON';
-      this.configService.updateContest(this.contest)
-        .subscribe(() => {
-        }, () => {
-          this.contest.status = oldStatus;
-        });
+      if (this.checkPublishStatus()) {
+        this.contest.status = 'REGISTRATION ON';
+        this.configService.updateContest(this.contest)
+          .subscribe(() => {
+            this.setOpenedContestState();
+          }, () => {
+            this.contest.status = oldStatus;
+            this.setOpenedContestState();
+          });
+      }
     } else if (this.contest.status === 'REGISTRATION ON') {
       this.configService.registerToContest(this.contest.id)
         .subscribe(() => {
           this.contest.isRegistered = true;
+          this.setOpenedContestState();
         }, () => {
           this.contest.status = oldStatus;
+          this.setOpenedContestState();
         });
     }
+    this.setOpenedContestState();
   }
 
   setRegisterDate(date) {
@@ -251,4 +312,56 @@ export class ContestComponent implements OnInit {
     }
   }
 
+  setOpenedContestState() {
+    switch (this.contest.status) {
+      case 'UNPUBLISHED':
+        if (this.contest.createUser === this.configService.currUser.userId) {
+          this.openedContestState = 'edit';
+        } else {
+          this.router.navigate(['**']);
+        }
+        break;
+      case 'REGISTRATION ON':
+        if (this.contest.createUser !== this.configService.currUser.userId && !this.contest.isRegistered) {
+          this.openedContestState = 'register';
+        } else {
+          this.openedContestState = 'view';
+        }
+        break;
+      case 'REGISTRATION OVER':
+      case 'ONGOING':
+      case 'COMPLETED':
+        this.openedContestState = 'view';
+        break;
+      case 'CANCELLED':
+        if (this.contest.createUser === this.configService.currUser.userId) {
+          this.openedContestState = 'view';
+        } else {
+          this.router.navigate(['**']);
+        }
+    }
+  }
+
+  private checkPublishStatus() {
+    let result = true;
+    if (this.contest.title.length === 0) {
+      result = false;
+    }
+    if (this.contest.registrationEnd === null || this.contest.registrationEnd === undefined) {
+      result = false;
+    }
+    if (this.contest.subjectIds.length === 0) {
+      result = false;
+    }
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < this.rounds.length; i++) {
+      if (this.rounds[i].startTime === null || this.rounds[i].startTime === undefined) {
+        result = false;
+      }
+      if (this.rounds[i].duration === null || this.rounds[i].duration === undefined) {
+        result = false;
+      }
+    }
+    return result;
+  }
 }

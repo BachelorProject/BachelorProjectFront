@@ -5,32 +5,35 @@
         <div class="head-section">
           <div class="avatar-container">
             <img [src]="contest ? contest.imageUrl : '../../../assets/images/default-avatar.png'">
-            <div class="avatar-change" (click)="openAvatarChange()"> Change</div>
+            <div class="avatar-change" [hidden]="openedContestState !== 'edit'" (click)="openAvatarChange()"> Change
+            </div>
           </div>
           <div class="title-section">
             <mat-form-field appearance="none">
               <mat-label>TITLE</mat-label>
-              <input (change)="contest.title = $event.target.value"
-                     matInput autocomplete="off">
+              <input [value]="contest? contest.title : ''" (change)="contest.title = $event.target.value"
+                     matInput autocomplete="off" [disabled]="openedContestState !== 'edit'">
             </mat-form-field>
           </div>
         </div>
         <div class="vertical-flex" style="width: 100%;">
           <h2 class="desc-header">contest description</h2>
-          <app-editor *ngIf="contest" [(data)]="contest.body"
+          <app-editor [isEditable]="openedContestState === 'edit'"
+                      *ngIf="contest" [(data)]="contest.body"
                       [placeholder]="'Add contest description...'"
-            [toolbar]="isSmallScreen? smallToolbar : defaultToolbar" class="desc-editor"></app-editor>
+                      [toolbar]="isSmallScreen? smallToolbar : defaultToolbar" class="desc-editor"></app-editor>
         </div>
         <div [ngClass]="isSmallScreen? 'vertical-flex' : 'horizontal-flex'"
              style="width: 100%">
           <mat-form-field class="datetime-picker">
-            <input matInput [ngxMatDatetimePicker]="picker" placeholder="Deadline"
+            <input [disabled]="openedContestState !== 'edit'"
+                   matInput [ngxMatDatetimePicker]="picker" placeholder="Deadline"
                    (dateChange)="setRegisterDate($event.value.valueOf())">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <ngx-mat-datetime-picker #picker>
             </ngx-mat-datetime-picker>
           </mat-form-field>
-          <mat-form-field *ngIf="contest" class="datetime-picker">
+          <mat-form-field *ngIf="contest && openedContestState === 'edit'" class="datetime-picker">
             <mat-label>Category</mat-label>
             <mat-select multiple [(value)]="contest.subjectIds">
               <mat-option *ngFor="let category of categoryService.categories" [value]="category.id">
@@ -57,11 +60,14 @@
             </button>
             <button (click)="cancelContest()"
                     [ngClass]="isSmallScreen? 'sm-btn-margin' : ''"
-                    [hidden]="!contest || contest.status === 'COMPLETED' || contest.status === 'CANCELLED'" class="main-action-btn"
+                    [hidden]="!contest || contest.status === 'COMPLETED'
+                    || contest.status === 'CANCELLED'
+                    || contest.createUser !== configService.currUser.userId" class="main-action-btn"
                     style="background-color: #EF6351;">
               cancel
             </button>
-            <button (click)="mainAction()" [hidden]="!contest || contest.status === 'COMPLETED' || contest.status === 'CANCELLED'"
+            <button (click)="mainAction()"
+                    [hidden]="!contest || !(contest.status === 'REGISTRATION ON' || contest.status === 'UNPUBLISHED') || rounds.length === 0"
                     class="main-action-btn"
                     style="background-color: {{getMainBtnStatusColor()}}">
               {{getMainBtnStatusText()}}
@@ -70,7 +76,8 @@
 
         </div>
         <div class="subject-container">
-          <app-subject-tag *ngFor="let subject of getFirstSubjects()" [subject]="categoryService.getCategoryById(subject)"
+          <app-subject-tag *ngFor="let subject of getFirstSubjects()"
+                           [subject]="categoryService.getCategoryById(subject)"
                            class="subject" [mode]="this.isSmallScreen? 'sm' : 'lg'"></app-subject-tag>
           <app-subject-tag *ngIf="contest && contest.subjectIds && contest.subjectIds.length > 2" [isMoreTag]="true"
                            [moreSubjects]="getMoreSubjects()"
@@ -87,44 +94,68 @@
       </div>
     </div>
     <div [hidden]="isSmallScreen && !isFilterOpen" class="right-panel">
-      <button class="create-button" (click)="addEmptyRound()"> add round</button>
+      <div class="horizontal-flex round-buttons-top">
+        <button class="create-button" (click)="addEmptyRound()"> add</button>
+        <button class="create-button save-btn" (click)="saveRound()" style="background-color: #fff; color: #6A6A6A"
+                #saveRounds> save
+        </button>
+      </div>
+      <h2 class="desc-header">rounds</h2>
       <div class="round-container" *ngFor="let round of rounds; index as i">
         <h2> round {{i + 1}}</h2>
-        <ng-switchery [(ngModel)]="round.strictMode" onLabel="enable strict mode"
-                      class="switch"></ng-switchery>
-        <ng-switchery [(ngModel)]="round.isOpen" onLabel="closed" class="switch"></ng-switchery>
+
+        <div class="switch-container">
+          <ng-switchery [value]="round.password !== null && round.password !== undefined && round.password.length > 0"
+                        (change)="onPassSwitchChange($event.target.value, i)"
+                        class="switch"></ng-switchery>
+          <mat-form-field>
+            <mat-label>Password</mat-label>
+            <mat-icon style="cursor: pointer" matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            <input [(ngModel)]="round.password"
+                   [type]="hide ? 'password' : 'text'"
+                   #pointsInput matInput autocomplete="off">
+          </mat-form-field>
+        </div>
+
+
+        <ng-switchery [(ngModel)]="round.isClosed" onLabel="closed" class="switch"></ng-switchery>
         <mat-form-field>
           <mat-label>Duration (min)</mat-label>
           <img class="mat-input-prefix" src="../../../assets/images/ic-material-timer.svg" matPrefix>
           <input value="{{getOrDefault(round.duration, -1,  '')}}"
                  (change)="round.duration = $event.target.value.length !== 0 ? $event.target.value : -1"
+                 type="number"
                  matInput autocomplete="off" (keypress)="numberOnly($event)">
         </mat-form-field>
         <h2> passing criterias</h2>
         <div class="switch-container">
-          <ng-switchery [value]="!getIsEqual(round.placeToPass, -1)"
+          <ng-switchery [value]="round.placeToPass !== null && round.placeToPass !== undefined"
+                        #placeSwitch
                         (change)="onPlaceSwitchChange($event.target.value, i)" class="switch"></ng-switchery>
           <mat-form-field>
             <mat-label>Place</mat-label>
             <img class="mat-input-prefix" src="../../../assets/images/ic-ionic-md-stats.svg" matPrefix>
-            <input [value]="getOrDefault(round.placeToPass, -1, '')"
+            <input [(ngModel)]="round.placeToPass"
+                   type="number"
                    #placeInput matInput autocomplete="off" (keypress)="numberOnly($event)">
           </mat-form-field>
         </div>
         <div class="switch-container">
-          <ng-switchery [value]="round.pointsToPass !== -1" (change)="onPointsSwitchChange($event.target.value, i)"
-                        class="switch"></ng-switchery>
+          <ng-switchery [value]="round.pointsToPass !== null && round.pointsToPass !== undefined"
+                        (change)="onPointsSwitchChange($event.target.value, i)"
+                        class="switch" #pointsSwitch></ng-switchery>
           <mat-form-field>
             <mat-label>Points</mat-label>
             <img class="mat-input-prefix" src="../../../assets/images/ic-material-grade.svg" matPrefix>
-            <input [value]="getOrDefault(round.pointsToPass, -1,  '')"
+            <input [(ngModel)]="round.pointsToPass"
+                   type="number"
                    #pointsInput matInput autocomplete="off" (keypress)="numberOnly($event)">
           </mat-form-field>
         </div>
         <mat-form-field class="datetime-picker">
-          <input value="{{getOrDefault(round.startTime, -1, '')}}"
+          <input [value]="getStartDate(i)"
                  matInput [ngxMatDatetimePicker]="picker" placeholder="Start Time"
-                 (dateChange)="round.startTime = $event.value.valueOf()">
+                 (dateChange)="setStartTime(i, $event)">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <ngx-mat-datetime-picker #picker>
           </ngx-mat-datetime-picker>
