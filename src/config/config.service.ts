@@ -36,48 +36,48 @@ export class ConfigService {
         userId: userId.toString()
       }
     });
-    const data: PastContest[] = [
-      {
-        imageUrl: 'https://avatar.onlinesoccermanager.nl/03319541v1.png',
-        title: 'asdDFADFD df SDF ASDF SADFV ASDF XFV ASDGA DG ASDG ASDG ASD ASDF ASSDFasdf df adsf asadsf adf asdf asdf a',
-        subjectIds: [1, 2, 3],
-        contestId: 1,
-      },
-      {
-        imageUrl: 'https://avatar.onlinesoccermanager.nl/03319541v1.png',
-        title: 'asdDFADFD df SDF ASDF SADFV ASDF XFV ASDGA DG ASDG ASDG ASD ASDF ASSDFasdf df adsf asadsf adf asdf asdf a',
-        subjectIds: [1, 2, 3],
-        contestId: 1,
-      },
-      {
-        imageUrl: 'https://avatar.onlinesoccermanager.nl/03319541v1.png',
-        title: 'asdDFADFD df SDF ASDF SADFV ASDF XFV ASDGA DG ASDG ASDG ASD ASDF ASSDFasdf df adsf asadsf adf asdf asdf a',
-        subjectIds: [1, 2, 3],
-        contestId: 1,
-      }
-      , {
-        imageUrl: 'https://avatar.onlinesoccermanager.nl/03319541v1.png',
-        title: 'asdDFADFD df SDF ASDF SADFV ASDF XFV ASDGA DG ASDG ASDG ASD ASDF ASSDFasdf df adsf asadsf adf asdf asdf a',
-        subjectIds: [1, 2, 3],
-        contestId: 1,
-      }, {
-        imageUrl: 'https://avatar.onlinesoccermanager.nl/03319541v1.png',
-        title: 'asdDFADFD df SDF ASDF SADFV ASDF XFV ASDGA DG ASDG ASDG ASD ASDF ASSDFasdf df adsf asadsf adf asdf asdf a',
-        subjectIds: [1, 2, 3],
-        contestId: 1,
-      }, {
-        imageUrl: 'https://avatar.onlinesoccermanager.nl/03319541v1.png',
-        title: 'asdDFADFD df SDF ASDF SADFV ASDF XFV ASDGA DG ASDG ASDG ASD ASDF ASSDFasdf df adsf asadsf adf asdf asdf a',
-        subjectIds: [1, 2, 3],
-        contestId: 1,
-      }, {
-        imageUrl: 'https://avatar.onlinesoccermanager.nl/03319541v1.png',
-        title: 'asdDFADFD df SDF ASDF SADFV ASDF XFV ASDGA DG ASDG ASDG ASD ASDF ASSDFasdf df adsf asadsf adf asdf asdf a',
-        subjectIds: [1, 2, 3],
-        contestId: 1,
-      }
-    ];
-    return of(data);
+    // const data: PastContest[] = [
+    //   {
+    //     imageUrl: 'https://avatar.onlinesoccermanager.nl/03319541v1.png',
+    //     title: 'asdDFADFD df SDF ASDF SADFV ASDF XFV ASDGA DG ASDG ASDG ASD ASDF ASSDFasdf df adsf asadsf adf asdf asdf a',
+    //     subjectIds: [1, 2, 3],
+    //     contestId: 1,
+    //   },
+    //   {
+    //     imageUrl: 'https://avatar.onlinesoccermanager.nl/03319541v1.png',
+    //     title: 'asdDFADFD df SDF ASDF SADFV ASDF XFV ASDGA DG ASDG ASDG ASD ASDF ASSDFasdf df adsf asadsf adf asdf asdf a',
+    //     subjectIds: [1, 2, 3],
+    //     contestId: 1,
+    //   },
+    //   {
+    //     imageUrl: 'https://avatar.onlinesoccermanager.nl/03319541v1.png',
+    //     title: 'asdDFADFD df SDF ASDF SADFV ASDF XFV ASDGA DG ASDG ASDG ASD ASDF ASSDFasdf df adsf asadsf adf asdf asdf a',
+    //     subjectIds: [1, 2, 3],
+    //     contestId: 1,
+    //   }
+    //   , {
+    //     imageUrl: 'https://avatar.onlinesoccermanager.nl/03319541v1.png',
+    //     title: 'asdDFADFD df SDF ASDF SADFV ASDF XFV ASDGA DG ASDG ASDG ASD ASDF ASSDFasdf df adsf asadsf adf asdf asdf a',
+    //     subjectIds: [1, 2, 3],
+    //     contestId: 1,
+    //   }, {
+    //     imageUrl: 'https://avatar.onlinesoccermanager.nl/03319541v1.png',
+    //     title: 'asdDFADFD df SDF ASDF SADFV ASDF XFV ASDGA DG ASDG ASDG ASD ASDF ASSDFasdf df adsf asadsf adf asdf asdf a',
+    //     subjectIds: [1, 2, 3],
+    //     contestId: 1,
+    //   }, {
+    //     imageUrl: 'https://avatar.onlinesoccermanager.nl/03319541v1.png',
+    //     title: 'asdDFADFD df SDF ASDF SADFV ASDF XFV ASDGA DG ASDG ASDG ASD ASDF ASSDFasdf df adsf asadsf adf asdf asdf a',
+    //     subjectIds: [1, 2, 3],
+    //     contestId: 1,
+    //   }, {
+    //     imageUrl: 'https://avatar.onlinesoccermanager.nl/03319541v1.png',
+    //     title: 'asdDFADFD df SDF ASDF SADFV ASDF XFV ASDGA DG ASDG ASDG ASD ASDF ASSDFasdf df adsf asadsf adf asdf asdf a',
+    //     subjectIds: [1, 2, 3],
+    //     contestId: 1,
+    //   }
+    // ];
+    // return of(data);
     return this.http.get<PastContest[]>('past_contests', {params});
   }
 
@@ -187,22 +187,22 @@ export class ConfigService {
   }
 
   fetchCategories() {
-    const data: Subject[] = [{
-      id: 1,
-      name: 'Mathematics',
-      colorId: 1
-    },
-    {
-      id: 2,
-      name: 'Physics',
-      colorId: 2
-    },
-    {
-      id: 3,
-      name: 'Chemistry',
-      colorId: 3
-    }];
-    return of(data).pipe(delay(1000));
+    // const data: Subject[] = [{
+    //   id: 1,
+    //   name: 'Mathematics',
+    //   colorId: 1
+    // },
+    // {
+    //   id: 2,
+    //   name: 'Physics',
+    //   colorId: 2
+    // },
+    // {
+    //   id: 3,
+    //   name: 'Chemistry',
+    //   colorId: 3
+    // }];
+    // return of(data).pipe(delay(1000));
     return this.http.get<Subject[]>('subjects');
   }
 
