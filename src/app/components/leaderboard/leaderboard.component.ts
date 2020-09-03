@@ -45,7 +45,7 @@ export class LeaderboardComponent implements OnInit {
   }
 
   @HostListener('window:resize', ['$event'])
-  onResize(event) {
+  onResize() {
     this.isScreenSmall = document.body.offsetWidth < 1000;
   }
 

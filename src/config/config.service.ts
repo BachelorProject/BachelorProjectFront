@@ -5,8 +5,7 @@ import {
   Contest,
   ContestQuestion,
   LeaderBoardMetaModel,
-  LeaderBoardPlaceModel,
-  PastContest,
+  LeaderBoardPlaceModel, PastContest,
   Subject,
   Tournament,
   UserInformation
@@ -173,12 +172,19 @@ export class ConfigService {
   uploadMedia(id: number, type: string, file: File) {
     const formData: FormData = new FormData();
     formData.append('id', id.toString());
-    formData.append('type', type);
-    formData.append('file', file);
-    return this.http.post<any>('upload', formData, {
-      reportProgress: true,
-      observe: 'events'
-    });
+    formData.append('avatar', file);
+
+    if (type === 'profileAvatar') {
+      return this.http.post<any>('set_profile_picture', formData,  {
+        reportProgress: true,
+        observe: 'events'
+      });
+    } else if (type === 'contestAvatar') {
+      return this.http.post<any>('set_contest_picture', formData,  {
+        reportProgress: true,
+        observe: 'events'
+      });
+    }
   }
 
   updateContest(contest: Contest) {
@@ -186,44 +192,28 @@ export class ConfigService {
   }
 
   requestContest(mode: string, id: number) {
-    const data: Contest = {
-      id: 5324,
-      title: '',
-      body: '',
-      imageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png',
-      registrationEnd: null,
-      subjectIds: [1, 2, 3],
-      status: 'UNPUBLISHED',
-      rounds: [],
-    };
-    return of(data).pipe(delay(2000));
-    return this.http.post<Contest>('contest', {mode, id}); // id -1 mean create new one. mode = 'edit', 'view'
+    // const data: Contest = {
+    //   id: 5324,
+    //   title: '',
+    //   body: '',
+    //   imageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png',
+    //   registrationEnd: null,
+    //   subjectIds: [1, 2, 3],
+    //   status: 'UNPUBLISHED',
+    //   rounds: [],
+    // };
+    // return of(data).pipe(delay(2000));
+    //
+    const params = new HttpParams({
+      fromObject: {
+        mode,
+        id: id.toString()
+      }
+    });
+    return this.http.get<Contest>('contest', {params});
   }
 
   fetchCategories() {
-    const data: Subject[] = [
-      {
-        id: 0,
-        name: 'Mathematics',
-        colorId: 0,
-      },
-      {
-        id: 1,
-        name: 'Physics',
-        colorId: 1,
-      },
-      {
-        id: 2,
-        name: 'Chemistry',
-        colorId: 2
-      },
-      {
-        id: 3,
-        name: 'Biology',
-        colorId: 3,
-      }
-    ];
-    return of(data);
     return this.http.get<Subject[]>('subjects');
   }
 
@@ -269,7 +259,7 @@ export class ConfigService {
         roundNumber: roundNumber.toString()
       }
     });
-    return this.http.get<LeaderBoardMetaModel>('leaderboardmeta', {params});
+    return this.http.get<LeaderBoardMetaModel>('leader_board_meta', {params});
   }
 
   getTournamentList(from: number, to: number, myContests: boolean, pastContests: boolean, searchString: string, subjectIds: number[]) {
