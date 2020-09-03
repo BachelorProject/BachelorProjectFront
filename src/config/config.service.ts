@@ -187,22 +187,22 @@ export class ConfigService {
   }
 
   fetchCategories() {
-    // const data: Subject[] = [{
-    //   id: 1,
-    //   name: 'Mathematics',
-    //   colorId: 1
-    // },
-    // {
-    //   id: 2,
-    //   name: 'Physics',
-    //   colorId: 2
-    // },
-    // {
-    //   id: 3,
-    //   name: 'Chemistry',
-    //   colorId: 3
-    // }];
-    // return of(data).pipe(delay(1000));
+    const data: Subject[] = [{
+      id: 1,
+      name: 'Mathematics',
+      colorId: 1
+    },
+    {
+      id: 2,
+      name: 'Physics',
+      colorId: 2
+    },
+    {
+      id: 3,
+      name: 'Chemistry',
+      colorId: 3
+    }];
+    return of(data).pipe(delay(1000));
     return this.http.get<Subject[]>('subjects');
   }
 

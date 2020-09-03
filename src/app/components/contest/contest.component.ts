@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
 import {ConfigService} from '../../../config/config.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {FabControllerService} from '../../../config/FabControllerService';
 import {CategoryService} from '../../../config/CategoryService';
 import {Utils} from '../../../config/utils';
@@ -28,17 +28,18 @@ export class ContestComponent implements OnInit {
     public ref: ChangeDetectorRef,
     public fab: FabControllerService,
     public categoryService: CategoryService,
-    public dialog: MatDialog) {
+    public dialog: MatDialog,
+    public route: ActivatedRoute) {
     if (!this.isFetching) {
       this.isFetching = true;
     }
-    configService.requestContest(-1)
-      .subscribe(value => {
-        this.contest = value;
-        this.isFetching = false;
-        this.setOpenedContestState();
-      }, error => {
+    this.route
+      .queryParams
+      .subscribe(params => {
+        const contestId = params.id || -1;
+        this.getContestService(contestId);
       });
+
     fab.icon = '../../../assets/images/ic-metro-trophy.svg';
     fab.onClickListener.subscribe(() => {
       this.switchFilter();
@@ -67,6 +68,17 @@ export class ContestComponent implements OnInit {
   ngOnInit(): void {
     this.isSmallScreen = document.body.offsetWidth < 1200;
     this.fab.isHidden = !this.isSmallScreen;
+  }
+
+  getContestService(contestId: number) {
+    this.configService.requestContest(contestId)
+      .subscribe(value => {
+        this.contest = value;
+        this.isFetching = false;
+        this.setOpenedContestState();
+      }, error => {
+        this.router.navigate(['**']);
+      });
   }
 
   getColor(colorId: number) {
@@ -99,8 +111,7 @@ export class ContestComponent implements OnInit {
     this.rounds[roundId].password = '';
   }
 
-
-    onPointsSwitchChange(value, roundId) {
+  onPointsSwitchChange(value, roundId) {
     console.log(value === 'true');
     if (value) {
       this.rounds[roundId].pointsToPass = 0;
