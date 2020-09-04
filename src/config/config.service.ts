@@ -27,9 +27,9 @@ export class ConfigService {
   };
 
   constructor(private http: HttpClient) {
-    if (localStorage.getItem('access_token')) {
-      this.updateUserMetaInfo();
-    }
+    // if (localStorage.getItem('access_token')) {
+    //   this.updateUserMetaInfo();
+    // }
   }
 
   updateUserMetaInfo() {

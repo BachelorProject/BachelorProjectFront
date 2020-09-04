@@ -119,16 +119,18 @@ export class BoardComponent implements OnInit, AfterViewInit {
   }
 
   formValueChanged() {
-    if (this.searchTimeout !== undefined) {
-      clearTimeout(this.searchTimeout);
+    // if (this.searchTimeout !== undefined) {
+    //   clearTimeout(this.searchTimeout);
+    // }
+    // this.searchTimeout = setTimeout(() => {
+    //
+    // }, 1000);
+
+    if (!this.isFetching) {
+      this.isFetching = true;
+      this.tournaments = [];
+      this.fetchTournaments(this.tournaments.length, this.tournaments.length + this.FETCH_SIZE);
     }
-    this.searchTimeout = setTimeout(() => {
-      if (!this.isFetching) {
-        this.isFetching = true;
-        this.tournaments = [];
-        this.fetchTournaments(this.tournaments.length, this.tournaments.length + this.FETCH_SIZE);
-      }
-    }, 1000);
   }
 
   fetchTournaments(from: number, to: number) {

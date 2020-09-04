@@ -19,14 +19,16 @@ export class AppComponent implements OnInit {
               private upcomingTournamentService: UpcomingTournamentService) {
     router.events.subscribe(e => {
       if (e instanceof NavigationEnd) {
-        this.configService.updateUserMetaInfo();
-        this.upcomingTournamentService.getNearest();
         this.activatedRoute.queryParams.subscribe(params => {
           const urlTree = this.router.parseUrl(this.router.url);
           if (urlTree.root.children.primary) {
             this.showHeader = urlTree.root.children.primary && urlTree.root.children.primary.segments[0].path !== 'auth';
           } else {
             this.showHeader = true;
+          }
+          if (this.showHeader){
+            this.configService.updateUserMetaInfo();
+            this.upcomingTournamentService.getNearest();
           }
         });
       }
