@@ -7,6 +7,7 @@ import {AuthService} from 'angularx-social-login';
 import {FacebookLoginProvider, GoogleLoginProvider} from 'angularx-social-login';
 import {ConfigService} from '../config/config.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {UpcomingTournamentService} from '../config/UpcomingTournamentService';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,8 @@ export class AuthServiceLocal {
 
   constructor(private httpClient: HttpClient, public router: Router,
               private configService: ConfigService, private authService: AuthService,
-              private snackBar: MatSnackBar ) {
+              private snackBar: MatSnackBar,
+              private upcomingTournamentService: UpcomingTournamentService) {
   }
 
   getAccessToken() {
@@ -46,6 +48,7 @@ export class AuthServiceLocal {
           window.localStorage.setItem('access_token', value.token);
           window.location.href = '/';
           this.configService.currUser = value.currentUser;
+          this.upcomingTournamentService.getNearest(value.currentUser.userId);
         }
         , () => {
         });
@@ -67,6 +70,7 @@ export class AuthServiceLocal {
           localStorage.setItem('access_token', value.token);
           window.location.href = '/';
           this.configService.currUser = value.currentUser;
+          this.upcomingTournamentService.getNearest(value.currentUser.userId);
         }
         , () => {
         });
@@ -90,6 +94,7 @@ export class AuthServiceLocal {
         localStorage.setItem('access_token', value.token);
         window.location.href = '/';
         this.configService.currUser = value.currentUser;
+        this.upcomingTournamentService.getNearest(value.currentUser.userId);
       }
       , () => {
       });
@@ -101,6 +106,7 @@ export class AuthServiceLocal {
         localStorage.setItem('access_token', value.token);
         window.location.href = '/';
         this.configService.currUser = value.currentUser;
+        this.upcomingTournamentService.getNearest(value.currentUser.userId);
       }
       , () => {});
   }
@@ -112,6 +118,7 @@ export class AuthServiceLocal {
         localStorage.setItem('access_token', value.token);
         window.location.href = '/';
         this.configService.currUser = value.currentUser;
+        this.upcomingTournamentService.getNearest(value.currentUser.userId);
       }
       , error => {
       }

@@ -38,6 +38,10 @@ export class ContestComponent implements OnInit {
       .subscribe(params => {
         const contestId = params.id || -1;
         this.getContestService(contestId);
+        this.configService.getRounds(contestId)
+          .subscribe(value => {
+            this.rounds = value;
+          });
       });
 
     fab.icon = '../../../assets/images/ic-metro-trophy.svg';
@@ -109,6 +113,14 @@ export class ContestComponent implements OnInit {
 
   onPassSwitchChange(value, roundId) {
     this.rounds[roundId].password = '';
+  }
+
+  onPassChange(passVal, index) {
+    if (passVal && passVal.length > 0 ){
+      this.rounds[index].isClosed = true;
+    } else {
+      this.rounds[index].isClosed = false;
+    }
   }
 
   onPointsSwitchChange(value, roundId) {

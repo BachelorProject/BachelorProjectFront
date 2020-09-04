@@ -3,12 +3,14 @@ import {Injectable} from '@angular/core';
 import {
   AuthResponse,
   Contest,
-  ContestQuestion, ContestRound, CurrentUserInformation,
+  ContestQuestion,
+  ContestRound,
+  CurrentUserInformation,
   LeaderBoardMetaModel,
   LeaderBoardPlaceModel,
   PastContest,
   Subject,
-  Tournament,
+  Tournament, UpcomingTournament,
   UserInformation
 } from './config.service.model';
 import {of} from 'rxjs';
@@ -25,9 +27,18 @@ export class ConfigService {
   constructor(private http: HttpClient) {
   }
 
-  getNearestUpcomingTournament() {
-    return of(1243).pipe(delay(2000));
-    return this.http.get<number>('upcoming_tournament');
+  getNearestUpcomingTournament(userId) {
+    const data: UpcomingTournament = {
+      timestamp: new Date().getTime() + 10000,
+      contestId: 1243
+    };
+    return of(data).pipe(delay(2000));
+    const params = new HttpParams({
+      fromObject: {
+        userId: userId.toString()
+      }
+    });
+    return this.http.get<UpcomingTournament>('upcoming_tournament', {params});
   }
 
   getPastContests(userId: number) {
@@ -82,7 +93,7 @@ export class ConfigService {
   }
 
   saveRounds(rounds: ContestRound[]) {
-    return this.http.post<any>('save_rounds',  JSON.stringify(rounds));
+    return this.http.post<any>('save_rounds', JSON.stringify(rounds));
   }
 
   addRound(contestId: number) {
@@ -164,6 +175,27 @@ export class ConfigService {
     return this.http.post<any>('register_contest', {contestId});
   }
 
+  getRounds(id: number) {
+
+    const data: ContestRound[] = [{
+      id: 1231,
+      password: '',
+      duration: null,
+      placeToPass: null,
+      pointsToPass: null,
+      status: 'COMPLETED', //   'ACTIVE', 'ONGOING', 'CANCELLED', 'COMPLETED'
+      startTime: null,
+      isClosed: false
+    }];
+    return of(data).pipe(delay(1000));
+    const params = new HttpParams({
+      fromObject: {
+        contestId: id.toString()
+      }
+    });
+    return this.http.get<ContestRound[]>('past_contests', {params});
+  }
+
   requestContest(id: number) {
     const data: Contest = {
       id,
@@ -172,11 +204,11 @@ export class ConfigService {
       imageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png',
       registrationEnd: null,
       subjectIds: [1, 2, 3],
-      status: 'UNPUBLISHED',
+      status: 'REGISTRATION ON',
       isRegistered: false,
       createUser: 1
     };
-    return of(data).pipe(delay(2000));
+    return of(data).pipe(delay(1000));
 
     const params = new HttpParams({
       fromObject: {
@@ -192,16 +224,16 @@ export class ConfigService {
       name: 'Mathematics',
       colorId: 1
     },
-    {
-      id: 2,
-      name: 'Physics',
-      colorId: 2
-    },
-    {
-      id: 3,
-      name: 'Chemistry',
-      colorId: 3
-    }];
+      {
+        id: 2,
+        name: 'Physics',
+        colorId: 2
+      },
+      {
+        id: 3,
+        name: 'Chemistry',
+        colorId: 3
+      }];
     return of(data).pipe(delay(1000));
     return this.http.get<Subject[]>('subjects');
   }

@@ -55,13 +55,13 @@ export interface Contest {
 
 export interface ContestRound {
   id: number;
-  isClosed: boolean;
   duration: number;
   placeToPass: number; // -1 means this is not passing criteria
   pointsToPass: number; // -1 means this is not passing criteria
   status: string; //   'ACTIVE', 'ONGOING', 'CANCELLED', 'COMPLETED'
   startTime: number;
   password: '';
+  isClosed: boolean;
 }
 
 export interface ContestQuestion {
@@ -105,4 +105,9 @@ export interface PastContest {
   title: string;
   subjectIds: number[];
   contestId: number;
+}
+
+export interface UpcomingTournament {
+  contestId: number;
+  timestamp: number;
 }
