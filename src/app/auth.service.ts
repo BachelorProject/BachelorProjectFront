@@ -47,8 +47,6 @@ export class AuthServiceLocal {
         value => {
           window.localStorage.setItem('access_token', value.token);
           window.location.href = '/';
-          this.configService.currUser = value.CurrentUserInformation;
-          this.upcomingTournamentService.getNearest(value.CurrentUserInformation.userId);
         }
         , () => {
         });
@@ -69,8 +67,6 @@ export class AuthServiceLocal {
         value => {
           localStorage.setItem('access_token', value.token);
           window.location.href = '/';
-          this.configService.currUser = value.CurrentUserInformation;
-          this.upcomingTournamentService.getNearest(value.CurrentUserInformation.userId);
         }
         , () => {
         });
@@ -94,8 +90,6 @@ export class AuthServiceLocal {
       value => {
         localStorage.setItem('access_token', value.token);
         window.location.href = '/';
-        this.configService.currUser = value.CurrentUserInformation;
-        this.upcomingTournamentService.getNearest(value.CurrentUserInformation.userId);
       }
       , () => {
       });
@@ -106,8 +100,6 @@ export class AuthServiceLocal {
       value => {
         localStorage.setItem('access_token', value.token);
         window.location.href = '/';
-        this.configService.currUser = value.CurrentUserInformation;
-        this.upcomingTournamentService.getNearest(value.CurrentUserInformation.userId);
       }
       , () => {});
   }
@@ -118,8 +110,6 @@ export class AuthServiceLocal {
       value => {
         localStorage.setItem('access_token', value.token);
         window.location.href = '/';
-        this.configService.currUser = value.CurrentUserInformation;
-        this.upcomingTournamentService.getNearest(value.CurrentUserInformation.userId);
       }
       , error => {
       }

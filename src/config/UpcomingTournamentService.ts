@@ -12,13 +12,14 @@ export class UpcomingTournamentService {
   constructor(private configService: ConfigService) {
   }
 
-  public getNearest(userId) {
-    this.configService.getNearestUpcomingTournament(userId)
+  public getNearest() {
+    if (this.contest !== undefined && this.contest.timestamp < new Date().getTime()) {
+      return;
+    }
+    this.configService.getNearestUpcomingTournament()
       .subscribe(value => {
         this.contest = value;
-        console.log(value.timestamp - new Date().getTime());
         setTimeout( () => {
-          alert('sheicvala');
           this.catId.next(value.contestId);
         }, value.timestamp - new Date().getTime() );
       }, error => {
