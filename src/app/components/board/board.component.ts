@@ -132,6 +132,9 @@ export class BoardComponent implements OnInit, AfterViewInit {
   }
 
   fetchTournaments(from: number, to: number) {
+    if (this.loadedAll)  {
+      return;
+    }
     this.configService.getTournamentList(
       from,
       to,
@@ -142,13 +145,19 @@ export class BoardComponent implements OnInit, AfterViewInit {
     ).subscribe(
       // @ts-ignore
       value => {
+        console.log(value);
         if (value.length === 0 ){
           this.loadedAll = true;
         }
+
+        console.log(value);
         for (const elem of value) {
           this.tournaments.push(elem);
         }
+
+        console.log(this.tournaments);
         this.isFetching = false;
+        console.log(this.isFetching);
       }
       , () => {
         this.isFetching = false;

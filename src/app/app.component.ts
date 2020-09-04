@@ -1,6 +1,8 @@
 import {Component, HostListener, OnInit} from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {FabControllerService} from '../config/FabControllerService';
+import {ConfigService} from '../config/config.service';
+import {UpcomingTournamentService} from '../config/UpcomingTournamentService';
 
 @Component({
   selector: 'app-root',
@@ -12,9 +14,13 @@ export class AppComponent implements OnInit {
   isScreenSmall = false;
   showHeader = true;
 
-  constructor(public router: Router, public activatedRoute: ActivatedRoute, public fab: FabControllerService) {
+  constructor(public router: Router, public activatedRoute: ActivatedRoute, public fab: FabControllerService,
+              private configService: ConfigService,
+              private upcomingTournamentService: UpcomingTournamentService) {
     router.events.subscribe(e => {
       if (e instanceof NavigationEnd) {
+        this.configService.updateUserMetaInfo();
+        this.upcomingTournamentService.getNearest();
         this.activatedRoute.queryParams.subscribe(params => {
           const urlTree = this.router.parseUrl(this.router.url);
           if (urlTree.root.children.primary) {

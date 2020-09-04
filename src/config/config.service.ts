@@ -27,20 +27,35 @@ export class ConfigService {
   };
 
   constructor(private http: HttpClient) {
+    if (localStorage.getItem('access_token')) {
+      this.updateUserMetaInfo();
+    }
   }
 
-  getNearestUpcomingTournament(userId) {
+  updateUserMetaInfo() {
+    if (this.currUser.userId !== -1) {
+      return ;
+    }
+    const data: CurrentUserInformation = {
+      profileImageUrl: 'https://avatar.onlinesoccermanager.nl/03319541v1.png',
+      userId: 23
+    };
+    return of(data).pipe(delay(2000)).subscribe(value => {
+      this.currUser = value;
+    });
+    this.http.get<CurrentUserInformation>('get_user_metadata')
+      .subscribe(value => {
+        this.currUser = value;
+      });
+  }
+
+  getNearestUpcomingTournament() {
     const data: UpcomingTournament = {
-      timestamp: new Date().getTime() + 10000,
+      timestamp: new Date().getTime() + 5000,
       contestId: 1243
     };
     return of(data).pipe(delay(2000));
-    const params = new HttpParams({
-      fromObject: {
-        userId: userId.toString()
-      }
-    });
-    return this.http.get<UpcomingTournament>('upcoming_tournament', {params});
+    return this.http.get<UpcomingTournament>('upcoming_tournament');
   }
 
   getPastContests(userId: number) {
@@ -339,21 +354,21 @@ export class ConfigService {
   }
 
   getTournamentList(from: number, to: number, myContests: boolean, pastContests: boolean, searchString: string, subjectIds: number[]) {
-    // const data: Tournament[] = [];
-    // for (let i = from; i < to; i++) {
-    //   data.push({
-    //     id: i,
-    //     title: `asdasd ${i}`,
-    //     body: `some body once told me  ${i}`,
-    //     imageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png',
-    //     registrationEnd: new Date().getTime() + 1000000,
-    //     nextContestStart: new Date().getTime(),
-    //     nextContestDuration: i * 10,
-    //     subjects: [],
-    //     registeredCount: 1000 - 15 * i
-    //   });
-    // }
-    // return of(data).pipe(delay(1000));
+    const data: Tournament[] = [];
+    for (let i = from; i < to; i++) {
+      data.push({
+        id: i,
+        title: `asdasd ${i}`,
+        body: `some body once told me  ${i}`,
+        imageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png',
+        registrationEnd: new Date().getTime() + 1000000,
+        nextContestStart: new Date().getTime(),
+        nextContestDuration: i * 10,
+        subjects: [],
+        registeredCount: 1000 - 15 * i
+      });
+    }
+    return of(data).pipe(delay(1000));
 
     const subjectIdStr: string[] = subjectIds.map(value => value.toString());
 
@@ -382,18 +397,18 @@ export class ConfigService {
   }
 
   getMyTournamentList() {
-    // const data: Tournament[] = [{
-    //   id: 3,
-    //   title: 'asdasd',
-    //   body: 'some body once told me',
-    //   imageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png',
-    //   registrationEnd: new Date().getTime(),
-    //   nextContestStart: new Date().getTime(),
-    //   nextContestDuration: 180,
-    //   subjects: [],
-    //   registeredCount: 3321
-    // }];
-    // return of(data).pipe(delay(1000));
+    const data: Tournament[] = [{
+      id: 3,
+      title: 'asdasd',
+      body: 'some body once told me',
+      imageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png',
+      registrationEnd: new Date().getTime(),
+      nextContestStart: new Date().getTime(),
+      nextContestDuration: 180,
+      subjects: [],
+      registeredCount: 3321
+    }];
+    return of(data).pipe(delay(1000));
     return this.http.get<Tournament[]>('tournament/registered_list');
   }
 
