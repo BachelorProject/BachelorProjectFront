@@ -11,6 +11,7 @@ import {ConfigService} from '../../../../config/config.service';
 export class BoardItemComponent implements OnInit {
   @Input() data: Tournament;
   @Input() isRegistered = false;
+  @Input() registrationOn = false;
   @Input() pastContest = false;
   timeLeft = 5;
   isSmallScreen = false;

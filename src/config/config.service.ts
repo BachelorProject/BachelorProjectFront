@@ -143,53 +143,53 @@ export class ConfigService {
   }
 
   updateQuestions(questions: ContestQuestion[], roundId: number) {
-    return this.http.post<any>('contest', {questions, roundId});
+    return this.http.post<any>('update_questions', {questions, roundId});
   }
 
   submitResult(questions: ContestLiveQuestionModel, roundId: number) {
-    return this.http.post<any>('contest', {questions, roundId});
+    return this.http.post<any>('submit_result', {questions, roundId});
   }
 
   getLiveQuestions(password: string, round: number) {
 
-    const data: ContestLiveQuestionModel = {
-      questions: [
-        {
-          question: 'asdasdada',
-          options: [{
-            value: 'aaaaa',
-            id: 2
-          }, {
-            value: 'aaaaa',
-            id: 1
-          }, {
-            value: 'aaaaa',
-            id: 3
-          }],
-          score: 2,
-          type: 'MULTIPLE CHOICE',
-          answeredAnswers: []
-        },
-        {
-          question: 'asdasdada2',
-          options: [{
-            value: 'aaaaa',
-            id: 2
-          }, {
-            value: 'aaaaa',
-            id: 1
-          }, {
-            value: 'aaaaa',
-            id: 3
-          }],
-          score: 3,
-          type: 'MULTIPLE CHOICE',
-          answeredAnswers: []
-        }
-      ],
-      timeLeft: 300
-    };
-    return of(data).pipe(delay(300));
+    // const data: ContestLiveQuestionModel = {
+    //   questions: [
+    //     {
+    //       question: 'asdasdada',
+    //       options: [{
+    //         value: 'aaaaa',
+    //         id: 2
+    //       }, {
+    //         value: 'aaaaa',
+    //         id: 1
+    //       }, {
+    //         value: 'aaaaa',
+    //         id: 3
+    //       }],
+    //       score: 2,
+    //       type: 'MULTIPLE CHOICE',
+    //       answeredAnswers: []
+    //     },
+    //     {
+    //       question: 'asdasdada2',
+    //       options: [{
+    //         value: 'aaaaa',
+    //         id: 2
+    //       }, {
+    //         value: 'aaaaa',
+    //         id: 1
+    //       }, {
+    //         value: 'aaaaa',
+    //         id: 3
+    //       }],
+    //       score: 3,
+    //       type: 'MULTIPLE CHOICE',
+    //       answeredAnswers: []
+    //     }
+    //   ],
+    //   timeLeft: 300
+    // };
+    // return of(data).pipe(delay(300));
     const params = new HttpParams({
       fromObject: {
         password,

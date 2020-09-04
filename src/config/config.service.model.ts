@@ -11,6 +11,7 @@ export interface Tournament {
   nextContestDuration: number; // minutes
   subjects: Subject[];
   registeredCount: number;
+  status: string;
 }
 
 export interface AuthResponse {

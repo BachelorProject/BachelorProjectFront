@@ -67,7 +67,7 @@
               cancel
             </button>
             <button (click)="mainAction()"
-                    [hidden]="!contest || !(contest.status === 'REGISTRATION ON' || contest.status === 'UNPUBLISHED') || rounds.length === 0"
+                    [hidden]="!contest || !((contest.status === 'REGISTRATION ON' && !contest.isRegistered) || contest.status === 'UNPUBLISHED') || rounds.length === 0"
                     class="main-action-btn"
                     style="background-color: {{getMainBtnStatusColor()}}">
               {{getMainBtnStatusText()}}
@@ -179,7 +179,7 @@
             > edit questions
             </button>
           </div>
-          <div class="vertical-flex" [hidden]="openedContestState === 'edit' || contest.isRegistered"
+          <div class="vertical-flex" [hidden]="openedContestState === 'edit' || !contest.isRegistered"
                style="width: 100%">
             <button class="questions-btn round-btn "
                     [routerLink]="['/leaderboard']" [queryParams]="{id: round.id}"

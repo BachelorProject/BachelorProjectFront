@@ -22,7 +22,7 @@
       <img src="../../../assets/images/ic-material-today.svg">
       <p>{{getFormattedDateTime(data.nextContestStart)}}</p>
     </div>
-    <div [hidden]="pastContest" class="register-button-container">
+    <div [hidden]="pastContest || registrationOn" class="register-button-container">
       <button [ngClass]="isRegistered? 'registered' : 'unregistered' " (click)="register($event)">
         {{isRegistered ? 'registered' : 'register'}}
       </button>
