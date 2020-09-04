@@ -1,27 +1,32 @@
 import {ChangeDetectorRef, Component, HostListener, OnInit} from '@angular/core';
-import {ContestQuestion} from '../../../../config/config.service.model';
+import {ContestLiveQuestionModel, ContestQuestion} from '../../../../config/config.service.model';
 import {ConfigService} from '../../../../config/config.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FabControllerService} from '../../../../config/FabControllerService';
+import {MatDialog} from '@angular/material/dialog';
+import {EnterPasswordComponent} from './enter-password/enter-password.component';
 
 @Component({
-  selector: 'app-question',
-  templateUrl: './question.component.html',
-  styleUrls: ['./question.component.css']
+  selector: 'app-live-contest',
+  templateUrl: './live-contest.component.html',
+  styleUrls: ['./live-contest.component.css']
 })
-export class QuestionComponent implements OnInit {
+export class LiveContestComponent implements OnInit {
 
-  data: ContestQuestion[] = [];
+  data: ContestLiveQuestionModel;
   curr = 0;
   newAnswer = '';
   contestId: number;
   roundId: number;
+  isClosed: false;
+  timeLeft = 99999;
 
   constructor(
     private configService: ConfigService,
     public router: Router,
     public ref: ChangeDetectorRef,
     private route: ActivatedRoute,
+    public dialog: MatDialog,
     public fab: FabControllerService) {
     if (!this.isFetching) {
       this.isFetching = true;
@@ -35,18 +40,15 @@ export class QuestionComponent implements OnInit {
       .queryParams
       .subscribe(params => {
         this.roundId = params.id || -1;
+        this.isClosed = params.closed || false;
         if (this.roundId === -1) {
           this.router.navigate(['**']);
         } else {
-          this.configService.getQuestions(this.roundId)
-            .subscribe(value => {
-              this.data = value;
-              if (this.data.length === 0) {
-                this.appendQuestion();
-              }
-              this.isFetching = false;
-            }, () => {
-            });
+          if (this.isClosed.toString() === 'true') {
+            this.openPassQuestion();
+          } else {
+            this.getQuestions('', this.roundId);
+          }
         }
       });
 
@@ -76,6 +78,28 @@ export class QuestionComponent implements OnInit {
     this.fab.isHidden = !this.isSmallScreen;
   }
 
+  getQuestions(password, roundId) {
+    this.configService.getLiveQuestions(password, roundId)
+      .subscribe(value => {
+        this.data = value;
+        this.timeLeft = this.data.timeLeft;
+        this.isFetching = false;
+      }, () => {
+        this.openPassQuestion();
+      });
+  }
+
+  openPassQuestion() {
+    const dialogRef = this.dialog.open(EnterPasswordComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        console.log(result);
+        this.getQuestions(result, this.roundId);
+      }
+    });
+  }
+
   switchFilter() {
     this.isFilterOpen = !this.isFilterOpen;
     setTimeout(() => {
@@ -83,29 +107,21 @@ export class QuestionComponent implements OnInit {
     }, 100);
   }
 
-  numberOnly(event): boolean {
-    const charCode = (event.which) ? event.which : event.keyCode;
-    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-      return false;
-    }
-    return true;
-  }
-
   clickCorrect(i) {
-    switch (this.data[this.curr].type) {
+    switch (this.data.questions[this.curr].type) {
       case 'MULTIPLE CHOICE':
-        const indexOfCorrect = this.data[this.curr].correctAnswer.indexOf(i);
+        const indexOfCorrect = this.data.questions[this.curr].answeredAnswers.indexOf(i);
         if (indexOfCorrect === -1) {
-          this.data[this.curr].correctAnswer.push(i);
+          this.data.questions[this.curr].answeredAnswers.push(i);
         } else {
-          this.data[this.curr].correctAnswer.splice(indexOfCorrect, 1);
+          this.data.questions[this.curr].answeredAnswers.splice(indexOfCorrect, 1);
         }
-        this.data[this.curr].correctAnswer.sort((a, b) => {
+        this.data.questions[this.curr].answeredAnswers.sort((a, b) => {
           return a - b;
         });
         break;
       case 'ONE CHOICE':
-        this.data[this.curr].correctAnswer = [i];
+        this.data.questions[this.curr].answeredAnswers = [i];
         break;
     }
   }
@@ -114,38 +130,12 @@ export class QuestionComponent implements OnInit {
     return index;
   }
 
-  addAnswer() {
-    this.data[this.curr].options.push(this.newAnswer);
-    this.newAnswer = '';
-  }
-
-  removeOption(index) {
-    this.data[this.curr].options.splice(index, 1);
-    const indexOfCorrect = this.data[this.curr].correctAnswer.indexOf(index);
-    if (indexOfCorrect !== -1) {
-      this.data[this.curr].correctAnswer.splice(indexOfCorrect, 1);
-    }
-    if (this.data[this.curr].options.length === 0) {
-      const oldCurr = this.curr;
-      this.curr = Math.max(0, this.curr - 1);
-      if (this.data.length > 1) {
-        this.data.splice(oldCurr, 1);
-      }
-    }
-  }
-
-  appendQuestion() {
-    this.data.push({
-      question: '',
-      options: ['', ''],
-      score: null,
-      type: 'ONE CHOICE',
-      correctAnswer: []
-    });
-  }
-
   saveQuestions() {
-    this.configService.updateQuestions(this.data, this.roundId);
+    this.configService.submitResult(this.data, this.contestId)
+      .subscribe(value => {
+        this.router.navigate(['/']);
+      });
   }
+
 
 }

@@ -54,11 +54,14 @@ import { ChartModule } from 'angular2-chartjs';
 import {MatMomentDateModule} from '@angular/material-moment-adapter';
 import {UpcomingTournamentService} from '../config/UpcomingTournamentService';
 import {ChangePasswordComponent} from './components/change-password/change-password.component';
+import { LiveContestComponent } from './components/contest/live-contest/live-contest.component';
+import { EnterPasswordComponent } from './components/contest/live-contest/enter-password/enter-password.component';
 
 const appRoutes: Routes = [
   {path: 'auth', component: WelcomeComponent},
   {path: '', component: BoardComponent},
   {path: 'question', component: QuestionComponent},
+  {path: 'live', component: LiveContestComponent},
   {path: 'editor', component: EditorComponent},
   {path: 'leaderboard', component: LeaderboardComponent},
   {path: 'profile', component: ProfileComponent},
@@ -98,7 +101,9 @@ export function provideConfig() {
     DragDropDirective,
     QuestionComponent,
     ProfileComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    LiveContestComponent,
+    EnterPasswordComponent
   ],
   imports: [
     BrowserModule,

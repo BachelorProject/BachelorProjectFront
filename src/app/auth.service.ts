@@ -48,7 +48,7 @@ export class AuthServiceLocal {
           window.localStorage.setItem('access_token', value.token);
           window.location.href = '/';
           this.configService.currUser = value.CurrentUserInformation;
-          this.upcomingTournamentService.getNearest(value.currentUser.userId);
+          this.upcomingTournamentService.getNearest(value.CurrentUserInformation.userId);
         }
         , () => {
         });
@@ -70,7 +70,7 @@ export class AuthServiceLocal {
           localStorage.setItem('access_token', value.token);
           window.location.href = '/';
           this.configService.currUser = value.CurrentUserInformation;
-          this.upcomingTournamentService.getNearest(value.currentUser.userId);
+          this.upcomingTournamentService.getNearest(value.CurrentUserInformation.userId);
         }
         , () => {
         });
@@ -95,7 +95,7 @@ export class AuthServiceLocal {
         localStorage.setItem('access_token', value.token);
         window.location.href = '/';
         this.configService.currUser = value.CurrentUserInformation;
-        this.upcomingTournamentService.getNearest(value.currentUser.userId);
+        this.upcomingTournamentService.getNearest(value.CurrentUserInformation.userId);
       }
       , () => {
       });
@@ -107,7 +107,7 @@ export class AuthServiceLocal {
         localStorage.setItem('access_token', value.token);
         window.location.href = '/';
         this.configService.currUser = value.CurrentUserInformation;
-        this.upcomingTournamentService.getNearest(value.currentUser.userId);
+        this.upcomingTournamentService.getNearest(value.CurrentUserInformation.userId);
       }
       , () => {});
   }
@@ -119,7 +119,7 @@ export class AuthServiceLocal {
         localStorage.setItem('access_token', value.token);
         window.location.href = '/';
         this.configService.currUser = value.CurrentUserInformation;
-        this.upcomingTournamentService.getNearest(value.currentUser.userId);
+        this.upcomingTournamentService.getNearest(value.CurrentUserInformation.userId);
       }
       , error => {
       }

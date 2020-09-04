@@ -72,6 +72,24 @@ export interface ContestQuestion {
   correctAnswer: number[];
 }
 
+export interface ContestLiveQuestionModel {
+  questions: ContestLiveQuestion[];
+  timeLeft: number;
+}
+
+export interface ContestLiveQuestion {
+  question: string;
+  options: ContestLiveQuestionOption[];
+  score: number;
+  type: string; // 'MULTIPLE CHOICE', 'ONE CHOICE'
+  answeredAnswers: number[];
+}
+
+export interface ContestLiveQuestionOption {
+  value: string;
+  id: number;
+}
+
 export interface CurrentUserInformation {
   userId: number;
   profileImageUrl: string;

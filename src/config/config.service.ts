@@ -3,6 +3,7 @@ import {Injectable} from '@angular/core';
 import {
   AuthResponse,
   Contest,
+  ContestLiveQuestionModel,
   ContestQuestion,
   ContestRound,
   CurrentUserInformation,
@@ -10,7 +11,8 @@ import {
   LeaderBoardPlaceModel,
   PastContest,
   Subject,
-  Tournament, UpcomingTournament,
+  Tournament,
+  UpcomingTournament,
   UserInformation
 } from './config.service.model';
 import {of} from 'rxjs';
@@ -124,11 +126,64 @@ export class ConfigService {
     return this.http.post<any>('contest', JSON.stringify(info));
   }
 
-  updateQuestions(questions: ContestQuestion[], contestId: number, roundId: number) {
-    return this.http.post<any>('contest', JSON.stringify({questions, contestId, roundId}));
+  updateQuestions(questions: ContestQuestion[], roundId: number) {
+    return this.http.post<any>('contest', JSON.stringify({questions, roundId}));
   }
 
-  getQuestions(contest: number, round: number) {
+  submitResult(questions: ContestLiveQuestionModel, roundId: number) {
+    return this.http.post<any>('contest', JSON.stringify({questions, roundId}));
+  }
+
+  getLiveQuestions(password: string, round: number) {
+
+    const data: ContestLiveQuestionModel = {
+      questions: [
+        {
+          question: 'asdasdada',
+          options: [{
+            value: 'aaaaa',
+            id: 2
+          }, {
+            value: 'aaaaa',
+            id: 1
+          }, {
+            value: 'aaaaa',
+            id: 3
+          }],
+          score: 2,
+          type: 'MULTIPLE CHOICE',
+          answeredAnswers: []
+        },
+        {
+          question: 'asdasdada2',
+          options: [{
+            value: 'aaaaa',
+            id: 2
+          }, {
+            value: 'aaaaa',
+            id: 1
+          }, {
+            value: 'aaaaa',
+            id: 3
+          }],
+          score: 3,
+          type: 'MULTIPLE CHOICE',
+          answeredAnswers: []
+        }
+      ],
+      timeLeft: 300
+    };
+    return of(data).pipe(delay(300));
+    const params = new HttpParams({
+      fromObject: {
+        password,
+        round: round.toString()
+      }
+    });
+    return this.http.get<ContestLiveQuestionModel>('live_questions', {params});
+  }
+
+  getQuestions(round: number) {
     // const data: ContestQuestion[] = [];
     // for (let i = 0; i < 11; i++) {
     //   data.push({
@@ -142,7 +197,6 @@ export class ConfigService {
     // return of(data).pipe(delay(300));
     const params = new HttpParams({
       fromObject: {
-        contest: contest.toString(),
         round: round.toString()
       }
     });

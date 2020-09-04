@@ -171,19 +171,26 @@
         </mat-form-field>
         <div [ngClass]="isSmallScreen? 'vertical-flex round-btn-sm' : 'horizontal-flex'" class="round-buttons">
           <button (click)="rounds.splice(i, 1)" class="round-btn" style="margin-top: 5px;"
-                  [hidden]="openedContestState !== 'edit'"> remove</button>
+                  [hidden]="openedContestState !== 'edit'"> remove
+          </button>
           <div class="vertical-flex" [hidden]="openedContestState !== 'edit'">
-            <button class="questions-btn round-btn "> edit questions</button>
+            <button class="questions-btn round-btn "
+                    [routerLink]="['/question']" [queryParams]="{id: round.id}"
+            > edit questions
+            </button>
           </div>
-          <div class="vertical-flex" [hidden]="openedContestState === 'edit' || contest.isRegistered" style="width: 100%">
+          <div class="vertical-flex" [hidden]="openedContestState === 'edit' || contest.isRegistered"
+               style="width: 100%">
             <button class="questions-btn round-btn "
                     [routerLink]="['/leaderboard']" [queryParams]="{id: round.id}"
                     [hidden]="round.status !== 'COMPLETED'"
-            > results </button>
+            > results
+            </button>
             <button class="questions-btn round-btn "
-                    [routerLink]="['/questions']" [queryParams]="{id: round.id, closed: round.isClosed}"
+                    [routerLink]="['/live']" [queryParams]="{id: round.id, closed: round.isClosed}"
                     [hidden]="round.status !== 'ONGOING'"
-            > enter </button>
+            > enter
+            </button>
           </div>
         </div>
       </div>
