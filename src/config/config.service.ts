@@ -36,13 +36,13 @@ export class ConfigService {
     if (this.currUser.userId !== -1) {
       return ;
     }
-    const data: CurrentUserInformation = {
-      profileImageUrl: 'https://avatar.onlinesoccermanager.nl/03319541v1.png',
-      userId: 23
-    };
-    return of(data).pipe(delay(2000)).subscribe(value => {
-      this.currUser = value;
-    });
+    // const data: CurrentUserInformation = {
+    //   profileImageUrl: 'https://avatar.onlinesoccermanager.nl/03319541v1.png',
+    //   userId: 23
+    // };
+    // return of(data).pipe(delay(2000)).subscribe(value => {
+    //   this.currUser = value;
+    // });
     this.http.get<CurrentUserInformation>('get_user_metadata')
       .subscribe(value => {
         this.currUser = value;
@@ -50,11 +50,11 @@ export class ConfigService {
   }
 
   getNearestUpcomingTournament() {
-    const data: UpcomingTournament = {
-      timestamp: new Date().getTime() + 5000,
-      contestId: 1243
-    };
-    return of(data).pipe(delay(2000));
+    // const data: UpcomingTournament = {
+    //   timestamp: new Date().getTime() + 5000,
+    //   contestId: 1243
+    // };
+    // return of(data).pipe(delay(2000));
     return this.http.get<UpcomingTournament>('upcoming_tournament');
   }
 
@@ -139,15 +139,15 @@ export class ConfigService {
   }
 
   updateUserInfo(info: UserInformation) {
-    return this.http.post<any>('contest', JSON.stringify(info));
+    return this.http.post<any>('contest', info);
   }
 
   updateQuestions(questions: ContestQuestion[], roundId: number) {
-    return this.http.post<any>('contest', JSON.stringify({questions, roundId}));
+    return this.http.post<any>('contest', {questions, roundId});
   }
 
   submitResult(questions: ContestLiveQuestionModel, roundId: number) {
-    return this.http.post<any>('contest', JSON.stringify({questions, roundId}));
+    return this.http.post<any>('contest', {questions, roundId});
   }
 
   getLiveQuestions(password: string, round: number) {
@@ -238,7 +238,7 @@ export class ConfigService {
   }
 
   updateContest(contest: Contest) {
-    return this.http.post<any>('update_contest', JSON.stringify(contest));
+    return this.http.post<any>('update_contest', contest);
   }
 
   registerToContest(contestId: number) {
@@ -247,23 +247,23 @@ export class ConfigService {
 
   getRounds(id: number) {
 
-    const data: ContestRound[] = [{
-      id: 1231,
-      password: '',
-      duration: null,
-      placeToPass: null,
-      pointsToPass: null,
-      status: 'COMPLETED', //   'ACTIVE', 'ONGOING', 'CANCELLED', 'COMPLETED'
-      startTime: null,
-      isClosed: false
-    }];
-    return of(data).pipe(delay(1000));
+    // const data: ContestRound[] = [{
+    //   id: 1231,
+    //   password: '',
+    //   duration: null,
+    //   placeToPass: null,
+    //   pointsToPass: null,
+    //   status: 'COMPLETED', //   'ACTIVE', 'ONGOING', 'CANCELLED', 'COMPLETED'
+    //   startTime: null,
+    //   isClosed: false
+    // }];
+    // return of(data).pipe(delay(1000));
     const params = new HttpParams({
       fromObject: {
         contestId: id.toString()
       }
     });
-    return this.http.get<ContestRound[]>('past_contests', {params});
+    return this.http.get<ContestRound[]>('contest_rounds', {params});
   }
 
   requestContest(id: number) {
