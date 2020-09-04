@@ -154,6 +154,10 @@ export class BoardComponent implements OnInit, AfterViewInit {
         for (const elem of value) {
           this.tournaments.push(elem);
         }
+        setTimeout(() => {
+          this.ref.markForCheck();
+
+        }, 100);
 
         console.log(this.tournaments);
         this.isFetching = false;

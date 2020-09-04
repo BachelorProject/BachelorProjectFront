@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, HostListener, Input, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, HostListener, Input, OnInit} from '@angular/core';
 import {Tournament} from '../../../../config/config.service.model';
 import * as moment from 'moment';
 import {ConfigService} from '../../../../config/config.service';
@@ -16,12 +16,13 @@ export class BoardItemComponent implements OnInit {
   isSmallScreen = false;
   window = window;
 
-  constructor(public configService: ConfigService) {
+  constructor(public configService: ConfigService,
+              public ref: ChangeDetectorRef) {
   }
 
   ngOnInit(): void {
     this.timeLeft = Math.round((this.data.registrationEnd - new Date().getTime()) / 1000);
-    if (this.timeLeft < 0 ) {
+    if (this.timeLeft < 0) {
       this.timeLeft = 1;
     }
     this.isSmallScreen = document.body.offsetWidth < 700;
@@ -47,6 +48,10 @@ export class BoardItemComponent implements OnInit {
         registerButton.classList = ['registered'];
         registerButton.innerText = 'registered';
         this.isRegistered = true;
+        setTimeout(() => {
+          this.ref.markForCheck();
+
+        }, 100);
       });
   }
 
