@@ -289,22 +289,22 @@ export class ConfigService {
   }
 
   fetchCategories() {
-    const data: Subject[] = [{
-      id: 1,
-      name: 'Mathematics',
-      colorId: 1
-    },
-      {
-        id: 2,
-        name: 'Physics',
-        colorId: 2
-      },
-      {
-        id: 3,
-        name: 'Chemistry',
-        colorId: 3
-      }];
-    return of(data).pipe(delay(1000));
+    // const data: Subject[] = [{
+    //   id: 1,
+    //   name: 'Mathematics',
+    //   colorId: 1
+    // },
+    //   {
+    //     id: 2,
+    //     name: 'Physics',
+    //     colorId: 2
+    //   },
+    //   {
+    //     id: 3,
+    //     name: 'Chemistry',
+    //     colorId: 3
+    //   }];
+    // return of(data).pipe(delay(1000));
     return this.http.get<Subject[]>('subjects');
   }
 
@@ -354,21 +354,21 @@ export class ConfigService {
   }
 
   getTournamentList(from: number, to: number, myContests: boolean, pastContests: boolean, searchString: string, subjectIds: number[]) {
-    const data: Tournament[] = [];
-    for (let i = from; i < to; i++) {
-      data.push({
-        id: i,
-        title: `asdasd ${i}`,
-        body: `some body once told me  ${i}`,
-        imageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png',
-        registrationEnd: new Date().getTime() + 1000000,
-        nextContestStart: new Date().getTime(),
-        nextContestDuration: i * 10,
-        subjects: [],
-        registeredCount: 1000 - 15 * i
-      });
-    }
-    return of(data).pipe(delay(1000));
+    // const data: Tournament[] = [];
+    // for (let i = from; i < to; i++) {
+    //   data.push({
+    //     id: i,
+    //     title: `asdasd ${i}`,
+    //     body: `some body once told me  ${i}`,
+    //     imageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png',
+    //     registrationEnd: new Date().getTime() + 1000000,
+    //     nextContestStart: new Date().getTime(),
+    //     nextContestDuration: i * 10,
+    //     subjects: [],
+    //     registeredCount: 1000 - 15 * i
+    //   });
+    // }
+    // return of(data).pipe(delay(1000));
 
     const subjectIdStr: string[] = subjectIds.map(value => value.toString());
 
@@ -397,18 +397,18 @@ export class ConfigService {
   }
 
   getMyTournamentList() {
-    const data: Tournament[] = [{
-      id: 3,
-      title: 'asdasd',
-      body: 'some body once told me',
-      imageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png',
-      registrationEnd: new Date().getTime(),
-      nextContestStart: new Date().getTime(),
-      nextContestDuration: 180,
-      subjects: [],
-      registeredCount: 3321
-    }];
-    return of(data).pipe(delay(1000));
+    // const data: Tournament[] = [{
+    //   id: 3,
+    //   title: 'asdasd',
+    //   body: 'some body once told me',
+    //   imageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png',
+    //   registrationEnd: new Date().getTime(),
+    //   nextContestStart: new Date().getTime(),
+    //   nextContestDuration: 180,
+    //   subjects: [],
+    //   registeredCount: 3321
+    // }];
+    // return of(data).pipe(delay(1000));
     return this.http.get<Tournament[]>('tournament/registered_list');
   }
 
