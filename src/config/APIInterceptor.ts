@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, Injector} from '@angular/core';
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {environment} from '../environments/environment';
@@ -10,13 +10,14 @@ import {catchError} from 'rxjs/operators';
 export class APIInterceptor implements HttpInterceptor {
   private apiReq: HttpRequest<any>;
 
-  constructor(private authService: AuthServiceLocal, private snackBar: MatSnackBar) {
+  constructor(private injector: Injector) {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-    if (this.authService.isLoggedIn) {
-      const accessToken = this.authService.getAccessToken();
+    const authService = this.injector.get(AuthServiceLocal);
+    if (authService.isLoggedIn) {
+      const accessToken = authService.getAccessToken();
       req = req.clone({
         setHeaders: {
           // Authorization: `JWT $[accessToken}`
@@ -35,13 +36,15 @@ export class APIInterceptor implements HttpInterceptor {
     return next.handle(this.apiReq).pipe(
       catchError(error => {
         if (error.status === 401 || error.status === 403) {
-          this.authService.logout();
+          authService.logout();
         }
         let defaultErr = 'An error has occurred. Please try again later';
         if (error.error.message){
           defaultErr = error.error.message;
         }
-        this.snackBar.open(defaultErr, 'Ok', {duration: 5000});
+
+        const snackBar = this.injector.get(MatSnackBar);
+        snackBar.open(defaultErr, 'Ok', {duration: 5000});
         return throwError(error);
       })
     );
