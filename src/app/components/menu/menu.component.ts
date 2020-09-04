@@ -1,8 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Injector, Input, OnInit} from '@angular/core';
 import {ConfigService} from '../../../config/config.service';
 import {Router} from '@angular/router';
 import {AuthServiceLocal} from '../../auth.service';
 import {UpcomingTournamentService} from '../../../config/UpcomingTournamentService';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-menu',
@@ -16,7 +17,7 @@ export class MenuComponent implements OnInit {
 
   constructor(public configService: ConfigService,
               public router: Router,
-              private authService: AuthServiceLocal,
+              public injector: Injector,
               public upcomingTournament: UpcomingTournamentService
   ) {
     upcomingTournament.catId.subscribe(value => {
@@ -36,7 +37,8 @@ export class MenuComponent implements OnInit {
   }
 
   logout() {
-    this.authService.logout();
+    const AuthService = this.injector.get(AuthServiceLocal);
+    AuthService.logout();
   }
 
 }
