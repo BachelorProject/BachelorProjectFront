@@ -82,21 +82,22 @@ export class ConfigService {
   }
 
   saveRounds(rounds: ContestRound[]) {
-    return this.http.post<any>('save_rounds',  JSON.stringify(rounds));
+    // return this.http.post<any>('save_rounds',  JSON.stringify(rounds));
+    return this.http.post<any>('save_rounds',  rounds);
   }
 
   addRound(contestId: number) {
-    const data: ContestRound = {
-      id: 1231,
-      password: '',
-      isClosed: false,
-      duration: null,
-      placeToPass: null,
-      pointsToPass: null,
-      status: 'ACTIVE', //   'ACTIVE', 'ONGOING', 'CANCELLED', 'COMPLETED'
-      startTime: null
-    };
-    return of(data).pipe(delay(1000));
+    // const data: ContestRound = {
+    //   id: 1231,
+    //   password: '',
+    //   isClosed: false,
+    //   duration: null,
+    //   placeToPass: null,
+    //   pointsToPass: null,
+    //   status: 'ACTIVE', //   'ACTIVE', 'ONGOING', 'CANCELLED', 'COMPLETED'
+    //   startTime: null
+    // };
+    // return of(data).pipe(delay(1000));
     return this.http.post<ContestRound>('add_round', {contestId});
   }
 
