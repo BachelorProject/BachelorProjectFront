@@ -55,13 +55,13 @@ export interface Contest {
 
 export interface ContestRound {
   id: number;
-  isClosed: boolean;
   duration: number;
   placeToPass: number; // -1 means this is not passing criteria
   pointsToPass: number; // -1 means this is not passing criteria
   status: string; //   'ACTIVE', 'ONGOING', 'CANCELLED', 'COMPLETED'
   startTime: number;
   password: '';
+  isClosed: boolean;
 }
 
 export interface ContestQuestion {
@@ -70,6 +70,24 @@ export interface ContestQuestion {
   score: number;
   type: string; // 'MULTIPLE CHOICE', 'ONE CHOICE'
   correctAnswer: number[];
+}
+
+export interface ContestLiveQuestionModel {
+  questions: ContestLiveQuestion[];
+  timeLeft: number;
+}
+
+export interface ContestLiveQuestion {
+  question: string;
+  options: ContestLiveQuestionOption[];
+  score: number;
+  type: string; // 'MULTIPLE CHOICE', 'ONE CHOICE'
+  answeredAnswers: number[];
+}
+
+export interface ContestLiveQuestionOption {
+  value: string;
+  id: number;
 }
 
 export interface CurrentUserInformation {
@@ -105,4 +123,9 @@ export interface PastContest {
   title: string;
   subjectIds: number[];
   contestId: number;
+}
+
+export interface UpcomingTournament {
+  contestId: number;
+  timestamp: number;
 }

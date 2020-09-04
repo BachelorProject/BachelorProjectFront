@@ -94,7 +94,7 @@
       </div>
     </div>
     <div [hidden]="isSmallScreen && !isFilterOpen" class="right-panel">
-      <div class="horizontal-flex round-buttons-top">
+      <div class="horizontal-flex round-buttons-top" [hidden]="openedContestState !== 'edit'">
         <button class="create-button" (click)="addEmptyRound()"> add</button>
         <button class="create-button save-btn" (click)="saveRound()" style="background-color: #fff; color: #6A6A6A"
                 #saveRounds> save
@@ -104,26 +104,28 @@
       <div class="round-container" *ngFor="let round of rounds; index as i">
         <h2> round {{i + 1}}</h2>
 
-        <div class="switch-container">
+        <div class="switch-container" [hidden]="openedContestState !== 'edit'">
           <ng-switchery [value]="round.password !== null && round.password !== undefined && round.password.length > 0"
                         (change)="onPassSwitchChange($event.target.value, i)"
                         class="switch"></ng-switchery>
           <mat-form-field>
             <mat-label>Password</mat-label>
-            <mat-icon style="cursor: pointer" matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            <mat-icon style="cursor: pointer" matSuffix
+                      (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
             <input [(ngModel)]="round.password"
                    [type]="hide ? 'password' : 'text'"
+                   [disabled]="openedContestState !== 'edit'"
+                   (change)="onPassChange(i, $event.target.value)"
                    #pointsInput matInput autocomplete="off">
           </mat-form-field>
         </div>
 
-
-        <ng-switchery [(ngModel)]="round.isClosed" onLabel="closed" class="switch"></ng-switchery>
         <mat-form-field>
           <mat-label>Duration (min)</mat-label>
           <img class="mat-input-prefix" src="../../../assets/images/ic-material-timer.svg" matPrefix>
           <input value="{{getOrDefault(round.duration, -1,  '')}}"
                  (change)="round.duration = $event.target.value.length !== 0 ? $event.target.value : -1"
+                 [disabled]="openedContestState !== 'edit'"
                  type="number"
                  matInput autocomplete="off" (keypress)="numberOnly($event)">
         </mat-form-field>
@@ -131,29 +133,36 @@
         <div class="switch-container">
           <ng-switchery [value]="round.placeToPass !== null && round.placeToPass !== undefined"
                         #placeSwitch
+                        [hidden]="openedContestState !== 'edit'"
                         (change)="onPlaceSwitchChange($event.target.value, i)" class="switch"></ng-switchery>
-          <mat-form-field>
+          <mat-form-field
+            [hidden]="openedContestState !== 'edit' && !round.placeToPass">
             <mat-label>Place</mat-label>
             <img class="mat-input-prefix" src="../../../assets/images/ic-ionic-md-stats.svg" matPrefix>
             <input [(ngModel)]="round.placeToPass"
+                   [disabled]="openedContestState !== 'edit'"
                    type="number"
                    #placeInput matInput autocomplete="off" (keypress)="numberOnly($event)">
           </mat-form-field>
         </div>
         <div class="switch-container">
           <ng-switchery [value]="round.pointsToPass !== null && round.pointsToPass !== undefined"
+                        [hidden]="openedContestState !== 'edit'"
                         (change)="onPointsSwitchChange($event.target.value, i)"
                         class="switch" #pointsSwitch></ng-switchery>
-          <mat-form-field>
+          <mat-form-field
+            [hidden]="openedContestState !== 'edit' && !round.pointsToPass">
             <mat-label>Points</mat-label>
             <img class="mat-input-prefix" src="../../../assets/images/ic-material-grade.svg" matPrefix>
             <input [(ngModel)]="round.pointsToPass"
+                   [disabled]="openedContestState !== 'edit'"
                    type="number"
                    #pointsInput matInput autocomplete="off" (keypress)="numberOnly($event)">
           </mat-form-field>
         </div>
         <mat-form-field class="datetime-picker">
           <input [value]="getStartDate(i)"
+                 [disabled]="openedContestState !== 'edit'"
                  matInput [ngxMatDatetimePicker]="picker" placeholder="Start Time"
                  (dateChange)="setStartTime(i, $event)">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -161,9 +170,27 @@
           </ngx-mat-datetime-picker>
         </mat-form-field>
         <div [ngClass]="isSmallScreen? 'vertical-flex round-btn-sm' : 'horizontal-flex'" class="round-buttons">
-          <button (click)="rounds.splice(i, 1)" class="round-btn" style="margin-top: 5px;"> remove</button>
-          <div class="vertical-flex">
-            <button class="questions-btn round-btn "> edit questions</button>
+          <button (click)="rounds.splice(i, 1)" class="round-btn" style="margin-top: 5px;"
+                  [hidden]="openedContestState !== 'edit'"> remove
+          </button>
+          <div class="vertical-flex" [hidden]="openedContestState !== 'edit'">
+            <button class="questions-btn round-btn "
+                    [routerLink]="['/question']" [queryParams]="{id: round.id}"
+            > edit questions
+            </button>
+          </div>
+          <div class="vertical-flex" [hidden]="openedContestState === 'edit' || contest.isRegistered"
+               style="width: 100%">
+            <button class="questions-btn round-btn "
+                    [routerLink]="['/leaderboard']" [queryParams]="{id: round.id}"
+                    [hidden]="round.status !== 'COMPLETED'"
+            > results
+            </button>
+            <button class="questions-btn round-btn "
+                    [routerLink]="['/live']" [queryParams]="{id: round.id, closed: round.isClosed}"
+                    [hidden]="round.status !== 'ONGOING'"
+            > enter
+            </button>
           </div>
         </div>
       </div>

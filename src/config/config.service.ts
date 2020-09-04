@@ -3,12 +3,16 @@ import {Injectable} from '@angular/core';
 import {
   AuthResponse,
   Contest,
-  ContestQuestion, ContestRound, CurrentUserInformation,
+  ContestLiveQuestionModel,
+  ContestQuestion,
+  ContestRound,
+  CurrentUserInformation,
   LeaderBoardMetaModel,
   LeaderBoardPlaceModel,
   PastContest,
   Subject,
   Tournament,
+  UpcomingTournament,
   UserInformation
 } from './config.service.model';
 import {of} from 'rxjs';
@@ -25,9 +29,18 @@ export class ConfigService {
   constructor(private http: HttpClient) {
   }
 
-  getNearestUpcomingTournament() {
-    return of(1243).pipe(delay(2000));
-    return this.http.get<number>('upcoming_tournament');
+  getNearestUpcomingTournament(userId) {
+    const data: UpcomingTournament = {
+      timestamp: new Date().getTime() + 10000,
+      contestId: 1243
+    };
+    return of(data).pipe(delay(2000));
+    const params = new HttpParams({
+      fromObject: {
+        userId: userId.toString()
+      }
+    });
+    return this.http.get<UpcomingTournament>('upcoming_tournament', {params});
   }
 
   getPastContests(userId: number) {
@@ -114,11 +127,64 @@ export class ConfigService {
     return this.http.post<any>('contest', JSON.stringify(info));
   }
 
-  updateQuestions(questions: ContestQuestion[], contestId: number, roundId: number) {
-    return this.http.post<any>('contest', JSON.stringify({questions, contestId, roundId}));
+  updateQuestions(questions: ContestQuestion[], roundId: number) {
+    return this.http.post<any>('contest', JSON.stringify({questions, roundId}));
   }
 
-  getQuestions(contest: number, round: number) {
+  submitResult(questions: ContestLiveQuestionModel, roundId: number) {
+    return this.http.post<any>('contest', JSON.stringify({questions, roundId}));
+  }
+
+  getLiveQuestions(password: string, round: number) {
+
+    const data: ContestLiveQuestionModel = {
+      questions: [
+        {
+          question: 'asdasdada',
+          options: [{
+            value: 'aaaaa',
+            id: 2
+          }, {
+            value: 'aaaaa',
+            id: 1
+          }, {
+            value: 'aaaaa',
+            id: 3
+          }],
+          score: 2,
+          type: 'MULTIPLE CHOICE',
+          answeredAnswers: []
+        },
+        {
+          question: 'asdasdada2',
+          options: [{
+            value: 'aaaaa',
+            id: 2
+          }, {
+            value: 'aaaaa',
+            id: 1
+          }, {
+            value: 'aaaaa',
+            id: 3
+          }],
+          score: 3,
+          type: 'MULTIPLE CHOICE',
+          answeredAnswers: []
+        }
+      ],
+      timeLeft: 300
+    };
+    return of(data).pipe(delay(300));
+    const params = new HttpParams({
+      fromObject: {
+        password,
+        round: round.toString()
+      }
+    });
+    return this.http.get<ContestLiveQuestionModel>('live_questions', {params});
+  }
+
+  getQuestions(round: number) {
     // const data: ContestQuestion[] = [];
     // for (let i = 0; i < 11; i++) {
     //   data.push({
@@ -132,7 +198,6 @@ export class ConfigService {
     // return of(data).pipe(delay(300));
     const params = new HttpParams({
       fromObject: {
-        contest: contest.toString(),
         round: round.toString()
       }
     });
@@ -165,6 +230,27 @@ export class ConfigService {
     return this.http.post<any>('register_contest', {contestId});
   }
 
+  getRounds(id: number) {
+
+    const data: ContestRound[] = [{
+      id: 1231,
+      password: '',
+      duration: null,
+      placeToPass: null,
+      pointsToPass: null,
+      status: 'COMPLETED', //   'ACTIVE', 'ONGOING', 'CANCELLED', 'COMPLETED'
+      startTime: null,
+      isClosed: false
+    }];
+    return of(data).pipe(delay(1000));
+    const params = new HttpParams({
+      fromObject: {
+        contestId: id.toString()
+      }
+    });
+    return this.http.get<ContestRound[]>('past_contests', {params});
+  }
+
   requestContest(id: number) {
     // const data: Contest = {
     //   id,
@@ -193,16 +279,16 @@ export class ConfigService {
       name: 'Mathematics',
       colorId: 1
     },
-    {
-      id: 2,
-      name: 'Physics',
-      colorId: 2
-    },
-    {
-      id: 3,
-      name: 'Chemistry',
-      colorId: 3
-    }];
+      {
+        id: 2,
+        name: 'Physics',
+        colorId: 2
+      },
+      {
+        id: 3,
+        name: 'Chemistry',
+        colorId: 3
+      }];
     return of(data).pipe(delay(1000));
     return this.http.get<Subject[]>('subjects');
   }

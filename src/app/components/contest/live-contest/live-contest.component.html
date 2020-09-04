@@ -1,0 +1,72 @@
+<div class="contest-container">
+  <div class="question-content">
+    <div [hidden]="isSmallScreen && isFilterOpen" class="left-panel">
+      <div *ngIf="data" [hidden]="isFetching" class="question-details">
+        <h2>Question {{curr + 1}}</h2>
+        <div class="question-block">
+          <app-editor *ngIf="data" [toolbar]="isSmallScreen? smallToolbar : defaultToolbar"
+                      [isEditable]="false"
+                      [(data)]="data.questions[curr].question" [placeholder]="'Type a Question...'"></app-editor>
+        </div>
+        <div *ngFor="let option of data.questions[curr].options; index as i; trackBy: trackByFn"
+             class="question-option question-block">
+          <div [hidden]="!isSmallScreen" class="vertical-flex" style="width: 100%;">
+            <div class="horizontal-flex" style="width: 100%; justify-content: space-between;">
+              <button [ngClass]="data.questions[curr].answeredAnswers.indexOf(data.questions[curr].options[i].id) !== -1 ? 'correct-green' : ''"
+                      (click)="clickCorrect(option.id)">
+                correct
+              </button>
+            </div>
+            <app-editor style="width: 100%;" [toolbar]="isSmallScreen? smallToolbar : defaultToolbar"
+                        [isEditable]="false"
+                        [(data)]="data.questions[curr].options[i].value"
+                        [placeholder]="'Type an Option...'"></app-editor>
+          </div>
+          <div [hidden]="isSmallScreen" class="horizontal-flex">
+            <app-editor [toolbar]="isSmallScreen? smallToolbar : defaultToolbar"
+                        [(data)]="data.questions[curr].options[i].value"
+                        [isEditable]="false"
+                        [placeholder]="'Type an Option...'"></app-editor>
+            <button [ngClass]="data.questions[curr].answeredAnswers.indexOf(data.questions[curr].options[i].id) !== -1 ? 'correct-green' : ''"
+                    (click)="clickCorrect(option.id)">
+              correct
+            </button>
+          </div>
+        </div>
+      </div>
+      <div [hidden]="!isFetching" class="skeleton">
+        <div class="horizontal-flex">
+          <div class="skeleton-circle"></div>
+          <div class="skeleton-rect"></div>
+        </div>
+        <div class="skeleton-rect" style="width: 70%;"></div>
+        <div class="skeleton-rect"></div>
+      </div>
+    </div>
+    <div *ngIf="data" [hidden]="isSmallScreen && !isFilterOpen" class="right-panel">
+      <button class="create-button" (click)="saveQuestions()"> submit </button>
+      <div class="question-block question-params">
+        <h3>score</h3>
+        <p style="margin:0">{{data.questions[curr].score}}</p>
+        <h3>Type</h3>
+        <p style="margin:0">{{data.questions[curr].type == 'ONE CHOICE' ? 'Single Choice' : 'Multiple choice'}}</p>
+        <h3>Time</h3>
+        <countdown *ngIf="timeLeft < 3600" [config]="{ leftTime: this.timeLeft, format: 'm:s' , notify: [ 1 ]}"
+                   (event)="saveQuestions()"></countdown>
+        <countdown *ngIf="timeLeft < 86400 && timeLeft >= 3600"
+                   [config]="{ leftTime: this.timeLeft, format: 'h:m:s' , notify: [ 3601 ]}"
+                   (event)="timeLeft = 3599"></countdown>
+      </div>
+      <h2 style="align-self: flex-start">Questions</h2>
+      <div class="question-grid">
+        <div class="question-grid-item"
+             [ngClass]="j===curr ? 'question-grid-item-active' : ''" *ngFor="let question of data.questions; index as j"
+             (click)="curr = j">{{j + 1}}</div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+

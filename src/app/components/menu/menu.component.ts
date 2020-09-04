@@ -12,19 +12,24 @@ import {UpcomingTournamentService} from '../../../config/UpcomingTournamentServi
 export class MenuComponent implements OnInit {
   @Input() direction = 'vertical';
 
+  upcomingContestId = -1;
+
   constructor(public configService: ConfigService,
               public router: Router,
               private authService: AuthServiceLocal,
               public upcomingTournament: UpcomingTournamentService
   ) {
+    upcomingTournament.catId.subscribe(value => {
+      this.upcomingContestId = value;
+    });
   }
 
   ngOnInit(): void {
   }
 
   getUpcomingOrBoard() {
-    if (this.upcomingTournament.catId !== -1) {
-      this.router.navigate(['/contest'], {queryParams: {contestId: this.upcomingTournament.catId}});
+    if (this.upcomingContestId !== -1) {
+      this.router.navigate(['/contest'], {queryParams: {contestId: this.upcomingTournament.contest.contestId}});
     } else {
       this.router.navigateByUrl('/');
     }
