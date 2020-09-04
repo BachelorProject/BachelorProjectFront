@@ -73,11 +73,12 @@ export class ProfileComponent implements OnInit {
       .queryParams
       .subscribe(params => {
         this.userId = params.userId || -1;
-        if (this.userId === -1) {
-          this.getInfo(this.configService.currUser.userId);
-        } else {
-          this.getInfo(this.userId);
-        }
+        // if (this.userId === -1) {
+        //   this.getInfo(this.configService.currUser.userId);
+        // } else {
+        //   this.getInfo(this.userId);
+        // }
+        this.getInfo(this.userId);
       });
 
     fab.icon = '../../../assets/images/ic-metro-profile.svg';

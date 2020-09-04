@@ -18,8 +18,8 @@ import {delay} from 'rxjs/operators';
 export class ConfigService {
 
   currUser: CurrentUserInformation = {
-    userId: 1,
-    profileImageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png'
+    userId: -1,
+    profileImageUrl: ''
   };
 
   constructor(private http: HttpClient) {
@@ -165,18 +165,18 @@ export class ConfigService {
   }
 
   requestContest(id: number) {
-    const data: Contest = {
-      id,
-      title: 'The best contest eva',
-      body: 'Wohoooooooooo contest\n awesome body\n foo\n bar\n bla <h2> u drunk m8? </h2>',
-      imageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png',
-      registrationEnd: null,
-      subjectIds: [1, 2, 3],
-      status: 'UNPUBLISHED',
-      isRegistered: false,
-      createUser: 1
-    };
-    return of(data).pipe(delay(2000));
+    // const data: Contest = {
+    //   id,
+    //   title: 'The best contest eva',
+    //   body: 'Wohoooooooooo contest\n awesome body\n foo\n bar\n bla <h2> u drunk m8? </h2>',
+    //   imageUrl: 'https://avatarfiles.alphacoders.com/218/thumb-218543.png',
+    //   registrationEnd: null,
+    //   subjectIds: [1, 2, 3],
+    //   status: 'UNPUBLISHED',
+    //   isRegistered: false,
+    //   createUser: 1
+    // };
+    // return of(data).pipe(delay(2000));
 
     const params = new HttpParams({
       fromObject: {
@@ -275,7 +275,7 @@ export class ConfigService {
         from: from.toString(),
         to: to.toString(),
         myContests: myContests.toString(),
-        pastContests: pastContests.toString(),
+        registrationIsOn: pastContests.toString(),
         subjectIds: subjectIdStr.join(',')
       }
     });

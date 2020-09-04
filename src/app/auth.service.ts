@@ -45,7 +45,7 @@ export class AuthServiceLocal {
         value => {
           window.localStorage.setItem('access_token', value.token);
           window.location.href = '/';
-          this.configService.currUser = value.currentUser;
+          this.configService.currUser = value.CurrentUserInformation;
         }
         , () => {
         });
@@ -66,10 +66,11 @@ export class AuthServiceLocal {
         value => {
           localStorage.setItem('access_token', value.token);
           window.location.href = '/';
-          this.configService.currUser = value.currentUser;
+          this.configService.currUser = value.CurrentUserInformation;
         }
         , () => {
         });
+
     });
   }
 
@@ -89,7 +90,7 @@ export class AuthServiceLocal {
       value => {
         localStorage.setItem('access_token', value.token);
         window.location.href = '/';
-        this.configService.currUser = value.currentUser;
+        this.configService.currUser = value.CurrentUserInformation;
       }
       , () => {
       });
@@ -100,7 +101,7 @@ export class AuthServiceLocal {
       value => {
         localStorage.setItem('access_token', value.token);
         window.location.href = '/';
-        this.configService.currUser = value.currentUser;
+        this.configService.currUser = value.CurrentUserInformation;
       }
       , () => {});
   }
@@ -111,7 +112,7 @@ export class AuthServiceLocal {
       value => {
         localStorage.setItem('access_token', value.token);
         window.location.href = '/';
-        this.configService.currUser = value.currentUser;
+        this.configService.currUser = value.CurrentUserInformation;
       }
       , error => {
       }

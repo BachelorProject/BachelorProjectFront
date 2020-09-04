@@ -17,7 +17,7 @@ export interface AuthResponse {
   success: boolean;
   token: string;
   newUser: boolean;
-  currentUser: CurrentUserInformation;
+  CurrentUserInformation: CurrentUserInformation;
 }
 
 export interface Subject {
